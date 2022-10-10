@@ -10,10 +10,13 @@ import {
   ActionIcon,
   useMantineColorScheme,
   Tooltip,
+  NavLink,
+  ThemeIcon,
 } from '@mantine/core';
-import { IconGolf, IconId, IconMoon, IconSun, IconUsers } from '@tabler/icons';
+import { IconChevronRight, IconGolf, IconId, IconMoon, IconSun, IconUsers } from '@tabler/icons';
 import { ReactNode, useState } from 'react';
-import MainLink from './MainLink';
+import { Link } from 'react-router-dom';
+import routes from '../../src/utils/routes';
 import { UserSettings } from './UserSettings';
 
 type LayoutProps = {
@@ -32,13 +35,47 @@ export default function Layout(props: LayoutProps) {
           background: colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
         },
       }}
+      padding="xl"
       navbarOffsetBreakpoint="sm"
       navbar={
         <Navbar p="xs" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 280 }}>
           <Navbar.Section grow mb="xs">
-            <MainLink label="Scorecards" icon={<IconId size={16} />} color="blue" />
-            <MainLink label="Players" icon={<IconUsers size={16} />} color="pink" />
-            <MainLink label="Courses" icon={<IconGolf size={16} />} color="green" />
+            <NavLink
+              label="Courses"
+              component={Link}
+              to={routes.courses}
+              onClick={() => setOpened(false)}
+              rightSection={<IconChevronRight size={12} />}
+              icon={
+                <ThemeIcon color="green" variant="light">
+                  <IconGolf size={16} />
+                </ThemeIcon>
+              }
+            />
+            <NavLink
+              label="Players"
+              component={Link}
+              to={routes.players}
+              onClick={() => setOpened(false)}
+              rightSection={<IconChevronRight size={12} />}
+              icon={
+                <ThemeIcon color="pink" variant="light">
+                  <IconUsers size={16} />
+                </ThemeIcon>
+              }
+            />
+            <NavLink
+              label="Scorecards"
+              component={Link}
+              to={routes.scorecards}
+              onClick={() => setOpened(false)}
+              rightSection={<IconChevronRight size={12} />}
+              icon={
+                <ThemeIcon color="cyan" variant="light">
+                  <IconId size={16} />
+                </ThemeIcon>
+              }
+            />
           </Navbar.Section>
           <Navbar.Section>
             <UserSettings />
@@ -58,8 +95,18 @@ export default function Layout(props: LayoutProps) {
                   mr="xs"
                 />
               </MediaQuery>
-              <Text size="xl">⛳️</Text>
-              <Text weight="bold">Golf Tracker</Text>
+              <Text size={22}>⛳️</Text>
+              <Text
+                component="span"
+                align="center"
+                variant="gradient"
+                gradient={{ from: 'teal', to: 'green', deg: 45 }}
+                size={22}
+                ml="xs"
+                weight="bold"
+              >
+                Golf Tracker
+              </Text>
             </Group>
             <Tooltip label={`${colorScheme === 'dark' ? 'Light' : 'Dark'} mode`}>
               <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={32} radius="md">

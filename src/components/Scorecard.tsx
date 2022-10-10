@@ -39,11 +39,14 @@ export default function Scorecard(props: ScorecardProps) {
             <Anchor weight="bold" href={website} target="_blank">
               {name}
             </Anchor>
+            <Badge size="lg" color="cyan" variant="light">
+              {scoredHoles.length} holes
+            </Badge>
             <Badge size="lg" color="green" variant="light">
               Par {netPar}
             </Badge>
             <Badge size="lg" color="pink" variant="light">
-              Player score {netPlayerScore}
+              Score {netPlayerScore}
             </Badge>
             <Menu withinPortal position="bottom-end" shadow="sm">
               <Menu.Target>

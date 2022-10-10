@@ -1,6 +1,6 @@
-import { Stack } from '@mantine/core';
-import store from '../../src/utils/store';
-import Scorecard, { ScorecardProps } from './Scorecard';
+import { Stack, Text } from '@mantine/core';
+import store from '../utils/store';
+import Scorecard, { ScorecardProps } from '../components/Scorecard';
 
 export default function Scorecards() {
   const golfCourses = store.useState((s) => s.golfCourses);
@@ -29,10 +29,15 @@ export default function Scorecards() {
   scorecards.sort((a, b) => b.scorecard.date.getTime() - a.scorecard.date.getTime());
 
   return (
-    <Stack justify="flex-start">
-      {scorecards.map((scorecard, index) => (
-        <Scorecard key={index} {...scorecard} />
-      ))}
-    </Stack>
+    <>
+      <Text size={30} weight="bold" mb="sm">
+        Scorecards
+      </Text>
+      <Stack>
+        {scorecards.map((scorecard, index) => (
+          <Scorecard key={index} {...scorecard} />
+        ))}
+      </Stack>
+    </>
   );
 }
