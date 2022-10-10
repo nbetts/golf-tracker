@@ -40,3 +40,14 @@ Start the server
 **Client:** React, Typescript, Mantine, Vite
 
 **Server:** Firebase hosting, Firestore database
+
+## To do
+
+- add player statistics
+- add search filters to each page using the MultiSelect component
+- setup firebase project
+- setup build pipeline and firebase hosting
+- integrate firestore database
+- setup firestore rules
+- add ability to create/edit/delete player & course data using modals
+- scope data editing to specific users

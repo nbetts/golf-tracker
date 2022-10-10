@@ -1,14 +1,16 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
+import store from '../../src/utils/store';
 import { GolfCourse, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
 
-export type ScorecardProps = {
+export type PlayerScorecardProps = {
   playerName: string;
   scorecard: GolfScorecard;
   golfCourse: GolfCourse;
 };
 
-export default function Scorecard(props: ScorecardProps) {
+export default function PlayerScorecard(props: PlayerScorecardProps) {
+  const user = store.useState((s) => s.user);
   const { date, scores } = props.scorecard;
   const { name, website, holes } = props.golfCourse;
 
@@ -48,19 +50,21 @@ export default function Scorecard(props: ScorecardProps) {
             <Badge size="lg" color="pink" variant="light">
               Score {netPlayerScore}
             </Badge>
-            <Menu withinPortal position="bottom-end" shadow="sm">
-              <Menu.Target>
-                <ActionIcon>
-                  <IconDots size={16} />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
-                <Menu.Item icon={<IconTrash size={14} />} color="red">
-                  Delete
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+            {user && (
+              <Menu withinPortal position="bottom-end" shadow="sm">
+                <Menu.Target>
+                  <ActionIcon>
+                    <IconDots size={16} />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
+                  <Menu.Item icon={<IconTrash size={14} />} color="red">
+                    Delete
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            )}
           </Group>
         </Group>
       </Card.Section>
@@ -75,8 +79,8 @@ export default function Scorecard(props: ScorecardProps) {
                     <th>Hole</th>
                     <th>Par</th>
                     <th>Score</th>
-                    <th>Stroke Index</th>
                     <th>Yards</th>
+                    <th>Stroke Index</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -85,8 +89,8 @@ export default function Scorecard(props: ScorecardProps) {
                       <td>{index + 1}</td>
                       <td>{hole.par}</td>
                       <td>{hole.score}</td>
-                      <td>{hole.strokeIndex}</td>
                       <td>{hole.yards}</td>
+                      <td>{hole.strokeIndex}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -95,8 +99,8 @@ export default function Scorecard(props: ScorecardProps) {
                     <th></th>
                     <th>{netPar}</th>
                     <th>{netPlayerScore}</th>
-                    <th></th>
                     <th>{netYards}</th>
+                    <th></th>
                   </tr>
                 </tfoot>
               </Table>

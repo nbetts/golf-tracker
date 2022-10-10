@@ -1,4 +1,5 @@
-import { Stack } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
+import PlayerStatistics from '../../src/components/PlayerStatistics';
 import store from '../utils/store';
 
 export default function Players() {
@@ -6,10 +7,15 @@ export default function Players() {
   golfPlayers.sort((a, b) => a.user.name.localeCompare(b.user.name));
 
   return (
-    <Stack justify="flex-start">
-      {golfPlayers.map((player, index) => (
-        <p key={index}>{player.user.name}</p>
-      ))}
-    </Stack>
+    <>
+      <Text size={30} weight="bold" mb="sm">
+        Players
+      </Text>
+      <Stack justify="flex-start">
+        {golfPlayers.map((player, index) => (
+          <PlayerStatistics key={index} {...player} />
+        ))}
+      </Stack>
+    </>
   );
 }

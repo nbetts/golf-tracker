@@ -1,4 +1,5 @@
-import { Stack } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
+import CourseScorecard from '../../src/components/CourseScorecard';
 import store from '../utils/store';
 
 export default function Courses() {
@@ -6,10 +7,15 @@ export default function Courses() {
   golfCourses.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <Stack justify="flex-start">
-      {golfCourses.map((course, index) => (
-        <p key={index}>{course.name}</p>
-      ))}
-    </Stack>
+    <>
+      <Text size={30} weight="bold" mb="sm">
+        Courses
+      </Text>
+      <Stack justify="flex-start">
+        {golfCourses.map((course, index) => (
+          <CourseScorecard key={index} {...course} />
+        ))}
+      </Stack>
+    </>
   );
 }

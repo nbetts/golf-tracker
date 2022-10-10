@@ -1,12 +1,12 @@
 import { Stack, Text } from '@mantine/core';
 import store from '../utils/store';
-import Scorecard, { ScorecardProps } from '../components/Scorecard';
+import PlayerScorecard, { PlayerScorecardProps } from '../components/PlayerScorecard';
 
 export default function Scorecards() {
   const golfCourses = store.useState((s) => s.golfCourses);
   const golfPlayers = store.useState((s) => s.golfPlayers);
 
-  const scorecards: ScorecardProps[] = [];
+  const scorecards: PlayerScorecardProps[] = [];
 
   for (let i = 0; i < golfPlayers.length; i++) {
     const golfPlayer = golfPlayers[i];
@@ -35,7 +35,7 @@ export default function Scorecards() {
       </Text>
       <Stack>
         {scorecards.map((scorecard, index) => (
-          <Scorecard key={index} {...scorecard} />
+          <PlayerScorecard key={index} {...scorecard} />
         ))}
       </Stack>
     </>
