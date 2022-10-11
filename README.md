@@ -53,6 +53,7 @@ Start the server
 ### Should
 
 - allow users to hide their scorecards
+- fix vite issue using absolute imports for src/**/*
 
 ### Could
 

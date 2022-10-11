@@ -1,23 +1,26 @@
 import { Stack, Text } from '@mantine/core';
 import store from '../utils/store';
 import PlayerScorecard, { PlayerScorecardProps } from '../components/PlayerScorecard';
+import withRouteCheck from '../../src/utils/withRouteCheck';
 
-export default function Scorecards() {
+const Scorecards = () => {
   const golfCourses = store.useState((s) => s.golfCourses);
   const golfPlayers = store.useState((s) => s.golfPlayers);
 
+  const golfPlayersArray = Object.entries(golfPlayers);
   const scorecards: PlayerScorecardProps[] = [];
 
-  for (let i = 0; i < golfPlayers.length; i++) {
-    const golfPlayer = golfPlayers[i];
+  for (let i = 0; i < golfPlayersArray.length; i++) {
+    const [, golfPlayer] = golfPlayersArray[i];
+    const scorecardsArray = Object.entries(golfPlayer.scorecards);
 
-    for (let j = 0; j < golfPlayer.scorecards.length; j++) {
-      const scorecard = golfPlayer.scorecards[j];
-      const golfCourse = golfCourses.find((course) => course.name === scorecard.courseName);
+    for (let j = 0; j < scorecardsArray.length; j++) {
+      const [, scorecard] = scorecardsArray[j];
+      const golfCourse = golfCourses[scorecard.courseId];
 
       if (golfCourse) {
         scorecards.push({
-          playerName: golfPlayer.user.name,
+          playerName: golfPlayer.name,
           scorecard,
           golfCourse,
         });
@@ -26,7 +29,7 @@ export default function Scorecards() {
   }
 
   // Sort scorecards by reverse chronological order.
-  scorecards.sort((a, b) => b.scorecard.date.getTime() - a.scorecard.date.getTime());
+  scorecards.sort((a, b) => b.scorecard.timestamp.seconds - a.scorecard.timestamp.seconds);
 
   return (
     <>
@@ -40,4 +43,6 @@ export default function Scorecards() {
       </Stack>
     </>
   );
-}
+};
+
+export default withRouteCheck(Scorecards, 'signed-in');

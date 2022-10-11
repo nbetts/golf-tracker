@@ -11,7 +11,7 @@ export default function PlayerStatistics(props: GolfPlayer) {
       <Card.Section withBorder inheritPadding py="xs">
         <Group position="apart">
           <Group mt="md" mb="xs">
-            <Text weight="bold">{props.user.name}</Text>
+            <Text weight="bold">{props.name}</Text>
           </Group>
           <Group mt="md" mb="xs">
             {user && (

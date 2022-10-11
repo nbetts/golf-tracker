@@ -2,6 +2,7 @@ import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } 
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
 import store from '../../src/utils/store';
 import { GolfCourse, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
+import { getTimestampDate } from '../../src/utils/formatting';
 
 export type PlayerScorecardProps = {
   playerName: string;
@@ -11,7 +12,7 @@ export type PlayerScorecardProps = {
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
   const user = store.useState((s) => s.user);
-  const { date, scores } = props.scorecard;
+  const { timestamp, scores } = props.scorecard;
   const { name, website, holes } = props.golfCourse;
 
   const holeCount = Math.min(scores.length, holes.length);
@@ -33,7 +34,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
         <Group position="apart">
           <Group mt="md" mb="xs">
             <Badge size="lg" color="blue" variant="light">
-              {date.toLocaleDateString()}
+              {getTimestampDate(timestamp)}
             </Badge>
             <Text weight="bold">{props.playerName}</Text>
           </Group>

@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Courses from './pages/Courses';
 import Players from './pages/Players';
 import routes from './utils/routes';
+import Home from './pages/Home';
+import { Error404 } from './pages/Error404';
 
 export default function App() {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -26,7 +28,8 @@ export default function App() {
               <Route path={routes.courses} element={<Courses />} />
               <Route path={routes.players} element={<Players />} />
               <Route path={routes.scorecards} element={<Scorecards />} />
-              <Route path={routes.home} element={<p>Home</p>} />
+              <Route index path={routes.home} element={<Home />} />
+              <Route index path="*" element={<Error404 />} />
             </Routes>
           </Layout>
         </BrowserRouter>

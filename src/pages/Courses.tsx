@@ -1,10 +1,11 @@
 import { Stack, Text } from '@mantine/core';
+import withRouteCheck from '../../src/utils/withRouteCheck';
 import CourseScorecard from '../../src/components/CourseScorecard';
 import store from '../utils/store';
 
-export default function Courses() {
+const Courses = () => {
   const golfCourses = store.useState((s) => s.golfCourses);
-  golfCourses.sort((a, b) => a.name.localeCompare(b.name));
+  // golfCourses.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <>
@@ -12,10 +13,12 @@ export default function Courses() {
         Courses
       </Text>
       <Stack justify="flex-start">
-        {golfCourses.map((course, index) => (
-          <CourseScorecard key={index} {...course} />
+        {Object.entries(golfCourses).map(([id, course]) => (
+          <CourseScorecard key={id} {...course} />
         ))}
       </Stack>
     </>
   );
-}
+};
+
+export default withRouteCheck(Courses, 'signed-in');
