@@ -45,8 +45,6 @@ Start the server
 
 ### Must
 
-- setup firebase project
-- setup build pipeline and firebase hosting
 - integrate firestore database
 - setup firestore rules
 - add ability to create/edit/delete player & course data using modals
