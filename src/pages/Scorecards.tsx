@@ -5,11 +5,12 @@ import withRouteCheck from '../../src/utils/withRouteCheck';
 
 const Scorecards = () => {
   const user = store.useState((s) => s.user);
-  console.log('uid', user?.uid);
   const courses = store.useState((s) => s.courses);
   const players = store.useState((s) => s.players);
   const scorecards = store.useState((s) => s.scorecards);
-  const scorecardsArray = Object.entries(scorecards).sort(([, a], [, b]) => b.timestamp.seconds - a.timestamp.seconds);
+  const scorecardsArray = Object.entries(scorecards)
+    .filter(([, scorecard]) => courses[scorecard.courseId] && players[scorecard.userId])
+    .sort(([, a], [, b]) => b.timestamp.seconds - a.timestamp.seconds);
 
   return (
     <>

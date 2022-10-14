@@ -13,8 +13,10 @@ const withRouteCheck = (Component: React.ComponentType, access: 'signed-out' | '
     useEffect(() => {
       if (appLoaded) {
         if (user && access === 'signed-out') {
+          setRouteAllowed(false);
           navigate(routes.scorecards, { replace: true });
         } else if (!user && access === 'signed-in') {
+          setRouteAllowed(false);
           navigate(routes.home, { replace: true });
         } else {
           setRouteAllowed(true);
