@@ -1,6 +1,6 @@
 import { createStyles, Title, Text, Button, Container, Group } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
-import routes from '../utils/routes';
+import Link from 'next/link';
+import routes from 'src/utils/routes';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -40,9 +40,8 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Error404() {
+export default function Error404() {
   const { classes } = useStyles();
-  const navigate = useNavigate();
 
   return (
     <Container className={classes.root}>
@@ -53,9 +52,11 @@ export function Error404() {
         URL.
       </Text>
       <Group position="center">
-        <Button variant="subtle" size="md" onClick={() => navigate(routes.home)}>
-          Take me back to home page
-        </Button>
+        <Link href={routes.home} passHref>
+          <Button component="a" variant="subtle" size="md">
+            Take me back to home the page
+          </Button>
+        </Link>
       </Group>
     </Container>
   );

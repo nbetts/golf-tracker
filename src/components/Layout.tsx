@@ -1,13 +1,13 @@
 import { useMantineTheme, AppShell, LoadingOverlay } from '@mantine/core';
-import { Unsubscribe } from 'firebase/firestore';
+import type { Unsubscribe } from 'firebase/firestore';
 import { ReactNode, useEffect, useState } from 'react';
 import {
   authStateChangedObserver,
   coursesSnapshotListener,
   playersSnapshotListener,
   scorecardsSnapshotListener,
-} from '../../src/utils/firebase';
-import store from '../../src/utils/store';
+} from 'src/utils/firebase';
+import store from 'src/utils/store';
 import AppShellHeader from './AppShellHeader';
 import AppShellNavbar from './AppShellNavbar';
 

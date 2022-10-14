@@ -55,7 +55,6 @@ Start the server
 
 - allow users to delete data (implement soft delete)
 - allow users to hide their scorecards
-- fix vite issue using absolute imports for `src/**/*`
 
 ### Could
 

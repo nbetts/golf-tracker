@@ -1,6 +1,6 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
-import store from '../../src/utils/store';
+import store from 'src/utils/store';
 import { GolfCourse } from 'src/utils/types';
 
 export default function CourseScorecard(props: GolfCourse) {

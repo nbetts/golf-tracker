@@ -1,5 +1,5 @@
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import routes from './routes';
 import store from './store';
 
@@ -7,22 +7,22 @@ const withRouteCheck = (Component: React.ComponentType, access: 'signed-out' | '
   function InnerComponent(props) {
     const appLoaded = store.useState((s) => s.appLoaded);
     const user = store.useState((s) => s.user);
-    const navigate = useNavigate();
+    const router = useRouter();
     const [routeAllowed, setRouteAllowed] = useState(false);
 
     useEffect(() => {
-      if (appLoaded) {
+      if (router.isReady && appLoaded) {
         if (user && access === 'signed-out') {
           setRouteAllowed(false);
-          navigate(routes.scorecards, { replace: true });
+          router.replace(routes.scorecards);
         } else if (!user && access === 'signed-in') {
           setRouteAllowed(false);
-          navigate(routes.home, { replace: true });
+          router.replace(routes.home);
         } else {
           setRouteAllowed(true);
         }
       }
-    }, [appLoaded, user, access]);
+    }, [router, appLoaded, user]);
 
     return routeAllowed ? <Component {...props} /> : null;
   };

@@ -1,6 +1,6 @@
 import { Card, Group, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
-import store from '../../src/utils/store';
+import store from 'src/utils/store';
 import { GolfPlayer } from 'src/utils/types';
 
 export default function PlayerStatistics(props: GolfPlayer) {

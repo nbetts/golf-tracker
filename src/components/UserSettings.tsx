@@ -1,7 +1,7 @@
 import { IconChevronRight } from '@tabler/icons';
 import { Box, NavLink, Popover, Button, Avatar } from '@mantine/core';
-import store from '../../src/utils/store';
-import { signInWithGoogle, signOut } from '../../src/utils/firebase';
+import store from 'src/utils/store';
+import { signInWithGoogle, signOut } from 'src/utils/firebase';
 import { showNotification } from '@mantine/notifications';
 
 export function UserSettings() {
