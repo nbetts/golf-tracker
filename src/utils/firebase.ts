@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
-import { collection, getFirestore, onSnapshot } from 'firebase/firestore';
+import { collection, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
 import store from './store';
 import { showNotification } from '@mantine/notifications';
-import { GolfCourse, GolfCourses, GolfPlayer, GolfPlayers } from './types';
+import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDjek7Vhze3tddsDvXQ3pNcmaAloEOGjZI',
@@ -22,8 +22,9 @@ const firebaseAuth = getAuth(firebaseApp);
 const googleAuthProvider = new GoogleAuthProvider();
 
 const firebaseFirestore = getFirestore(firebaseApp);
-const golfCoursesCollectionRef = collection(firebaseFirestore, 'golfCourses');
-const golfPlayersCollectionRef = collection(firebaseFirestore, 'golfPlayers');
+const coursesCollectionRef = collection(firebaseFirestore, 'courses');
+const playersCollectionRef = collection(firebaseFirestore, 'players');
+const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards');
 
 export const signInWithGoogle = () => signInWithPopup(firebaseAuth, googleAuthProvider);
 export const signOut = () => firebaseAuth.signOut();
@@ -48,8 +49,8 @@ export const authStateChangedObserver = () => {
       } else {
         store.update((s) => {
           s.user = null;
-          s.golfCourses = {};
-          s.golfPlayers = {};
+          s.courses = {};
+          s.players = {};
         });
 
         showNotification({ title: 'Signed out', message: 'Successfully signed out.', color: 'green' });
@@ -64,32 +65,49 @@ export const authStateChangedObserver = () => {
   });
 };
 
-export const golfCoursesSnapshotListener = () => {
-  return onSnapshot(golfCoursesCollectionRef, (querySnapshot) => {
-    const golfCourses: GolfCourses = { ...(store.getRawState().golfCourses || {}) };
+export const coursesSnapshotListener = () => {
+  return onSnapshot(coursesCollectionRef, (querySnapshot) => {
+    const courses = { ...(store.getRawState().courses || {}) };
 
     querySnapshot.docChanges().forEach((documentChange) => {
       const { doc } = documentChange;
-      golfCourses[doc.id as any] = doc.data() as GolfCourse;
+      courses[doc.id] = doc.data() as GolfCourse;
     });
 
     store.update((s) => {
-      s.golfCourses = golfCourses;
+      s.courses = courses;
     });
   });
 };
 
-export const golfPlayersSnapshotListener = () => {
-  return onSnapshot(golfPlayersCollectionRef, (querySnapshot) => {
-    const golfPlayers: GolfPlayers = { ...(store.getRawState().golfPlayers || {}) };
+export const playersSnapshotListener = () => {
+  return onSnapshot(playersCollectionRef, (querySnapshot) => {
+    const players = { ...(store.getRawState().players || {}) };
 
     querySnapshot.docChanges().forEach((documentChange) => {
       const { doc } = documentChange;
-      golfPlayers[doc.id as any] = doc.data() as GolfPlayer;
+      players[doc.id] = doc.data() as GolfPlayer;
     });
 
     store.update((s) => {
-      s.golfPlayers = golfPlayers;
+      s.players = players;
+    });
+  });
+};
+
+const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false));
+
+export const scorecardsSnapshotListener = () => {
+  return onSnapshot(scorecardsQuery, (querySnapshot) => {
+    const scorecards = { ...(store.getRawState().scorecards || {}) };
+
+    querySnapshot.docChanges().forEach((documentChange) => {
+      const { doc } = documentChange;
+      scorecards[doc.id] = doc.data() as GolfScorecard;
+    });
+
+    store.update((s) => {
+      s.scorecards = scorecards;
     });
   });
 };

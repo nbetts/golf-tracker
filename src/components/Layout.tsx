@@ -3,8 +3,9 @@ import { Unsubscribe } from 'firebase/firestore';
 import { ReactNode, useEffect, useState } from 'react';
 import {
   authStateChangedObserver,
-  golfCoursesSnapshotListener,
-  golfPlayersSnapshotListener,
+  coursesSnapshotListener,
+  playersSnapshotListener,
+  scorecardsSnapshotListener,
 } from '../../src/utils/firebase';
 import store from '../../src/utils/store';
 import AppShellHeader from './AppShellHeader';
@@ -33,15 +34,18 @@ export default function Layout(props: LayoutProps) {
   useEffect(() => {
     let unsubscribeGolfCoursesSnapshotListener: Unsubscribe;
     let unsubscribeGolfPlayersSnapshotListener: Unsubscribe;
+    let unsubscribeScorecardsSnapshotListener: Unsubscribe;
 
     if (appLoaded && user) {
-      unsubscribeGolfCoursesSnapshotListener = golfCoursesSnapshotListener();
-      unsubscribeGolfPlayersSnapshotListener = golfPlayersSnapshotListener();
+      unsubscribeGolfCoursesSnapshotListener = coursesSnapshotListener();
+      unsubscribeGolfPlayersSnapshotListener = playersSnapshotListener();
+      unsubscribeScorecardsSnapshotListener = scorecardsSnapshotListener();
     }
 
     return () => {
       unsubscribeGolfCoursesSnapshotListener && unsubscribeGolfCoursesSnapshotListener();
       unsubscribeGolfPlayersSnapshotListener && unsubscribeGolfPlayersSnapshotListener();
+      unsubscribeScorecardsSnapshotListener && unsubscribeScorecardsSnapshotListener();
     };
   }, [appLoaded, user]);
 

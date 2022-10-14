@@ -5,19 +5,22 @@ import store from './store';
 
 const withRouteCheck = (Component: React.ComponentType, access: 'signed-out' | 'signed-in'): React.FC =>
   function InnerComponent(props) {
+    const appLoaded = store.useState((s) => s.appLoaded);
     const user = store.useState((s) => s.user);
     const navigate = useNavigate();
     const [routeAllowed, setRouteAllowed] = useState(false);
 
     useEffect(() => {
-      if (user && access === 'signed-out') {
-        navigate(routes.scorecards, { replace: true });
-      } else if (!user && access === 'signed-in') {
-        navigate(routes.home, { replace: true });
-      } else {
-        setRouteAllowed(true);
+      if (appLoaded) {
+        if (user && access === 'signed-out') {
+          navigate(routes.scorecards, { replace: true });
+        } else if (!user && access === 'signed-in') {
+          navigate(routes.home, { replace: true });
+        } else {
+          setRouteAllowed(true);
+        }
       }
-    }, [user, access]);
+    }, [appLoaded, user, access]);
 
     return routeAllowed ? <Component {...props} /> : null;
   };

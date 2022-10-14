@@ -1,35 +1,15 @@
 import { Stack, Text } from '@mantine/core';
 import store from '../utils/store';
-import PlayerScorecard, { PlayerScorecardProps } from '../components/PlayerScorecard';
+import PlayerScorecard from '../components/PlayerScorecard';
 import withRouteCheck from '../../src/utils/withRouteCheck';
 
 const Scorecards = () => {
-  const golfCourses = store.useState((s) => s.golfCourses);
-  const golfPlayers = store.useState((s) => s.golfPlayers);
-
-  const golfPlayersArray = Object.entries(golfPlayers);
-  const scorecards: PlayerScorecardProps[] = [];
-
-  for (let i = 0; i < golfPlayersArray.length; i++) {
-    const [, golfPlayer] = golfPlayersArray[i];
-    const scorecardsArray = Object.entries(golfPlayer.scorecards);
-
-    for (let j = 0; j < scorecardsArray.length; j++) {
-      const [, scorecard] = scorecardsArray[j];
-      const golfCourse = golfCourses[scorecard.courseId];
-
-      if (golfCourse) {
-        scorecards.push({
-          playerName: golfPlayer.name,
-          scorecard,
-          golfCourse,
-        });
-      }
-    }
-  }
-
-  // Sort scorecards by reverse chronological order.
-  scorecards.sort((a, b) => b.scorecard.timestamp.seconds - a.scorecard.timestamp.seconds);
+  const user = store.useState((s) => s.user);
+  console.log('uid', user?.uid);
+  const courses = store.useState((s) => s.courses);
+  const players = store.useState((s) => s.players);
+  const scorecards = store.useState((s) => s.scorecards);
+  const scorecardsArray = Object.entries(scorecards).sort(([, a], [, b]) => b.timestamp.seconds - a.timestamp.seconds);
 
   return (
     <>
@@ -37,8 +17,16 @@ const Scorecards = () => {
         Scorecards
       </Text>
       <Stack>
-        {scorecards.map((scorecard, index) => (
-          <PlayerScorecard key={index} {...scorecard} />
+        {scorecardsArray.map(([id, scorecard]) => (
+          <PlayerScorecard
+            key={id}
+            course={courses[scorecard.courseId]}
+            player={players[scorecard.userId]}
+            scorecard={scorecard}
+            isOwner={user?.uid === scorecard.userId}
+            onEdit={() => null}
+            onDelete={() => null}
+          />
         ))}
       </Stack>
     </>

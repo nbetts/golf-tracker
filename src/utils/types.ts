@@ -11,31 +11,19 @@ export type ScoredGolfHole = {
 } & GolfHole;
 
 export type GolfCourse = {
-  name: string; // Acts as the ID
+  name: string;
   website: string;
   holes: GolfHole[];
 };
 
-export type GolfCourses = {
-  [key: string]: GolfCourse;
-};
-
 export type GolfScorecard = {
   courseId: string;
+  userId: string;
   timestamp: Timestamp;
   scores: number[];
-};
-
-export type GolfScorecards = {
-  [key: string]: GolfScorecard;
+  private: boolean;
 };
 
 export type GolfPlayer = {
-  userId: string;
   name: string;
-  scorecards: GolfScorecards;
-};
-
-export type GolfPlayers = {
-  [key: string]: GolfPlayer;
 };

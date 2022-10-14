@@ -4,8 +4,8 @@ import PlayerStatistics from '../../src/components/PlayerStatistics';
 import store from '../utils/store';
 
 const Players = () => {
-  const golfPlayers = store.useState((s) => s.golfPlayers);
-  // golfPlayers.sort((a, b) => a.user.name.localeCompare(b.user.name));
+  const players = store.useState((s) => s.players);
+  const playersArray = Object.entries(players).sort(([, a], [, b]) => a.name.localeCompare(b.name));
 
   return (
     <>
@@ -13,7 +13,7 @@ const Players = () => {
         Players
       </Text>
       <Stack justify="flex-start">
-        {Object.entries(golfPlayers).map(([id, player]) => (
+        {playersArray.map(([id, player]) => (
           <PlayerStatistics key={id} {...player} />
         ))}
       </Stack>

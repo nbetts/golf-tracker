@@ -4,8 +4,8 @@ import CourseScorecard from '../../src/components/CourseScorecard';
 import store from '../utils/store';
 
 const Courses = () => {
-  const golfCourses = store.useState((s) => s.golfCourses);
-  // golfCourses.sort((a, b) => a.name.localeCompare(b.name));
+  const courses = store.useState((s) => s.courses);
+  const coursesArray = Object.entries(courses).sort(([, a], [, b]) => a.name.localeCompare(b.name));
 
   return (
     <>
@@ -13,7 +13,7 @@ const Courses = () => {
         Courses
       </Text>
       <Stack justify="flex-start">
-        {Object.entries(golfCourses).map(([id, course]) => (
+        {coursesArray.map(([id, course]) => (
           <CourseScorecard key={id} {...course} />
         ))}
       </Stack>
