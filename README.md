@@ -64,6 +64,7 @@ Start the server
 
 ### Wish
 
+- add firebase analytics
 - fetch sorted data using firestore query sort
 - add ability to create and join user groups
   - user groups scope what courses, players and scorecards that group can see
