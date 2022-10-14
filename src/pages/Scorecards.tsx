@@ -1,32 +1,16 @@
 import { Stack, Text } from '@mantine/core';
 import store from '../utils/store';
-import PlayerScorecard, { PlayerScorecardProps } from '../components/PlayerScorecard';
+import PlayerScorecard from '../components/PlayerScorecard';
+import withRouteCheck from '../../src/utils/withRouteCheck';
 
-export default function Scorecards() {
-  const golfCourses = store.useState((s) => s.golfCourses);
-  const golfPlayers = store.useState((s) => s.golfPlayers);
-
-  const scorecards: PlayerScorecardProps[] = [];
-
-  for (let i = 0; i < golfPlayers.length; i++) {
-    const golfPlayer = golfPlayers[i];
-
-    for (let j = 0; j < golfPlayer.scorecards.length; j++) {
-      const scorecard = golfPlayer.scorecards[j];
-      const golfCourse = golfCourses.find((course) => course.name === scorecard.courseName);
-
-      if (golfCourse) {
-        scorecards.push({
-          playerName: golfPlayer.user.name,
-          scorecard,
-          golfCourse,
-        });
-      }
-    }
-  }
-
-  // Sort scorecards by reverse chronological order.
-  scorecards.sort((a, b) => b.scorecard.date.getTime() - a.scorecard.date.getTime());
+const Scorecards = () => {
+  const user = store.useState((s) => s.user);
+  const courses = store.useState((s) => s.courses);
+  const players = store.useState((s) => s.players);
+  const scorecards = store.useState((s) => s.scorecards);
+  const scorecardsArray = Object.entries(scorecards)
+    .filter(([, scorecard]) => courses[scorecard.courseId] && players[scorecard.userId])
+    .sort(([, a], [, b]) => b.timestamp.seconds - a.timestamp.seconds);
 
   return (
     <>
@@ -34,10 +18,20 @@ export default function Scorecards() {
         Scorecards
       </Text>
       <Stack>
-        {scorecards.map((scorecard, index) => (
-          <PlayerScorecard key={index} {...scorecard} />
+        {scorecardsArray.map(([id, scorecard]) => (
+          <PlayerScorecard
+            key={id}
+            course={courses[scorecard.courseId]}
+            player={players[scorecard.userId]}
+            scorecard={scorecard}
+            isOwner={user?.uid === scorecard.userId}
+            onEdit={() => null}
+            onDelete={() => null}
+          />
         ))}
       </Stack>
     </>
   );
-}
+};
+
+export default withRouteCheck(Scorecards, 'signed-in');

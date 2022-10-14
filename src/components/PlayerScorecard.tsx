@@ -1,18 +1,20 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
-import store from '../../src/utils/store';
-import { GolfCourse, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
+import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
+import { getTimestampDate } from '../../src/utils/formatting';
 
-export type PlayerScorecardProps = {
-  playerName: string;
+type PlayerScorecardProps = {
+  course: GolfCourse;
+  player: GolfPlayer;
   scorecard: GolfScorecard;
-  golfCourse: GolfCourse;
+  isOwner: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
 };
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
-  const user = store.useState((s) => s.user);
-  const { date, scores } = props.scorecard;
-  const { name, website, holes } = props.golfCourse;
+  const { timestamp, scores } = props.scorecard;
+  const { name, website, holes } = props.course;
 
   const holeCount = Math.min(scores.length, holes.length);
   const scoredHoles: ScoredGolfHole[] = [];
@@ -33,9 +35,9 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
         <Group position="apart">
           <Group mt="md" mb="xs">
             <Badge size="lg" color="blue" variant="light">
-              {date.toLocaleDateString()}
+              {getTimestampDate(timestamp)}
             </Badge>
-            <Text weight="bold">{props.playerName}</Text>
+            <Text weight="bold">{props.player.name}</Text>
           </Group>
           <Group mt="md" mb="xs">
             <Anchor weight="bold" href={website} target="_blank">
@@ -50,7 +52,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
             <Badge size="lg" color="pink" variant="light">
               Score {netPlayerScore}
             </Badge>
-            {user && (
+            {props.isOwner && (
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon>
@@ -58,8 +60,10 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
-                  <Menu.Item icon={<IconTrash size={14} />} color="red">
+                  <Menu.Item onClick={props.onEdit} icon={<IconPencil size={14} />}>
+                    Edit
+                  </Menu.Item>
+                  <Menu.Item onClick={props.onDelete} icon={<IconTrash size={14} />} color="red">
                     Delete
                   </Menu.Item>
                 </Menu.Dropdown>

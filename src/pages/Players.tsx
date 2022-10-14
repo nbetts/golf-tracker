@@ -1,10 +1,11 @@
 import { Stack, Text } from '@mantine/core';
+import withRouteCheck from '../../src/utils/withRouteCheck';
 import PlayerStatistics from '../../src/components/PlayerStatistics';
 import store from '../utils/store';
 
-export default function Players() {
-  const golfPlayers = store.useState((s) => s.golfPlayers);
-  golfPlayers.sort((a, b) => a.user.name.localeCompare(b.user.name));
+const Players = () => {
+  const players = store.useState((s) => s.players);
+  const playersArray = Object.entries(players).sort(([, a], [, b]) => a.name.localeCompare(b.name));
 
   return (
     <>
@@ -12,10 +13,12 @@ export default function Players() {
         Players
       </Text>
       <Stack justify="flex-start">
-        {golfPlayers.map((player, index) => (
-          <PlayerStatistics key={index} {...player} />
+        {playersArray.map(([id, player]) => (
+          <PlayerStatistics key={id} {...player} />
         ))}
       </Stack>
     </>
   );
-}
+};
+
+export default withRouteCheck(Players, 'signed-in');
