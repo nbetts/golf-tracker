@@ -22,4 +22,5 @@ const Players = () => {
   );
 };
 
-export default withRouteCheck(Players, 'signed-in');
+// export default withRouteCheck(Players, 'signed-in');
+export default Players;

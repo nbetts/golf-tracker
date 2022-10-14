@@ -1,9 +1,9 @@
 import { Navbar, NavLink, ThemeIcon } from '@mantine/core';
 import { IconChevronRight, IconGolf, IconUsers, IconId } from '@tabler/icons';
 import Link from 'next/link';
-import store from 'src/utils/store';
 import routes from 'src/utils/routes';
 import { UserSettings } from './UserSettings';
+import { useFirebaseAuthUser } from 'src/utils/firebase';
 
 type AppShellNavbarProps = {
   navMenuOpened: boolean;
@@ -11,12 +11,12 @@ type AppShellNavbarProps = {
 };
 
 export default function AppShellNavbar(props: AppShellNavbarProps) {
-  const user = store.useState((s) => s.user);
+  const user = useFirebaseAuthUser();
 
   return (
     <Navbar p="xs" hiddenBreakpoint="sm" hidden={!props.navMenuOpened} width={{ sm: 280 }}>
       <Navbar.Section grow mb="xs">
-        {user && (
+        {user.data && (
           <>
             <Link href={routes.courses} passHref>
               <NavLink

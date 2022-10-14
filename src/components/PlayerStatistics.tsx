@@ -1,10 +1,10 @@
 import { Card, Group, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
-import store from 'src/utils/store';
+import { useFirebaseAuthUser } from 'src/utils/firebase';
 import { GolfPlayer } from 'src/utils/types';
 
 export default function PlayerStatistics(props: GolfPlayer) {
-  const user = store.useState((s) => s.user);
+  const user = useFirebaseAuthUser();
 
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -14,7 +14,7 @@ export default function PlayerStatistics(props: GolfPlayer) {
             <Text weight="bold">{props.name}</Text>
           </Group>
           <Group mt="md" mb="xs">
-            {user && (
+            {user.data && (
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon>

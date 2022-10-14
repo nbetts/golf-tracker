@@ -4,6 +4,9 @@ import { NotificationsProvider } from '@mantine/notifications';
 import type { AppProps } from 'next/app';
 import type { ColorScheme } from '@mantine/core';
 import Head from 'next/head';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -24,7 +27,9 @@ export default function App({ Component, pageProps }: AppProps) {
             <meta name="description" content="Track your golf scorecards with friends" />
             <link rel="icon" href="/favicon.svg" />
           </Head>
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
         </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>

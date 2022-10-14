@@ -1,9 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { collection, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
 import store from './store';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
+import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
+
+// Config
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDjek7Vhze3tddsDvXQ3pNcmaAloEOGjZI',
@@ -17,51 +20,28 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
-const googleAuthProvider = new GoogleAuthProvider();
-
 const firebaseFirestore = getFirestore(firebaseApp);
+
+// Auth
+
+export const useFirebaseAuthUser = () => useAuthUser(['user'], firebaseAuth);
+
+export const useSignIn = () =>
+  useAuthSignInWithRedirect(firebaseAuth, {
+    onSuccess: () => showNotification({ title: 'Signed in', message: 'Successfully signed in', color: 'green' }),
+    onError: (error) => showNotification({ title: 'Unable to sign in', message: error?.message, color: 'red' }),
+  });
+
+export const useSignOut = () =>
+  useAuthSignOut(firebaseAuth, {
+    onSuccess: () => showNotification({ title: 'Signed out', message: 'Successfully signed out', color: 'green' }),
+  });
+
+// Firestore
+
 const coursesCollectionRef = collection(firebaseFirestore, 'courses');
 const playersCollectionRef = collection(firebaseFirestore, 'players');
 const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards');
-
-export const signInWithGoogle = () => signInWithPopup(firebaseAuth, googleAuthProvider);
-export const signOut = () => firebaseAuth.signOut();
-
-export const authStateChangedObserver = () => {
-  return onAuthStateChanged(firebaseAuth, async (updatedUser) => {
-    const { appLoaded, user } = store.getRawState();
-
-    if (updatedUser !== user) {
-      if (updatedUser) {
-        store.update((s) => {
-          s.user = updatedUser;
-        });
-
-        if (appLoaded) {
-          showNotification({
-            title: 'Signed in',
-            message: `Successfully signed in as ${updatedUser.displayName}.`,
-            color: 'green',
-          });
-        }
-      } else {
-        store.update((s) => {
-          s.user = null;
-          s.courses = {};
-          s.players = {};
-        });
-
-        showNotification({ title: 'Signed out', message: 'Successfully signed out.', color: 'green' });
-      }
-    }
-
-    if (!appLoaded) {
-      store.update((s) => {
-        s.appLoaded = true;
-      });
-    }
-  });
-};
 
 export const coursesSnapshotListener = () => {
   return onSnapshot(coursesCollectionRef, (querySnapshot) => {

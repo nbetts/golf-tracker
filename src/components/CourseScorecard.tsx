@@ -1,10 +1,10 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
-import store from 'src/utils/store';
+import { useFirebaseAuthUser } from 'src/utils/firebase';
 import { GolfCourse } from 'src/utils/types';
 
 export default function CourseScorecard(props: GolfCourse) {
-  const user = store.useState((s) => s.user);
+  const user = useFirebaseAuthUser();
   const { name, website, holes } = props;
 
   let netPar = 0,
@@ -31,7 +31,7 @@ export default function CourseScorecard(props: GolfCourse) {
             <Badge size="lg" color="green" variant="light">
               Par {netPar}
             </Badge>
-            {user && (
+            {user.data && (
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon>

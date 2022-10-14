@@ -3,9 +3,10 @@ import store from 'src/utils/store';
 import PlayerScorecard from 'src/components/PlayerScorecard';
 import withRouteCheck from 'src/utils/withRouteCheck';
 import Layout from 'src/components/Layout';
+import { useFirebaseAuthUser } from 'src/utils/firebase';
 
 const Scorecards = () => {
-  const user = store.useState((s) => s.user);
+  const user = useFirebaseAuthUser();
   const courses = store.useState((s) => s.courses);
   const players = store.useState((s) => s.players);
   const scorecards = store.useState((s) => s.scorecards);
@@ -25,7 +26,7 @@ const Scorecards = () => {
             course={courses[scorecard.courseId]}
             player={players[scorecard.userId]}
             scorecard={scorecard}
-            isOwner={user?.uid === scorecard.userId}
+            isOwner={user.data?.uid === scorecard.userId}
             onEdit={() => null}
             onDelete={() => null}
           />

@@ -1,19 +1,12 @@
 import { IconChevronRight } from '@tabler/icons';
 import { Box, NavLink, Popover, Button, Avatar } from '@mantine/core';
-import store from 'src/utils/store';
-import { signInWithGoogle, signOut } from 'src/utils/firebase';
-import { showNotification } from '@mantine/notifications';
+import { useSignIn, useFirebaseAuthUser, useSignOut } from 'src/utils/firebase';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 export function UserSettings() {
-  const user = store.useState((s) => s.user);
-
-  const signIn = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      showNotification({ title: 'Unable to sign in', message: error?.message, color: 'red' });
-    }
-  };
+  const user = useFirebaseAuthUser();
+  const signIn = useSignIn();
+  const signOut = useSignOut();
 
   return (
     <Box
@@ -22,12 +15,12 @@ export function UserSettings() {
         borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
       })}
     >
-      {user ? (
+      {user.data ? (
         <Popover position="right">
           <Popover.Target>
             <NavLink
-              label={user.displayName}
-              description={user.email}
+              label={user.data.displayName}
+              description={user.data.email}
               icon={<Avatar color="pink" radius="xl" />}
               rightSection={<IconChevronRight size={12} />}
             />
@@ -35,7 +28,7 @@ export function UserSettings() {
           <Popover.Dropdown
             sx={(theme) => ({ background: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white })}
           >
-            <Button color="pink" variant="outline" onClick={signOut}>
+            <Button color="pink" variant="outline" onClick={() => signOut.mutate()}>
               Sign out
             </Button>
           </Popover.Dropdown>
@@ -45,7 +38,7 @@ export function UserSettings() {
           label="Sign in"
           icon={<Avatar color="pink" radius="xl" />}
           rightSection={<IconChevronRight size={12} />}
-          onClick={signIn}
+          onClick={() => signIn.mutate({ provider: new GoogleAuthProvider() })}
         />
       )}
     </Box>
