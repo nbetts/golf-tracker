@@ -45,15 +45,17 @@ Start the server
 
 ### Must
 
-- integrate firestore database
-- setup firestore rules
-- add ability to create/edit/delete player & course data using modals
-- scope data editing to specific users
+- allow users to create & edit courses *
+- allow users to create players *
+- allow users to edit their own player data *
+
+\* use modals
 
 ### Should
 
+- allow users to delete data (implement soft delete)
 - allow users to hide their scorecards
-- fix vite issue using absolute imports for src/**/*
+- fix vite issue using absolute imports for `src/**/*`
 
 ### Could
 
@@ -62,6 +64,7 @@ Start the server
 
 ### Wish
 
+- fetch sorted data using firestore query sort
 - add ability to create and join user groups
   - user groups scope what courses, players and scorecards that group can see
   - which will mean users need roles such as group captain and group member
