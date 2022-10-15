@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { collection, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
-import store from './store';
+import { collection, CollectionReference, getFirestore, orderBy, query, where } from 'firebase/firestore';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
 import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
+import { useFirestoreQueryData } from '@react-query-firebase/firestore';
 
 // Config
 
@@ -18,7 +18,7 @@ const firebaseConfig = {
   measurementId: 'G-KM8FZ9MTM9',
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
 const firebaseFirestore = getFirestore(firebaseApp);
 
@@ -39,53 +39,13 @@ export const useSignOut = () =>
 
 // Firestore
 
-const coursesCollectionRef = collection(firebaseFirestore, 'courses');
-const playersCollectionRef = collection(firebaseFirestore, 'players');
-const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards');
+const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
+const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
+const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
+const coursesQuery = query(coursesCollectionRef, orderBy('name'));
+const playersQuery = query(playersCollectionRef, orderBy('name'));
+const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false), orderBy('timestamp', 'desc'));
 
-export const coursesSnapshotListener = () => {
-  return onSnapshot(coursesCollectionRef, (querySnapshot) => {
-    const courses = { ...(store.getRawState().courses || {}) };
-
-    querySnapshot.docChanges().forEach((documentChange) => {
-      const { doc } = documentChange;
-      courses[doc.id] = doc.data() as GolfCourse;
-    });
-
-    store.update((s) => {
-      s.courses = courses;
-    });
-  });
-};
-
-export const playersSnapshotListener = () => {
-  return onSnapshot(playersCollectionRef, (querySnapshot) => {
-    const players = { ...(store.getRawState().players || {}) };
-
-    querySnapshot.docChanges().forEach((documentChange) => {
-      const { doc } = documentChange;
-      players[doc.id] = doc.data() as GolfPlayer;
-    });
-
-    store.update((s) => {
-      s.players = players;
-    });
-  });
-};
-
-const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false));
-
-export const scorecardsSnapshotListener = () => {
-  return onSnapshot(scorecardsQuery, (querySnapshot) => {
-    const scorecards = { ...(store.getRawState().scorecards || {}) };
-
-    querySnapshot.docChanges().forEach((documentChange) => {
-      const { doc } = documentChange;
-      scorecards[doc.id] = doc.data() as GolfScorecard;
-    });
-
-    store.update((s) => {
-      s.scorecards = scorecards;
-    });
-  });
-};
+export const useCoursesCollection = () => useFirestoreQueryData('courses', coursesQuery, { idField: 'id' });
+export const usePlayersCollection = () => useFirestoreQueryData('players', playersQuery, { idField: 'id' });
+export const useScorecardsCollection = () => useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id' });

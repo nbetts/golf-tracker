@@ -1,12 +1,11 @@
 import { Stack, Text } from '@mantine/core';
 import withRouteCheck from 'src/utils/withRouteCheck';
 import CourseScorecard from 'src/components/CourseScorecard';
-import store from 'src/utils/store';
 import Layout from 'src/components/Layout';
+import { useCoursesCollection } from 'src/utils/firebase';
 
 const Courses = () => {
-  const courses = store.useState((s) => s.courses);
-  const coursesArray = Object.entries(courses).sort(([, a], [, b]) => a.name.localeCompare(b.name));
+  const courses = useCoursesCollection();
 
   return (
     <Layout>
@@ -14,8 +13,8 @@ const Courses = () => {
         Courses
       </Text>
       <Stack justify="flex-start">
-        {coursesArray.map(([id, course]) => (
-          <CourseScorecard key={id} {...course} />
+        {courses.data?.map((course) => (
+          <CourseScorecard key={course.id} {...course} />
         ))}
       </Stack>
     </Layout>

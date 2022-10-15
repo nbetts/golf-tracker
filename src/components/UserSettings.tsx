@@ -25,9 +25,7 @@ export function UserSettings() {
               rightSection={<IconChevronRight size={12} />}
             />
           </Popover.Target>
-          <Popover.Dropdown
-            sx={(theme) => ({ background: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white })}
-          >
+          <Popover.Dropdown sx={(theme) => ({ background: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white })}>
             <Button color="pink" variant="outline" onClick={() => signOut.mutate()}>
               Sign out
             </Button>

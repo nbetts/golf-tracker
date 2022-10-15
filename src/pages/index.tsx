@@ -14,4 +14,3 @@ const Home = () => {
 };
 
 export default withRouteCheck(Home, 'signed-out');
-// export default Home;
