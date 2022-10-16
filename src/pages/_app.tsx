@@ -1,5 +1,6 @@
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
+import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
 import type { AppProps } from 'next/app';
 import type { ColorScheme } from '@mantine/core';
@@ -19,16 +20,18 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+      <MantineProvider theme={{ colorScheme, primaryColor: 'green' }} withGlobalStyles withNormalizeCSS>
         <NotificationsProvider>
-          <Head>
-            <title>Golf Tracker</title>
-            <meta name="description" content="Track your golf scorecards with friends" />
-            <link rel="icon" href="/favicon.svg" />
-          </Head>
-          <QueryClientProvider client={queryClient}>
-            <Component {...pageProps} />
-          </QueryClientProvider>
+          <ModalsProvider>
+            <Head>
+              <title>Golf Tracker</title>
+              <meta name="description" content="Track your golf scorecards with friends" />
+              <link rel="icon" href="/favicon.svg" />
+            </Head>
+            <QueryClientProvider client={queryClient}>
+              <Component {...pageProps} />
+            </QueryClientProvider>
+          </ModalsProvider>
         </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
