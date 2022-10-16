@@ -1,7 +1,8 @@
-import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
+import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Switch, Tooltip, Box } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
 import { getTimestampDate } from 'src/utils/formatting';
+import { useScorecardDocumentMutation } from 'src/utils/firebase';
 
 type PlayerScorecardProps = {
   course: GolfCourse;
@@ -13,6 +14,8 @@ type PlayerScorecardProps = {
 };
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
+  const mutation = useScorecardDocumentMutation(props.scorecard.id);
+
   const { timestamp, scores } = props.scorecard;
   const { name, website, holes } = props.course;
 
@@ -53,21 +56,33 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
               Score {netPlayerScore}
             </Badge>
             {props.isOwner && (
-              <Menu withinPortal position="bottom-end" shadow="sm">
-                <Menu.Target>
-                  <ActionIcon>
-                    <IconDots size={16} />
-                  </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item onClick={props.onEdit} icon={<IconPencil size={14} />}>
-                    Edit
-                  </Menu.Item>
-                  <Menu.Item onClick={props.onDelete} icon={<IconTrash size={14} />} color="red">
-                    Delete
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
+              <>
+                <Tooltip label={`Other players ${props.scorecard.private ? 'cannot' : 'can'} see this scorecard`}>
+                  <Box>
+                    <Switch
+                      checked={props.scorecard.private}
+                      onChange={(event) => mutation.mutate({ private: event.currentTarget.checked })}
+                      size="sm"
+                      label="Hidden"
+                    />
+                  </Box>
+                </Tooltip>
+                <Menu withinPortal position="bottom-end" shadow="sm">
+                  <Menu.Target>
+                    <ActionIcon>
+                      <IconDots size={16} />
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item onClick={props.onEdit} icon={<IconPencil size={14} />}>
+                      Edit
+                    </Menu.Item>
+                    <Menu.Item onClick={props.onDelete} icon={<IconTrash size={14} />} color="red">
+                      Delete
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              </>
             )}
           </Group>
         </Group>

@@ -55,7 +55,6 @@ Start the server
 
 - support signing in with other providers
 - allow users to delete data (implement soft delete)
-- allow users to hide their scorecards
 
 ### Could
 

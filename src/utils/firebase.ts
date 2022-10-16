@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { collection, CollectionReference, getFirestore, query, where } from 'firebase/firestore';
+import { collection, CollectionReference, doc, getFirestore, query, where } from 'firebase/firestore';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
 import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
-import { useFirestoreQueryData } from '@react-query-firebase/firestore';
+import { useFirestoreDocumentMutation, useFirestoreQueryData } from '@react-query-firebase/firestore';
 
 // Config
 
@@ -52,4 +52,8 @@ export const useScorecardsCollection = () => useFirestoreQueryData('scorecards',
 
 export const usePersonalScorecardsCollection = (uid: string) => {
   return useFirestoreQueryData('personalScorecards', query(scorecardsCollectionRef, where('userId', '==', uid)), { idField: 'id', subscribe: true });
+};
+
+export const useScorecardDocumentMutation = (id: string) => {
+  return useFirestoreDocumentMutation<Partial<GolfScorecard>>(doc(scorecardsCollectionRef, id), { merge: true });
 };
