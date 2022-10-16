@@ -65,6 +65,7 @@ Start the server
 ### Wish
 
 - add firebase analytics
+- make scorecard filtering more efficient (e.g. use maps instead of arrays)
 - add ability to create and join user groups
   - user groups scope what courses, players and scorecards that group can see
   - which will mean users need roles such as group captain and group member
