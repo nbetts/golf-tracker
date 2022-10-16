@@ -15,6 +15,7 @@ export type GolfCourse = {
   name: string;
   website: string;
   holes: GolfHole[];
+  deleted: boolean;
 };
 
 export type GolfScorecard = {
@@ -24,9 +25,11 @@ export type GolfScorecard = {
   timestamp: Timestamp;
   scores: number[];
   hidden: boolean;
+  deleted: boolean;
 };
 
 export type GolfPlayer = {
   id: string;
   name: string;
+  deleted: boolean;
 };
