@@ -1,9 +1,9 @@
 import { Navbar, NavLink, ThemeIcon } from '@mantine/core';
 import { IconChevronRight, IconGolf, IconUsers, IconId } from '@tabler/icons';
-import Link from 'next/link';
-import routes from 'src/utils/routes';
+import { Link } from 'react-router-dom';
+import store from '../../src/utils/store';
+import routes from '../../src/utils/routes';
 import { UserSettings } from './UserSettings';
-import { useFirebaseAuthUser } from 'src/utils/firebase';
 
 type AppShellNavbarProps = {
   navMenuOpened: boolean;
@@ -11,52 +11,49 @@ type AppShellNavbarProps = {
 };
 
 export default function AppShellNavbar(props: AppShellNavbarProps) {
-  const user = useFirebaseAuthUser();
+  const user = store.useState((s) => s.user);
 
   return (
     <Navbar p="xs" hiddenBreakpoint="sm" hidden={!props.navMenuOpened} width={{ sm: 280 }}>
       <Navbar.Section grow mb="xs">
-        {user.data && (
+        {user && (
           <>
-            <Link href={routes.courses} passHref>
-              <NavLink
-                label="Courses"
-                component="a"
-                onClick={() => props.onNavMenuToggle(false)}
-                rightSection={<IconChevronRight size={12} />}
-                icon={
-                  <ThemeIcon color="green" variant="light">
-                    <IconGolf size={16} />
-                  </ThemeIcon>
-                }
-              />
-            </Link>
-            <Link href={routes.players} passHref>
-              <NavLink
-                label="Players"
-                component="a"
-                onClick={() => props.onNavMenuToggle(false)}
-                rightSection={<IconChevronRight size={12} />}
-                icon={
-                  <ThemeIcon color="pink" variant="light">
-                    <IconUsers size={16} />
-                  </ThemeIcon>
-                }
-              />
-            </Link>
-            <Link href={routes.scorecards} passHref>
-              <NavLink
-                label="Scorecards"
-                component="a"
-                onClick={() => props.onNavMenuToggle(false)}
-                rightSection={<IconChevronRight size={12} />}
-                icon={
-                  <ThemeIcon color="cyan" variant="light">
-                    <IconId size={16} />
-                  </ThemeIcon>
-                }
-              />
-            </Link>
+            <NavLink
+              label="Courses"
+              component={Link}
+              to={routes.courses}
+              onClick={() => props.onNavMenuToggle(false)}
+              rightSection={<IconChevronRight size={12} />}
+              icon={
+                <ThemeIcon color="green" variant="light">
+                  <IconGolf size={16} />
+                </ThemeIcon>
+              }
+            />
+            <NavLink
+              label="Players"
+              component={Link}
+              to={routes.players}
+              onClick={() => props.onNavMenuToggle(false)}
+              rightSection={<IconChevronRight size={12} />}
+              icon={
+                <ThemeIcon color="pink" variant="light">
+                  <IconUsers size={16} />
+                </ThemeIcon>
+              }
+            />
+            <NavLink
+              label="Scorecards"
+              component={Link}
+              to={routes.scorecards}
+              onClick={() => props.onNavMenuToggle(false)}
+              rightSection={<IconChevronRight size={12} />}
+              icon={
+                <ThemeIcon color="cyan" variant="light">
+                  <IconId size={16} />
+                </ThemeIcon>
+              }
+            />
           </>
         )}
       </Navbar.Section>

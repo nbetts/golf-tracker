@@ -1,6 +1,6 @@
 import { createStyles, Title, Text, Button, Container, Group } from '@mantine/core';
-import Link from 'next/link';
-import routes from 'src/utils/routes';
+import { useNavigate } from 'react-router-dom';
+import routes from '../utils/routes';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -40,22 +40,22 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Error404() {
+export function Error404() {
   const { classes } = useStyles();
+  const navigate = useNavigate();
 
   return (
     <Container className={classes.root}>
       <div className={classes.label}>404</div>
       <Title className={classes.title}>You have found a secret place.</Title>
       <Text color="dimmed" size="lg" align="center" className={classes.description}>
-        Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another URL.
+        Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another
+        URL.
       </Text>
       <Group position="center">
-        <Link href={routes.home} passHref>
-          <Button component="a" variant="subtle" size="md">
-            Take me back to home the page
-          </Button>
-        </Link>
+        <Button variant="subtle" size="md" onClick={() => navigate(routes.home)}>
+          Take me back to home page
+        </Button>
       </Group>
     </Container>
   );

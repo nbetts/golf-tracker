@@ -1,12 +1,9 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { collection, CollectionReference, getFirestore, query, where } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
+import { collection, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
+import store from './store';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
-import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
-import { useFirestoreQueryData } from '@react-query-firebase/firestore';
-
-// Config
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDjek7Vhze3tddsDvXQ3pNcmaAloEOGjZI',
@@ -18,38 +15,97 @@ const firebaseConfig = {
   measurementId: 'G-KM8FZ9MTM9',
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
+const googleAuthProvider = new GoogleAuthProvider();
+
 const firebaseFirestore = getFirestore(firebaseApp);
+const coursesCollectionRef = collection(firebaseFirestore, 'courses');
+const playersCollectionRef = collection(firebaseFirestore, 'players');
+const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards');
 
-// Auth
+export const signInWithGoogle = () => signInWithPopup(firebaseAuth, googleAuthProvider);
+export const signOut = () => firebaseAuth.signOut();
 
-export const useFirebaseAuthUser = () => useAuthUser(['user'], firebaseAuth);
+export const authStateChangedObserver = () => {
+  return onAuthStateChanged(firebaseAuth, async (updatedUser) => {
+    const { appLoaded, user } = store.getRawState();
 
-export const useSignIn = () =>
-  useAuthSignInWithRedirect(firebaseAuth, {
-    onSuccess: () => showNotification({ title: 'Signed in', message: 'Successfully signed in', color: 'green' }),
-    onError: (error) => showNotification({ title: 'Unable to sign in', message: error?.message, color: 'red' }),
+    if (updatedUser !== user) {
+      if (updatedUser) {
+        store.update((s) => {
+          s.user = updatedUser;
+        });
+
+        if (appLoaded) {
+          showNotification({
+            title: 'Signed in',
+            message: `Successfully signed in as ${updatedUser.displayName}.`,
+            color: 'green',
+          });
+        }
+      } else {
+        store.update((s) => {
+          s.user = null;
+          s.courses = {};
+          s.players = {};
+        });
+
+        showNotification({ title: 'Signed out', message: 'Successfully signed out.', color: 'green' });
+      }
+    }
+
+    if (!appLoaded) {
+      store.update((s) => {
+        s.appLoaded = true;
+      });
+    }
   });
+};
 
-export const useSignOut = () =>
-  useAuthSignOut(firebaseAuth, {
-    onSuccess: () => showNotification({ title: 'Signed out', message: 'Successfully signed out', color: 'green' }),
+export const coursesSnapshotListener = () => {
+  return onSnapshot(coursesCollectionRef, (querySnapshot) => {
+    const courses = { ...(store.getRawState().courses || {}) };
+
+    querySnapshot.docChanges().forEach((documentChange) => {
+      const { doc } = documentChange;
+      courses[doc.id] = doc.data() as GolfCourse;
+    });
+
+    store.update((s) => {
+      s.courses = courses;
+    });
   });
+};
 
-// Firestore
+export const playersSnapshotListener = () => {
+  return onSnapshot(playersCollectionRef, (querySnapshot) => {
+    const players = { ...(store.getRawState().players || {}) };
 
-const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
-const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
-const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
-const coursesQuery = query(coursesCollectionRef);
-const playersQuery = query(playersCollectionRef);
+    querySnapshot.docChanges().forEach((documentChange) => {
+      const { doc } = documentChange;
+      players[doc.id] = doc.data() as GolfPlayer;
+    });
+
+    store.update((s) => {
+      s.players = players;
+    });
+  });
+};
+
 const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false));
 
-export const useCoursesCollection = () => useFirestoreQueryData('courses', coursesQuery, { idField: 'id', subscribe: true });
-export const usePlayersCollection = () => useFirestoreQueryData('players', playersQuery, { idField: 'id', subscribe: true });
-export const useScorecardsCollection = () => useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id', subscribe: true });
+export const scorecardsSnapshotListener = () => {
+  return onSnapshot(scorecardsQuery, (querySnapshot) => {
+    const scorecards = { ...(store.getRawState().scorecards || {}) };
 
-export const usePersonalScorecardsCollection = (uid: string) => {
-  return useFirestoreQueryData('personalScorecards', query(scorecardsCollectionRef, where('userId', '==', uid)), { idField: 'id', subscribe: true });
+    querySnapshot.docChanges().forEach((documentChange) => {
+      const { doc } = documentChange;
+      scorecards[doc.id] = doc.data() as GolfScorecard;
+    });
+
+    store.update((s) => {
+      s.scorecards = scorecards;
+    });
+  });
 };

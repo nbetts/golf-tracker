@@ -1,4 +1,4 @@
-import type { Timestamp } from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 
 export type GolfHole = {
   par: number;
@@ -11,14 +11,12 @@ export type ScoredGolfHole = {
 } & GolfHole;
 
 export type GolfCourse = {
-  id: string;
   name: string;
   website: string;
   holes: GolfHole[];
 };
 
 export type GolfScorecard = {
-  id: string;
   courseId: string;
   userId: string;
   timestamp: Timestamp;
@@ -27,6 +25,5 @@ export type GolfScorecard = {
 };
 
 export type GolfPlayer = {
-  id: string;
   name: string;
 };

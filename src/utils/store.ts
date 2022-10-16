@@ -1,4 +1,4 @@
-import type { User } from 'firebase/auth';
+import { User } from 'firebase/auth';
 import { Store } from 'pullstate';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
 

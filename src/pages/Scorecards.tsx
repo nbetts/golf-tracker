@@ -1,77 +1,37 @@
 import { Stack, Text } from '@mantine/core';
-import PlayerScorecard from 'src/components/PlayerScorecard';
-import { withAuthCheck } from 'src/utils/withRouteCheck';
-import Layout from 'src/components/Layout';
-import {
-  useCoursesCollection,
-  useFirebaseAuthUser,
-  usePlayersCollection,
-  usePersonalScorecardsCollection,
-  useScorecardsCollection,
-} from 'src/utils/firebase';
-import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/utils/types';
-
-type CombinedScorecardInformation = {
-  course: GolfCourse;
-  player: GolfPlayer;
-  scorecard: GolfScorecard;
-};
+import store from '../utils/store';
+import PlayerScorecard from '../components/PlayerScorecard';
+import withRouteCheck from '../../src/utils/withRouteCheck';
 
 const Scorecards = () => {
-  const user = useFirebaseAuthUser();
-  const courses = useCoursesCollection();
-  const players = usePlayersCollection();
-
-  const userId = user.data?.uid || '';
-  const personalScorecards = usePersonalScorecardsCollection(userId);
-  const publicScorecards = useScorecardsCollection();
-  const filteredScorecardInfo: CombinedScorecardInformation[] = [];
-
-  if (courses.data && players.data && personalScorecards.data && publicScorecards.data) {
-    const allScorecards = [...publicScorecards.data];
-
-    for (let i = 0; i < personalScorecards.data.length; i++) {
-      const scorecard = personalScorecards.data[i];
-
-      if (allScorecards.findIndex(({ id }) => id === scorecard.id) === -1) {
-        allScorecards.push(scorecard);
-      }
-    }
-
-    for (let i = 0; i < allScorecards.length; i++) {
-      const scorecard = allScorecards[i];
-      const player = players.data.find((player) => player.id === scorecard.userId);
-
-      if (player) {
-        const course = courses.data.find((course) => course.id === scorecard.courseId);
-
-        if (course) {
-          filteredScorecardInfo.push({ course, player, scorecard });
-        }
-      }
-    }
-  }
-
-  filteredScorecardInfo.sort((a, b) => b.scorecard.timestamp.seconds - a.scorecard.timestamp.seconds);
+  const user = store.useState((s) => s.user);
+  const courses = store.useState((s) => s.courses);
+  const players = store.useState((s) => s.players);
+  const scorecards = store.useState((s) => s.scorecards);
+  const scorecardsArray = Object.entries(scorecards)
+    .filter(([, scorecard]) => courses[scorecard.courseId] && players[scorecard.userId])
+    .sort(([, a], [, b]) => b.timestamp.seconds - a.timestamp.seconds);
 
   return (
-    <Layout>
+    <>
       <Text size={30} weight="bold" mb="sm">
         Scorecards
       </Text>
       <Stack>
-        {filteredScorecardInfo.map((info) => (
+        {scorecardsArray.map(([id, scorecard]) => (
           <PlayerScorecard
-            key={info.scorecard.id}
-            {...info}
-            isOwner={user.data?.uid === info.scorecard.userId}
+            key={id}
+            course={courses[scorecard.courseId]}
+            player={players[scorecard.userId]}
+            scorecard={scorecard}
+            isOwner={user?.uid === scorecard.userId}
             onEdit={() => null}
             onDelete={() => null}
           />
         ))}
       </Stack>
-    </Layout>
+    </>
   );
 };
 
-export default withAuthCheck(Scorecards);
+export default withRouteCheck(Scorecards, 'signed-in');
