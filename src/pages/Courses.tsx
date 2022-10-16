@@ -1,5 +1,5 @@
 import { Stack, Text } from '@mantine/core';
-import withRouteCheck from 'src/utils/withRouteCheck';
+import { withAuthCheck } from 'src/utils/withRouteCheck';
 import CourseScorecard from 'src/components/CourseScorecard';
 import Layout from 'src/components/Layout';
 import { useCoursesCollection } from 'src/utils/firebase';
@@ -21,4 +21,4 @@ const Courses = () => {
   );
 };
 
-export default withRouteCheck(Courses, 'signed-in');
+export default withAuthCheck(Courses);

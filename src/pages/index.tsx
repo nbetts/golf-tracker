@@ -1,6 +1,6 @@
 import { Text } from '@mantine/core';
 import Layout from 'src/components/Layout';
-import withRouteCheck from 'src/utils/withRouteCheck';
+import { withoutAuthCheck } from 'src/utils/withRouteCheck';
 
 const Home = () => {
   return (
@@ -13,4 +13,4 @@ const Home = () => {
   );
 };
 
-export default withRouteCheck(Home, 'signed-out');
+export default withoutAuthCheck(Home);

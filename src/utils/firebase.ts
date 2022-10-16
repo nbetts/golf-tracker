@@ -44,8 +44,13 @@ const playersCollectionRef = collection(firebaseFirestore, 'players') as Collect
 const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
 const coursesQuery = query(coursesCollectionRef, orderBy('name'));
 const playersQuery = query(playersCollectionRef, orderBy('name'));
-const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false), orderBy('timestamp', 'desc'));
+const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false));
 
-export const useCoursesCollection = () => useFirestoreQueryData('courses', coursesQuery, { idField: 'id' });
-export const usePlayersCollection = () => useFirestoreQueryData('players', playersQuery, { idField: 'id' });
-export const useScorecardsCollection = () => useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id' });
+export const useCoursesCollection = () => useFirestoreQueryData('courses', coursesQuery, { idField: 'id', subscribe: true });
+export const usePlayersCollection = () => useFirestoreQueryData('players', playersQuery, { idField: 'id', subscribe: true });
+export const useScorecardsCollection = () => useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id', subscribe: true });
+
+export const usePersonalScorecardsCollection = (uid: string) => {
+  const scorecardsQuery = query(scorecardsCollectionRef, where('userId', '==', uid));
+  return useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id', subscribe: true });
+};

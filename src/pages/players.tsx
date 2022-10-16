@@ -1,5 +1,5 @@
 import { Stack, Text } from '@mantine/core';
-import withRouteCheck from 'src/utils/withRouteCheck';
+import { withAuthCheck } from 'src/utils/withRouteCheck';
 import PlayerStatistics from 'src/components/PlayerStatistics';
 import Layout from 'src/components/Layout';
 import { usePlayersCollection } from 'src/utils/firebase';
@@ -21,4 +21,4 @@ const Players = () => {
   );
 };
 
-export default withRouteCheck(Players, 'signed-in');
+export default withAuthCheck(Players);

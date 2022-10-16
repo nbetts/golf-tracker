@@ -1,8 +1,14 @@
 import { Stack, Text } from '@mantine/core';
 import PlayerScorecard from 'src/components/PlayerScorecard';
-import withRouteCheck from 'src/utils/withRouteCheck';
+import { withAuthCheck } from 'src/utils/withRouteCheck';
 import Layout from 'src/components/Layout';
-import { useCoursesCollection, useFirebaseAuthUser, usePlayersCollection, useScorecardsCollection } from 'src/utils/firebase';
+import {
+  useCoursesCollection,
+  useFirebaseAuthUser,
+  usePlayersCollection,
+  usePersonalScorecardsCollection,
+  useScorecardsCollection,
+} from 'src/utils/firebase';
 import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/utils/types';
 
 type CombinedScorecardInformation = {
@@ -15,12 +21,17 @@ const Scorecards = () => {
   const user = useFirebaseAuthUser();
   const courses = useCoursesCollection();
   const players = usePlayersCollection();
-  const scorecards = useScorecardsCollection();
+
+  const userId = user.data?.uid || '';
+  const personalScorecards = usePersonalScorecardsCollection(userId);
+  const publicScorecards = useScorecardsCollection();
   const filteredScorecardInfo: CombinedScorecardInformation[] = [];
 
-  if (courses.data && players.data && scorecards.data) {
-    for (let i = 0; i < scorecards.data.length; i++) {
-      const scorecard = scorecards.data[i];
+  if (courses.data && players.data && personalScorecards.data && publicScorecards.data) {
+    const allScorecards = [...new Set([...personalScorecards.data, ...publicScorecards.data])];
+
+    for (let i = 0; i < allScorecards.length; i++) {
+      const scorecard = allScorecards[i];
       const player = players.data.find((player) => player.id === scorecard.userId);
 
       if (player) {
@@ -53,4 +64,4 @@ const Scorecards = () => {
   );
 };
 
-export default withRouteCheck(Scorecards, 'signed-in');
+export default withAuthCheck(Scorecards);

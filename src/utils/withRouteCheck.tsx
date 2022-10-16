@@ -1,29 +1,36 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useFirebaseAuthUser } from './firebase';
 import routes from './routes';
 
-const withRouteCheck = (Component: React.ComponentType, access: 'signed-out' | 'signed-in'): React.FC =>
+export const withAuthCheck = (Component: React.ComponentType): React.FC =>
   function InnerComponent(props) {
     const user = useFirebaseAuthUser();
     const router = useRouter();
-    const [routeAllowed, setRouteAllowed] = useState(false);
+    const isLoading = user.isLoading;
+    const routeAllowed = user.data?.uid;
 
     useEffect(() => {
-      if (router.isReady) {
-        if (user.data && access === 'signed-out') {
-          setRouteAllowed(false);
-          router.replace(routes.scorecards);
-        } else if (!user && access === 'signed-in') {
-          setRouteAllowed(false);
-          router.replace(routes.home);
-        } else {
-          setRouteAllowed(true);
-        }
+      if (router.isReady && !isLoading && !routeAllowed) {
+        router.replace(routes.home);
       }
-    }, [router, user]);
+    }, [router, isLoading, routeAllowed]);
 
-    return routeAllowed ? <Component {...props} /> : null;
+    return !isLoading && routeAllowed ? <Component {...props} /> : null;
   };
 
-export default withRouteCheck;
+export const withoutAuthCheck = (Component: React.ComponentType): React.FC =>
+  function InnerComponent(props) {
+    const user = useFirebaseAuthUser();
+    const router = useRouter();
+    const isLoading = user.isLoading;
+    const routeAllowed = !user.data;
+
+    useEffect(() => {
+      if (router.isReady && !isLoading && !routeAllowed) {
+        router.replace(routes.scorecards);
+      }
+    }, [router, isLoading, routeAllowed]);
+
+    return !isLoading && routeAllowed ? <Component {...props} /> : null;
+  };
