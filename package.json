@@ -1,13 +1,15 @@
 {
   "name": "golf-tracker",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "author": {
+    "name": "Nathan Betts",
+    "url": "https://github.com/nbetts"
+  },
+  "version": "0.1.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "dev": "next dev",
+    "build": "next build && next export",
+    "preview": "serve out",
+    "lint": "next lint && eslint src --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -15,20 +17,24 @@
     "@mantine/core": "^5.5.4",
     "@mantine/hooks": "^5.5.4",
     "@mantine/notifications": "^5.5.5",
+    "@react-query-firebase/auth": "^1.0.0-dev.2",
+    "@react-query-firebase/firestore": "^1.0.0-dev.7",
     "@tabler/icons": "^1.101.0",
     "firebase": "^9.12.0",
+    "next": "^12.3.1",
     "pullstate": "^1.24.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.2"
+    "react-query": "^3.39.2",
+    "serve": "^14.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
-    "@vitejs/plugin-react": "^2.1.0",
     "eslint": "^8.25.0",
+    "eslint-config-next": "12.3.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^3.5.1",
     "eslint-plugin-import": "^2.26.0",
@@ -37,8 +43,7 @@
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
     "pretty-quick": "^3.1.3",
-    "typescript": "^4.6.4",
-    "vite": "^3.1.0"
+    "typescript": "^4.6.4"
   },
   "eslintConfig": {
     "extends": [
@@ -46,23 +51,14 @@
       "plugin:react/recommended",
       "plugin:import/recommended",
       "plugin:jsx-a11y/recommended",
+      "next",
+      "next/core-web-vitals",
       "plugin:@typescript-eslint/recommended",
       "eslint-config-prettier"
-    ],
-    "settings": {
-      "react": {
-        "version": "detect"
-      },
-      "import/resolver": {
-        "typescript": {}
-      }
-    },
-    "rules": {
-      "react/react-in-jsx-scope": "off"
-    }
+    ]
   },
   "prettier": {
-    "printWidth": 120,
+    "printWidth": 150,
     "singleQuote": true,
     "trailingComma": "all"
   },
