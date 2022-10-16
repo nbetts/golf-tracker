@@ -23,7 +23,7 @@ export type GolfScorecard = {
   userId: string;
   timestamp: Timestamp;
   scores: number[];
-  private: boolean;
+  hidden: boolean;
 };
 
 export type GolfPlayer = {

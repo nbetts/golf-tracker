@@ -44,7 +44,7 @@ const playersCollectionRef = collection(firebaseFirestore, 'players') as Collect
 const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
 const coursesQuery = query(coursesCollectionRef);
 const playersQuery = query(playersCollectionRef);
-const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false));
+const scorecardsQuery = query(scorecardsCollectionRef, where('hidden', '==', false));
 
 export const useCoursesCollection = () => useFirestoreQueryData('courses', coursesQuery, { idField: 'id', subscribe: true });
 export const usePlayersCollection = () => useFirestoreQueryData('players', playersQuery, { idField: 'id', subscribe: true });

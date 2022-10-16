@@ -16,7 +16,7 @@ type PlayerScorecardProps = {
 export default function PlayerScorecard(props: PlayerScorecardProps) {
   const mutation = useScorecardDocumentMutation(props.scorecard.id);
 
-  const { timestamp, scores } = props.scorecard;
+  const { hidden, timestamp, scores } = props.scorecard;
   const { name, website, holes } = props.course;
 
   const holeCount = Math.min(scores.length, holes.length);
@@ -57,11 +57,11 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
             </Badge>
             {props.isOwner && (
               <>
-                <Tooltip label={`Other players ${props.scorecard.private ? 'cannot' : 'can'} see this scorecard`}>
+                <Tooltip label={`Other players ${hidden ? 'cannot' : 'can'} see this scorecard`}>
                   <Box>
                     <Switch
-                      checked={props.scorecard.private}
-                      onChange={(event) => mutation.mutate({ private: event.currentTarget.checked })}
+                      checked={hidden}
+                      onChange={(event) => mutation.mutate({ hidden: event.currentTarget.checked })}
                       size="sm"
                       label="Hidden"
                     />

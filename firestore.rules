@@ -12,7 +12,7 @@ service cloud.firestore {
 
     match /scorecards/{document=**} {
       allow create: if request.auth != null;
-      allow read: if request.auth != null && (request.auth.uid == resource.data.userId || !resource.data.private);
+      allow read: if request.auth != null && (request.auth.uid == resource.data.userId || !resource.data.hidden);
       allow update: if request.auth != null && request.auth.uid == resource.data.userId;
     }
   }
