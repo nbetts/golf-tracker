@@ -1,5 +1,5 @@
 import { Card, Group, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
+import { IconDots, IconPencil } from '@tabler/icons';
 import { useFirebaseAuthUser } from 'src/utils/firebase';
 import { GolfPlayer } from 'src/utils/types';
 
@@ -14,7 +14,7 @@ export default function PlayerStatistics(props: GolfPlayer) {
             <Text weight="bold">{props.name}</Text>
           </Group>
           <Group mt="md" mb="xs">
-            {user.data && (
+            {user.data?.uid === props.id && (
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon>
@@ -23,9 +23,6 @@ export default function PlayerStatistics(props: GolfPlayer) {
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
-                  <Menu.Item icon={<IconTrash size={14} />} color="red">
-                    Delete
-                  </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             )}

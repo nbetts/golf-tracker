@@ -13,9 +13,11 @@ const Courses = () => {
         Courses
       </Text>
       <Stack justify="flex-start">
-        {courses.data?.map((course) => (
-          <CourseScorecard key={course.id} {...course} />
-        ))}
+        {courses.data
+          ?.sort((a, b) => a.name.localeCompare(b.name))
+          .map((course) => (
+            <CourseScorecard key={course.id} {...course} />
+          ))}
       </Stack>
     </Layout>
   );

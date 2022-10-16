@@ -28,7 +28,15 @@ const Scorecards = () => {
   const filteredScorecardInfo: CombinedScorecardInformation[] = [];
 
   if (courses.data && players.data && personalScorecards.data && publicScorecards.data) {
-    const allScorecards = [...new Set([...personalScorecards.data, ...publicScorecards.data])];
+    const allScorecards = [...publicScorecards.data];
+
+    for (let i = 0; i < personalScorecards.data.length; i++) {
+      const scorecard = personalScorecards.data[i];
+
+      if (allScorecards.findIndex(({ id }) => id === scorecard.id) === -1) {
+        allScorecards.push(scorecard);
+      }
+    }
 
     for (let i = 0; i < allScorecards.length; i++) {
       const scorecard = allScorecards[i];
@@ -43,6 +51,8 @@ const Scorecards = () => {
       }
     }
   }
+
+  filteredScorecardInfo.sort((a, b) => b.scorecard.timestamp.seconds - a.scorecard.timestamp.seconds);
 
   return (
     <Layout>

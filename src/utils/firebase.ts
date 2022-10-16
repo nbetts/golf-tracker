@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { collection, CollectionReference, getFirestore, orderBy, query, where } from 'firebase/firestore';
+import { collection, CollectionReference, getFirestore, query, where } from 'firebase/firestore';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
 import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
@@ -42,8 +42,8 @@ export const useSignOut = () =>
 const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
 const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
 const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
-const coursesQuery = query(coursesCollectionRef, orderBy('name'));
-const playersQuery = query(playersCollectionRef, orderBy('name'));
+const coursesQuery = query(coursesCollectionRef);
+const playersQuery = query(playersCollectionRef);
 const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false));
 
 export const useCoursesCollection = () => useFirestoreQueryData('courses', coursesQuery, { idField: 'id', subscribe: true });
@@ -51,6 +51,5 @@ export const usePlayersCollection = () => useFirestoreQueryData('players', playe
 export const useScorecardsCollection = () => useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id', subscribe: true });
 
 export const usePersonalScorecardsCollection = (uid: string) => {
-  const scorecardsQuery = query(scorecardsCollectionRef, where('userId', '==', uid));
-  return useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id', subscribe: true });
+  return useFirestoreQueryData('personalScorecards', query(scorecardsCollectionRef, where('userId', '==', uid)), { idField: 'id', subscribe: true });
 };

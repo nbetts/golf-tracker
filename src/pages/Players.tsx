@@ -13,9 +13,11 @@ const Players = () => {
         Players
       </Text>
       <Stack justify="flex-start">
-        {players.data?.map((player) => (
-          <PlayerStatistics key={player.id} {...player} />
-        ))}
+        {players.data
+          ?.sort((a, b) => a.name.localeCompare(b.name))
+          .map((player) => (
+            <PlayerStatistics key={player.id} {...player} />
+          ))}
       </Stack>
     </Layout>
   );
