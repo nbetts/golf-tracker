@@ -1,7 +1,7 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
-import { getTimestampDate } from '../../src/utils/formatting';
+import { getTimestampDate } from 'src/utils/formatting';
 
 type PlayerScorecardProps = {
   course: GolfCourse;

@@ -1,30 +1,36 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useFirebaseAuthUser } from './firebase';
 import routes from './routes';
-import store from './store';
 
-const withRouteCheck = (Component: React.ComponentType, access: 'signed-out' | 'signed-in'): React.FC =>
+export const withAuthCheck = (Component: React.ComponentType): React.FC =>
   function InnerComponent(props) {
-    const appLoaded = store.useState((s) => s.appLoaded);
-    const user = store.useState((s) => s.user);
-    const navigate = useNavigate();
-    const [routeAllowed, setRouteAllowed] = useState(false);
+    const user = useFirebaseAuthUser();
+    const router = useRouter();
+    const isLoading = user.isLoading;
+    const routeAllowed = user.data?.uid;
 
     useEffect(() => {
-      if (appLoaded) {
-        if (user && access === 'signed-out') {
-          setRouteAllowed(false);
-          navigate(routes.scorecards, { replace: true });
-        } else if (!user && access === 'signed-in') {
-          setRouteAllowed(false);
-          navigate(routes.home, { replace: true });
-        } else {
-          setRouteAllowed(true);
-        }
+      if (router.isReady && !isLoading && !routeAllowed) {
+        router.replace(routes.home);
       }
-    }, [appLoaded, user, access]);
+    }, [router, isLoading, routeAllowed]);
 
-    return routeAllowed ? <Component {...props} /> : null;
+    return !isLoading && routeAllowed ? <Component {...props} /> : null;
   };
 
-export default withRouteCheck;
+export const withoutAuthCheck = (Component: React.ComponentType): React.FC =>
+  function InnerComponent(props) {
+    const user = useFirebaseAuthUser();
+    const router = useRouter();
+    const isLoading = user.isLoading;
+    const routeAllowed = !user.data;
+
+    useEffect(() => {
+      if (router.isReady && !isLoading && !routeAllowed) {
+        router.replace(routes.scorecards);
+      }
+    }, [router, isLoading, routeAllowed]);
+
+    return !isLoading && routeAllowed ? <Component {...props} /> : null;
+  };
