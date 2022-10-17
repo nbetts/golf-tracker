@@ -45,8 +45,7 @@ Start the server
 
 ### Must
 
-- allow users to create & edit courses *
-- allow users to create players *
+- create players record upon first sign in
 - allow users to edit their own player data *
 
 \* use modals

@@ -2,7 +2,7 @@ import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, S
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
 import { getTimestampDate } from 'src/utils/formatting';
-import { useScorecardDocumentMutation } from 'src/utils/firebase';
+import { useScorecardsDocumentMutation } from 'src/utils/firebase';
 
 type PlayerScorecardProps = {
   course: GolfCourse;
@@ -14,7 +14,7 @@ type PlayerScorecardProps = {
 };
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
-  const mutation = useScorecardDocumentMutation(props.scorecard.id);
+  const mutation = useScorecardsDocumentMutation(props.scorecard.id);
 
   const { hidden, timestamp, scores } = props.scorecard;
   const { name, website, holes } = props.course;

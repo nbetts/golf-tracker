@@ -55,14 +55,14 @@ export const usePersonalScorecardsCollection = (uid: string) => {
   return useFirestoreQueryData('personalScorecards', query(scorecardsCollectionRef, where('userId', '==', uid)), { idField: 'id', subscribe: true });
 };
 
-export const useCourseCollectionMutation = () => {
+export const useCoursesCollectionMutation = () => {
   return useFirestoreCollectionMutation(coursesCollectionRef, {
     onSuccess: () => showNotification({ message: 'Added course', color: 'green' }),
     onError: () => showNotification({ message: 'Unable to add course', color: 'red' }),
   });
 };
 
-export const useCourseDocumentMutation = (id: string) => {
+export const useCoursesDocumentMutation = (id: string) => {
   return useFirestoreDocumentMutation<Partial<GolfCourse>>(
     doc(coursesCollectionRef, id),
     { merge: true },
@@ -73,14 +73,32 @@ export const useCourseDocumentMutation = (id: string) => {
   );
 };
 
-export const useScorecardCollectionMutation = () => {
+export const usePlayersCollectionMutation = () => {
+  return useFirestoreCollectionMutation(playersCollectionRef, {
+    onSuccess: () => showNotification({ message: 'Added player', color: 'green' }),
+    onError: () => showNotification({ message: 'Unable to add player', color: 'red' }),
+  });
+};
+
+export const usePlayersDocumentMutation = (id: string) => {
+  return useFirestoreDocumentMutation<Partial<GolfPlayer>>(
+    doc(playersCollectionRef, id),
+    { merge: true },
+    {
+      onSuccess: () => showNotification({ message: 'Updated player', color: 'green' }),
+      onError: () => showNotification({ message: 'Unable to update player', color: 'red' }),
+    },
+  );
+};
+
+export const useScorecardsCollectionMutation = () => {
   return useFirestoreCollectionMutation(scorecardsCollectionRef, {
     onSuccess: () => showNotification({ message: 'Added scorecard', color: 'green' }),
     onError: () => showNotification({ message: 'Unable to add scorecard', color: 'red' }),
   });
 };
 
-export const useScorecardDocumentMutation = (id: string) => {
+export const useScorecardsDocumentMutation = (id: string) => {
   return useFirestoreDocumentMutation<Partial<GolfScorecard>>(
     doc(scorecardsCollectionRef, id),
     { merge: true },
