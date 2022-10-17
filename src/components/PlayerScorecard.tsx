@@ -1,8 +1,7 @@
-import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Switch, Tooltip, Box } from '@mantine/core';
+import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip } from '@mantine/core';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
 import { getTimestampDate } from 'src/utils/formatting';
-import { useScorecardsDocumentMutation } from 'src/utils/firebase';
 
 type PlayerScorecardProps = {
   course: GolfCourse;
@@ -14,8 +13,6 @@ type PlayerScorecardProps = {
 };
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
-  const mutation = useScorecardsDocumentMutation(props.scorecard.id);
-
   const { hidden, timestamp, scores } = props.scorecard;
   const { name, website, holes } = props.course;
 
@@ -57,16 +54,13 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
             </Badge>
             {props.isOwner && (
               <>
-                <Tooltip label={`Other players ${hidden ? 'cannot' : 'can'} see this scorecard`}>
-                  <Box>
-                    <Switch
-                      checked={hidden}
-                      onChange={(event) => mutation.mutate({ hidden: event.currentTarget.checked })}
-                      size="sm"
-                      label="Hidden"
-                    />
-                  </Box>
-                </Tooltip>
+                {hidden && (
+                  <Tooltip label="Other players cannot see this scorecard">
+                    <Badge size="lg" color="violet" variant="light">
+                      Hidden
+                    </Badge>
+                  </Tooltip>
+                )}
                 <Menu withinPortal position="bottom-end" shadow="sm">
                   <Menu.Target>
                     <ActionIcon>
