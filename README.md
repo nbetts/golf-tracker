@@ -55,6 +55,8 @@ Start the server
 
 - support signing in with other providers
 - allow users to delete data (implement soft delete)
+- fix bug where react-query or firestore data does not load after fast-refresh executes
+- add sensible form validation to all forms
 
 ### Could
 

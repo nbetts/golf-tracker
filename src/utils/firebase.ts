@@ -28,20 +28,21 @@ export const useFirebaseAuthUser = () => useAuthUser(['user'], firebaseAuth);
 
 export const useSignIn = () =>
   useAuthSignInWithRedirect(firebaseAuth, {
-    onSuccess: () => showNotification({ title: 'Signed in', message: 'Successfully signed in', color: 'green' }),
-    onError: (error) => showNotification({ title: 'Unable to sign in', message: error?.message, color: 'red' }),
+    onSuccess: () => showNotification({ message: 'Signed in', color: 'green' }),
+    onError: () => showNotification({ message: 'Unable to sign in', color: 'red' }),
   });
 
 export const useSignOut = () =>
   useAuthSignOut(firebaseAuth, {
-    onSuccess: () => showNotification({ title: 'Signed out', message: 'Successfully signed out', color: 'green' }),
+    onSuccess: () => showNotification({ message: 'Signed out', color: 'green' }),
   });
 
 // Firestore
 
-const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
-const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
-const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
+export const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
+export const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
+export const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
+
 const coursesQuery = query(coursesCollectionRef);
 const playersQuery = query(playersCollectionRef);
 const scorecardsQuery = query(scorecardsCollectionRef, where('hidden', '==', false));

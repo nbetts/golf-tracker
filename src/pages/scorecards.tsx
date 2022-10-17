@@ -1,4 +1,4 @@
-import { Stack, Text } from '@mantine/core';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import PlayerScorecard from 'src/components/PlayerScorecard';
 import { withAuthCheck } from 'src/utils/withRouteCheck';
 import Layout from 'src/components/Layout';
@@ -56,9 +56,12 @@ const Scorecards = () => {
 
   return (
     <Layout>
-      <Text size={30} weight="bold" mb="sm">
-        Scorecards
-      </Text>
+      <Group position="apart" mb="lg">
+        <Text size={30} weight="bold" m={0}>
+          Scorecards
+        </Text>
+        <Button>Add a scorecard</Button>
+      </Group>
       <Stack>
         {filteredScorecardInfo.map((info) => (
           <PlayerScorecard

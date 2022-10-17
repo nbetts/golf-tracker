@@ -21,18 +21,18 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme, primaryColor: 'green' }} withGlobalStyles withNormalizeCSS>
-        <NotificationsProvider>
-          <ModalsProvider>
-            <Head>
-              <title>Golf Tracker</title>
-              <meta name="description" content="Track your golf scorecards with friends" />
-              <link rel="icon" href="/favicon.svg" />
-            </Head>
-            <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <NotificationsProvider>
+            <ModalsProvider>
+              <Head>
+                <title>Golf Tracker</title>
+                <meta name="description" content="Track your golf scorecards with friends" />
+                <link rel="icon" href="/favicon.svg" />
+              </Head>
               <Component {...pageProps} />
-            </QueryClientProvider>
-          </ModalsProvider>
-        </NotificationsProvider>
+            </ModalsProvider>
+          </NotificationsProvider>
+        </QueryClientProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
