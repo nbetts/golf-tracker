@@ -15,7 +15,7 @@ const Courses = () => {
         <Text size={30} weight="bold" m={0}>
           Courses
         </Text>
-        <Button onClick={() => openModal({ title: 'Add a course', children: <AddCourseModal /> })}>Add a course</Button>
+        <Button onClick={() => openModal({ title: 'Add course', children: <AddCourseModal /> })}>Add course</Button>
       </Group>
       <Stack justify="flex-start">
         {courses.data

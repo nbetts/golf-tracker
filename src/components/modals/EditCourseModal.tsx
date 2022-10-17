@@ -1,11 +1,10 @@
 import { Button, Card, Grid, NumberInput, SegmentedControl, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { useCourseCollectionMutation } from 'src/utils/firebase';
-import { GolfHole } from 'src/utils/types';
+import { useCourseDocumentMutation } from 'src/utils/firebase';
+import { GolfCourse, GolfHole } from 'src/utils/types';
 
 const holeCount = ['9 holes', '18 holes'];
-const initialHoleData: GolfHole[] = new Array(18).fill(0).map(() => ({ par: 0, strokeIndex: 0, yards: 0 }));
 
 type FormInputs = {
   name: string;
@@ -14,15 +13,19 @@ type FormInputs = {
   holes: GolfHole[];
 };
 
-const AddCourseModal = () => {
-  const mutation = useCourseCollectionMutation();
+type EditCourseModalProps = {
+  course: GolfCourse;
+};
+
+const EditCourseModal = ({ course }: EditCourseModalProps) => {
+  const mutation = useCourseDocumentMutation(course.id);
 
   const form = useForm<FormInputs>({
     initialValues: {
-      name: '',
-      website: '',
-      holeCount: '9 holes',
-      holes: initialHoleData,
+      name: course.name,
+      website: course.website,
+      holeCount: course.holes.length <= 9 ? '9 holes' : '18 holes',
+      holes: course.holes,
     },
     validate: {
       name: (value) => (/^.{1,100}$/.test(value) ? null : 'Name must be 1-100 characters'),
@@ -63,7 +66,7 @@ const AddCourseModal = () => {
       id: '',
       name: values.name,
       website: values.website,
-      holes: values.holes.slice(0, values.holeCount === '9 holes' ? 9 : 18),
+      holes: values.holes,
       deleted: false,
     });
     closeAllModals();
@@ -77,11 +80,11 @@ const AddCourseModal = () => {
         <SegmentedControl mt="xs" {...form.getInputProps('holeCount')} data={holeCount.map((value) => ({ value, label: value }))} />
         {holeFields}
         <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Add course
+          Update course
         </Button>
       </Stack>
     </form>
   );
 };
 
-export default AddCourseModal;
+export default EditCourseModal;

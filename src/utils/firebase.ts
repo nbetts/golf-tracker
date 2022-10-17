@@ -4,7 +4,7 @@ import { collection, CollectionReference, doc, getFirestore, query, where } from
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
 import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
-import { useFirestoreDocumentMutation, useFirestoreQueryData } from '@react-query-firebase/firestore';
+import { useFirestoreCollectionMutation, useFirestoreDocumentMutation, useFirestoreQueryData } from '@react-query-firebase/firestore';
 
 // Config
 
@@ -55,6 +55,38 @@ export const usePersonalScorecardsCollection = (uid: string) => {
   return useFirestoreQueryData('personalScorecards', query(scorecardsCollectionRef, where('userId', '==', uid)), { idField: 'id', subscribe: true });
 };
 
+export const useCourseCollectionMutation = () => {
+  return useFirestoreCollectionMutation(coursesCollectionRef, {
+    onSuccess: () => showNotification({ message: 'Added course', color: 'green' }),
+    onError: () => showNotification({ message: 'Unable to add course', color: 'red' }),
+  });
+};
+
+export const useCourseDocumentMutation = (id: string) => {
+  return useFirestoreDocumentMutation<Partial<GolfCourse>>(
+    doc(coursesCollectionRef, id),
+    { merge: true },
+    {
+      onSuccess: () => showNotification({ message: 'Updated course', color: 'green' }),
+      onError: () => showNotification({ message: 'Unable to update course', color: 'red' }),
+    },
+  );
+};
+
+export const useScorecardCollectionMutation = () => {
+  return useFirestoreCollectionMutation(scorecardsCollectionRef, {
+    onSuccess: () => showNotification({ message: 'Added scorecard', color: 'green' }),
+    onError: () => showNotification({ message: 'Unable to add scorecard', color: 'red' }),
+  });
+};
+
 export const useScorecardDocumentMutation = (id: string) => {
-  return useFirestoreDocumentMutation<Partial<GolfScorecard>>(doc(scorecardsCollectionRef, id), { merge: true });
+  return useFirestoreDocumentMutation<Partial<GolfScorecard>>(
+    doc(scorecardsCollectionRef, id),
+    { merge: true },
+    {
+      onSuccess: () => showNotification({ message: 'Updated scorecard', color: 'green' }),
+      onError: () => showNotification({ message: 'Unable to update scorecard', color: 'red' }),
+    },
+  );
 };
