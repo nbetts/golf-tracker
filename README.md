@@ -70,3 +70,4 @@ Start the server
   - user groups scope what courses, players and scorecards that group can see
   - which will mean users need roles such as group captain and group member
   - captains can invite and remove users from groups
+- consider locking down all read/write access to firestore and instead using firebase functions for all data access
