@@ -10,6 +10,7 @@ import {
   useScorecardsCollection,
 } from 'src/utils/firebase';
 import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/utils/types';
+import { openAddScorecardModal } from 'src/utils/modals';
 
 type CombinedScorecardInformation = {
   course: GolfCourse;
@@ -60,7 +61,7 @@ const Scorecards = () => {
         <Text size={30} weight="bold" m={0}>
           Scorecards
         </Text>
-        <Button>Add a scorecard</Button>
+        <Button onClick={() => openAddScorecardModal({ userId })}>Add scorecard</Button>
       </Group>
       <Stack>
         {filteredScorecardInfo.map((info) => (

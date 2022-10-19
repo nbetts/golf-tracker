@@ -1,7 +1,6 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
-import { getTimestampDate } from 'src/utils/formatting';
 
 type PlayerScorecardProps = {
   course: GolfCourse;
@@ -34,7 +33,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
         <Group position="apart">
           <Group mt="md" mb="xs">
             <Badge size="lg" color="blue" variant="light">
-              {getTimestampDate(timestamp)}
+              {timestamp.toDate().toLocaleDateString()}
             </Badge>
             <Text weight="bold">{props.player.name}</Text>
           </Group>
