@@ -1,9 +1,8 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion } from '@mantine/core';
-import { openModal } from '@mantine/modals';
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
 import { useFirebaseAuthUser } from 'src/utils/firebase';
+import { openEditCourseModal } from 'src/utils/modals';
 import { GolfCourse } from 'src/utils/types';
-import EditCourseModal from './modals/EditCourseModal';
 
 export default function CourseScorecard(props: GolfCourse) {
   const user = useFirebaseAuthUser();
@@ -41,10 +40,7 @@ export default function CourseScorecard(props: GolfCourse) {
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item
-                    icon={<IconPencil size={14} />}
-                    onClick={() => openModal({ title: 'Edit course', children: <EditCourseModal course={props} /> })}
-                  >
+                  <Menu.Item icon={<IconPencil size={14} />} onClick={() => openEditCourseModal({ course: props })}>
                     Edit
                   </Menu.Item>
                   <Menu.Item icon={<IconTrash size={14} />} color="red">

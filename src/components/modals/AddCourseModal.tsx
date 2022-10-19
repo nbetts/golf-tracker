@@ -58,7 +58,7 @@ const AddCourseModal = () => {
     </Card>
   ));
 
-  const createCourse = (values: FormInputs) => {
+  const submitForm = (values: FormInputs) => {
     mutation.mutate({
       id: '',
       name: values.name,
@@ -70,7 +70,7 @@ const AddCourseModal = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(createCourse)}>
+    <form onSubmit={form.onSubmit(submitForm)}>
       <Stack>
         <TextInput label="Name" placeholder="Augusta National Golf Club" {...form.getInputProps('name')} data-autofocus />
         <TextInput label="Website" placeholder="https://example.com/" {...form.getInputProps('website')} />

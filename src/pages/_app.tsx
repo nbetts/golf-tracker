@@ -1,11 +1,10 @@
-import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
+import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
-import type { AppProps } from 'next/app';
-import type { ColorScheme } from '@mantine/core';
 import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { AppProps } from 'next/app';
 
 const queryClient = new QueryClient();
 

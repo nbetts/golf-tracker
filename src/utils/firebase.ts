@@ -1,10 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { collection, CollectionReference, doc, getFirestore, query, where } from 'firebase/firestore';
+import { collection, CollectionReference, doc, getDoc, getFirestore, query, where } from 'firebase/firestore';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
-import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
+import { useAuthSignInWithPopup, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
 import { useFirestoreCollectionMutation, useFirestoreDocumentMutation, useFirestoreQueryData } from '@react-query-firebase/firestore';
+import { openAddPlayerModal } from './modals';
 
 // Config
 
@@ -24,11 +25,22 @@ const firebaseFirestore = getFirestore(firebaseApp);
 
 // Auth
 
-export const useFirebaseAuthUser = () => useAuthUser(['user'], firebaseAuth);
+export const useFirebaseAuthUser = () => useAuthUser('user', firebaseAuth);
 
 export const useSignIn = () =>
-  useAuthSignInWithRedirect(firebaseAuth, {
-    onSuccess: () => showNotification({ message: 'Signed in', color: 'green' }),
+  useAuthSignInWithPopup(firebaseAuth, {
+    onSuccess: (data) => {
+      showNotification({ message: 'Signed in', color: 'green' });
+
+      const userId = data.user.uid;
+      const name = data.user.displayName;
+
+      getDoc(doc(playersCollectionRef, userId)).then((docSnap) => {
+        if (!docSnap.exists()) {
+          openAddPlayerModal({ userId, name });
+        }
+      });
+    },
     onError: () => showNotification({ message: 'Unable to sign in', color: 'red' }),
   });
 
@@ -37,7 +49,7 @@ export const useSignOut = () =>
     onSuccess: () => showNotification({ message: 'Signed out', color: 'green' }),
   });
 
-// Firestore
+// Firestore data read
 
 export const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
 export const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
@@ -52,8 +64,13 @@ export const usePlayersCollection = () => useFirestoreQueryData('players', playe
 export const useScorecardsCollection = () => useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id', subscribe: true });
 
 export const usePersonalScorecardsCollection = (uid: string) => {
-  return useFirestoreQueryData('personalScorecards', query(scorecardsCollectionRef, where('userId', '==', uid)), { idField: 'id', subscribe: true });
+  return useFirestoreQueryData(['personalScorecards', uid], query(scorecardsCollectionRef, where('userId', '==', uid)), {
+    idField: 'id',
+    subscribe: true,
+  });
 };
+
+// Firestore data write
 
 export const useCoursesCollectionMutation = () => {
   return useFirestoreCollectionMutation(coursesCollectionRef, {
@@ -85,8 +102,8 @@ export const usePlayersDocumentMutation = (id: string) => {
     doc(playersCollectionRef, id),
     { merge: true },
     {
-      onSuccess: () => showNotification({ message: 'Updated player', color: 'green' }),
-      onError: () => showNotification({ message: 'Unable to update player', color: 'red' }),
+      onSuccess: () => showNotification({ message: 'Updated profile', color: 'green' }),
+      onError: () => showNotification({ message: 'Unable to update profile', color: 'red' }),
     },
   );
 };

@@ -13,7 +13,7 @@ type FormInputs = {
   holes: GolfHole[];
 };
 
-type EditCourseModalProps = {
+export type EditCourseModalProps = {
   course: GolfCourse;
 };
 
@@ -61,7 +61,7 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
     </Card>
   ));
 
-  const createCourse = (values: FormInputs) => {
+  const submitForm = (values: FormInputs) => {
     mutation.mutate({
       id: '',
       name: values.name,
@@ -73,7 +73,7 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(createCourse)}>
+    <form onSubmit={form.onSubmit(submitForm)}>
       <Stack>
         <TextInput label="Name" placeholder="Augusta National Golf Club" {...form.getInputProps('name')} data-autofocus />
         <TextInput label="Website" placeholder="https://example.com/" {...form.getInputProps('website')} />
