@@ -45,10 +45,8 @@ Start the server
 
 ### Must
 
-- create players record upon first sign in
-- allow users to edit their own player data *
-
-\* use modals
+- allow users to add scorecards
+- allow users to edit their scorecards
 
 ### Should
 

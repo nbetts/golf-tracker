@@ -79,7 +79,7 @@ export const useCoursesCollectionMutation = () => {
   });
 };
 
-export const useCoursesDocumentMutation = (id: string) => {
+export const useCourseDocumentMutation = (id: string) => {
   return useFirestoreDocumentMutation<Partial<GolfCourse>>(
     doc(coursesCollectionRef, id),
     { merge: true },
@@ -97,7 +97,7 @@ export const usePlayersCollectionMutation = () => {
   });
 };
 
-export const usePlayersDocumentMutation = (id: string) => {
+export const usePlayerDocumentMutation = (id: string) => {
   return useFirestoreDocumentMutation<Partial<GolfPlayer>>(
     doc(playersCollectionRef, id),
     { merge: true },
@@ -115,7 +115,7 @@ export const useScorecardsCollectionMutation = () => {
   });
 };
 
-export const useScorecardsDocumentMutation = (id: string) => {
+export const useScorecardDocumentMutation = (id: string) => {
   return useFirestoreDocumentMutation<Partial<GolfScorecard>>(
     doc(scorecardsCollectionRef, id),
     { merge: true },

@@ -2,6 +2,7 @@ import { openModal } from '@mantine/modals';
 import AddCourseModal from 'src/components/modals/AddCourseModal';
 import AddPlayerModal, { AddPlayerModalProps } from 'src/components/modals/AddPlayerModal';
 import EditCourseModal, { EditCourseModalProps } from 'src/components/modals/EditCourseModal';
+import EditPlayerModal, { EditPlayerModalProps } from 'src/components/modals/EditPlayerModal';
 
 export const openAddPlayerModal = (props: AddPlayerModalProps) => {
   openModal({
@@ -11,6 +12,10 @@ export const openAddPlayerModal = (props: AddPlayerModalProps) => {
     closeOnEscape: false,
     closeOnClickOutside: false,
   });
+};
+
+export const openEditPlayerModal = (props: EditPlayerModalProps) => {
+  openModal({ title: 'Edit profile', children: <EditPlayerModal {...props} /> });
 };
 
 export const openAddCourseModal = () => {

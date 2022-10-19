@@ -64,13 +64,7 @@ const Scorecards = () => {
       </Group>
       <Stack>
         {filteredScorecardInfo.map((info) => (
-          <PlayerScorecard
-            key={info.scorecard.id}
-            {...info}
-            isOwner={user.data?.uid === info.scorecard.userId}
-            onEdit={() => null}
-            onDelete={() => null}
-          />
+          <PlayerScorecard key={info.scorecard.id} {...info} isOwner={user.data?.uid === info.scorecard.userId} onEdit={() => null} />
         ))}
       </Stack>
     </Layout>

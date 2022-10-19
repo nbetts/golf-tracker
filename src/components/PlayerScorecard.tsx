@@ -1,5 +1,5 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip } from '@mantine/core';
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
+import { IconDots, IconPencil } from '@tabler/icons';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
 import { getTimestampDate } from 'src/utils/formatting';
 
@@ -9,7 +9,6 @@ type PlayerScorecardProps = {
   scorecard: GolfScorecard;
   isOwner: boolean;
   onEdit: () => void;
-  onDelete: () => void;
 };
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
@@ -70,9 +69,6 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
                   <Menu.Dropdown>
                     <Menu.Item onClick={props.onEdit} icon={<IconPencil size={14} />}>
                       Edit
-                    </Menu.Item>
-                    <Menu.Item onClick={props.onDelete} icon={<IconTrash size={14} />} color="red">
-                      Delete
                     </Menu.Item>
                   </Menu.Dropdown>
                 </Menu>

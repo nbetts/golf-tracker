@@ -2,22 +2,22 @@ import { Button, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { usePlayerDocumentMutation } from 'src/utils/firebase';
+import { GolfPlayer } from 'src/utils/types';
 
 type FormInputs = {
   name: string;
 };
 
-export type AddPlayerModalProps = {
-  userId: string;
-  name: string | null;
+export type EditPlayerModalProps = {
+  player: GolfPlayer;
 };
 
-const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
-  const mutation = usePlayerDocumentMutation(userId);
+const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
+  const mutation = usePlayerDocumentMutation(player.id);
 
   const form = useForm<FormInputs>({
     initialValues: {
-      name: name || '',
+      name: player.name,
     },
     validate: {
       name: (value) => (/^.{1,100}$/.test(value) ? null : 'Name must be 1-100 characters'),
@@ -27,7 +27,6 @@ const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
   const submitForm = (values: FormInputs) => {
     mutation.mutate({
       name: values.name,
-      deleted: false,
     });
     closeAllModals();
   };
@@ -37,11 +36,11 @@ const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
       <Stack>
         <TextInput label="Name" placeholder="Your name" {...form.getInputProps('name')} data-autofocus />
         <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Continue
+          Update profile
         </Button>
       </Stack>
     </form>
   );
 };
 
-export default AddPlayerModal;
+export default EditPlayerModal;
