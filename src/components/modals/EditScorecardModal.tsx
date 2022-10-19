@@ -3,7 +3,8 @@ import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
-import { useCoursesCollection, useScorecardsCollectionMutation } from 'src/utils/firebase';
+import { useCoursesCollection, useScorecardDocumentMutation } from 'src/utils/firebase';
+import { GolfScorecard } from 'src/utils/types';
 
 type FormInputs = {
   date: Date;
@@ -12,20 +13,20 @@ type FormInputs = {
   hidden: boolean;
 };
 
-export type AddScorecardModalProps = {
-  userId: string;
+export type EditScorecardModalProps = {
+  scorecard: GolfScorecard;
 };
 
-const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
-  const mutation = useScorecardsCollectionMutation();
+const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
+  const mutation = useScorecardDocumentMutation(scorecard.id);
   const courses = useCoursesCollection();
 
   const form = useForm<FormInputs>({
     initialValues: {
-      date: new Date(),
-      courseId: '',
-      scores: new Array(18).fill(0),
-      hidden: false,
+      date: scorecard.timestamp.toDate(),
+      courseId: scorecard.courseId,
+      scores: new Array(18).fill(0).map((score, index) => scorecard.scores[index] || score),
+      hidden: scorecard.hidden,
     },
     validate: {
       date: (value) => (!value ? 'Date is required' : null),
@@ -42,19 +43,16 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
 
   const holeFields = new Array(holeCount).fill(0).map((_item, index) => (
     <Card key={index} shadow="sm" radius="md" withBorder p="sm">
-      <NumberInput size="xs" min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}.score`)} />
+      <NumberInput size="xs" min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}`)} />
     </Card>
   ));
 
   const submitForm = (values: FormInputs) => {
     mutation.mutate({
-      id: '',
       timestamp: Timestamp.fromDate(values.date),
       courseId: values.courseId,
-      scores: values.scores,
+      scores: new Array(holeCount).fill(0).map((score, index) => values.scores[index] || score),
       hidden: values.hidden,
-      userId,
-      deleted: false,
     });
     closeAllModals();
   };
@@ -65,13 +63,13 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
         <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus />
         {courseOptions && <Select label="Course" placeholder="Choose course" data={courseOptions} {...form.getInputProps('courseId')} />}
         {holeFields}
-        <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden')} />
+        <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden', { type: 'checkbox' })} />
         <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Add scorecard
+          Update scorecard
         </Button>
       </Stack>
     </form>
   );
 };
 
-export default AddScorecardModal;
+export default EditScorecardModal;

@@ -1,5 +1,6 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
+import { openEditScorecardModal } from 'src/utils/modals';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
 
 type PlayerScorecardProps = {
@@ -7,14 +8,22 @@ type PlayerScorecardProps = {
   player: GolfPlayer;
   scorecard: GolfScorecard;
   isOwner: boolean;
-  onEdit: () => void;
 };
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
   const { hidden, timestamp, scores } = props.scorecard;
   const { name, website, holes } = props.course;
 
-  const holeCount = Math.min(scores.length, holes.length);
+  // Calculate the last score index so that we don't need to show any more holes after that.
+  let lastScoredHole = 1;
+
+  for (let i = 0; i < scores.length; i++) {
+    if (scores[i] > 0) {
+      lastScoredHole = i + 1;
+    }
+  }
+
+  const holeCount = Math.min(lastScoredHole, holes.length);
   const scoredHoles: ScoredGolfHole[] = [];
   let netPar = 0,
     netYards = 0,
@@ -66,7 +75,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
                     </ActionIcon>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Menu.Item onClick={props.onEdit} icon={<IconPencil size={14} />}>
+                    <Menu.Item onClick={() => openEditScorecardModal({ scorecard: props.scorecard })} icon={<IconPencil size={14} />}>
                       Edit
                     </Menu.Item>
                   </Menu.Dropdown>

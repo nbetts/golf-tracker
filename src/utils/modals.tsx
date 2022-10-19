@@ -4,6 +4,7 @@ import AddPlayerModal, { AddPlayerModalProps } from 'src/components/modals/AddPl
 import AddScorecardModal, { AddScorecardModalProps } from 'src/components/modals/AddScorecardModal';
 import EditCourseModal, { EditCourseModalProps } from 'src/components/modals/EditCourseModal';
 import EditPlayerModal, { EditPlayerModalProps } from 'src/components/modals/EditPlayerModal';
+import EditScorecardModal, { EditScorecardModalProps } from 'src/components/modals/EditScorecardModal';
 
 export const openAddPlayerModal = (props: AddPlayerModalProps) => {
   openModal({
@@ -29,4 +30,8 @@ export const openEditCourseModal = (props: EditCourseModalProps) => {
 
 export const openAddScorecardModal = (props: AddScorecardModalProps) => {
   openModal({ title: 'Add scorecard', children: <AddScorecardModal {...props} /> });
+};
+
+export const openEditScorecardModal = (props: EditScorecardModalProps) => {
+  openModal({ title: 'Edit scorecard', children: <EditScorecardModal {...props} /> });
 };

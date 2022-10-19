@@ -46,8 +46,7 @@ Start the server
 
 ### Must
 
-- allow users to add scorecards
-- allow users to edit their scorecards
+- add more sophisticated firestore rules
 
 ### Should
 
@@ -56,7 +55,6 @@ Start the server
 - allow users to delete data (implement soft delete)
 - fix bug where react-query or firestore data does not load after fast-refresh executes
 - add sensible form validation to all forms
-- add more sophisticated firestore rules
 
 ### Could
 
@@ -71,4 +69,3 @@ Start the server
   - user groups scope what courses, players and scorecards that group can see
   - which will mean users need roles such as group captain and group member
   - captains can invite and remove users from groups
-- consider locking down all read/write access to firestore and instead using firebase functions for all data access
