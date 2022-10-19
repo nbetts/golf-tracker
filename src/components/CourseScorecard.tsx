@@ -1,6 +1,7 @@
-import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion } from '@mantine/core';
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
+import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
+import { IconDots, IconPencil } from '@tabler/icons';
 import { useFirebaseAuthUser } from 'src/utils/firebase';
+import { openEditCourseModal } from 'src/utils/modals';
 import { GolfCourse } from 'src/utils/types';
 
 export default function CourseScorecard(props: GolfCourse) {
@@ -39,9 +40,8 @@ export default function CourseScorecard(props: GolfCourse) {
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
-                  <Menu.Item icon={<IconTrash size={14} />} color="red">
-                    Delete
+                  <Menu.Item icon={<IconPencil size={14} />} onClick={() => openEditCourseModal({ course: props })}>
+                    Edit
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
@@ -54,31 +54,56 @@ export default function CourseScorecard(props: GolfCourse) {
           <Accordion.Item value="0">
             <Accordion.Control>Full scorecard</Accordion.Control>
             <Accordion.Panel>
-              <Table striped highlightOnHover withBorder>
+              <Table striped highlightOnHover withBorder captionSide="bottom" sx={{ maxWidth: 600 }}>
+                <caption>Full scorecard</caption>
                 <thead>
                   <tr>
-                    <th>Hole</th>
-                    <th>Par</th>
-                    <th>Yards</th>
-                    <th>Stroke Index</th>
+                    <th>
+                      <Text align="center">Hole</Text>
+                    </th>
+                    <th>
+                      <Text align="center">Par</Text>
+                    </th>
+                    <th>
+                      <Text align="center">Yards</Text>
+                    </th>
+                    <th>
+                      <Text align="center">Stroke Index</Text>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {holes.map((hole, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{hole.par}</td>
-                      <td>{hole.yards}</td>
-                      <td>{hole.strokeIndex}</td>
+                      <td>
+                        <Text align="center">{index + 1}</Text>
+                      </td>
+                      <td>
+                        <Text align="center">{hole.par}</Text>
+                      </td>
+                      <td>
+                        <Text align="center">{hole.yards}</Text>
+                      </td>
+                      <td>
+                        <Text align="center">{hole.strokeIndex}</Text>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th></th>
-                    <th>{netPar}</th>
-                    <th>{netYards}</th>
-                    <th></th>
+                    <th>
+                      <Text align="center"></Text>
+                    </th>
+                    <th>
+                      <Text align="center">{netPar}</Text>
+                    </th>
+                    <th>
+                      <Text align="center">{netYards}</Text>
+                    </th>
+                    <th>
+                      <Text align="center"></Text>
+                    </th>
                   </tr>
                 </tfoot>
               </Table>

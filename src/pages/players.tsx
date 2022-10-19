@@ -1,4 +1,4 @@
-import { Stack, Text } from '@mantine/core';
+import { Group, Stack, Text } from '@mantine/core';
 import { withAuthCheck } from 'src/utils/withRouteCheck';
 import PlayerStatistics from 'src/components/PlayerStatistics';
 import Layout from 'src/components/Layout';
@@ -9,9 +9,11 @@ const Players = () => {
 
   return (
     <Layout>
-      <Text size={30} weight="bold" mb="sm">
-        Players
-      </Text>
+      <Group position="apart" mb="lg">
+        <Text size={30} weight="bold" m={0}>
+          Players
+        </Text>
+      </Group>
       <Stack justify="flex-start">
         {players.data
           ?.sort((a, b) => a.name.localeCompare(b.name))

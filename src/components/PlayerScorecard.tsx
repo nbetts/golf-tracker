@@ -1,22 +1,29 @@
-import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons';
+import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip } from '@mantine/core';
+import { IconDots, IconPencil } from '@tabler/icons';
+import { openEditScorecardModal } from 'src/utils/modals';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
-import { getTimestampDate } from 'src/utils/formatting';
 
 type PlayerScorecardProps = {
   course: GolfCourse;
   player: GolfPlayer;
   scorecard: GolfScorecard;
   isOwner: boolean;
-  onEdit: () => void;
-  onDelete: () => void;
 };
 
 export default function PlayerScorecard(props: PlayerScorecardProps) {
-  const { timestamp, scores } = props.scorecard;
+  const { hidden, timestamp, scores } = props.scorecard;
   const { name, website, holes } = props.course;
 
-  const holeCount = Math.min(scores.length, holes.length);
+  // Calculate the last score index so that we don't need to show any more holes after that.
+  let lastScoredHole = 1;
+
+  for (let i = 0; i < scores.length; i++) {
+    if (scores[i] > 0) {
+      lastScoredHole = i + 1;
+    }
+  }
+
+  const holeCount = Math.min(lastScoredHole, holes.length);
   const scoredHoles: ScoredGolfHole[] = [];
   let netPar = 0,
     netYards = 0,
@@ -35,7 +42,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
         <Group position="apart">
           <Group mt="md" mb="xs">
             <Badge size="lg" color="blue" variant="light">
-              {getTimestampDate(timestamp)}
+              {timestamp.toDate().toLocaleDateString()}
             </Badge>
             <Text weight="bold">{props.player.name}</Text>
           </Group>
@@ -53,21 +60,27 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
               Score {netPlayerScore}
             </Badge>
             {props.isOwner && (
-              <Menu withinPortal position="bottom-end" shadow="sm">
-                <Menu.Target>
-                  <ActionIcon>
-                    <IconDots size={16} />
-                  </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item onClick={props.onEdit} icon={<IconPencil size={14} />}>
-                    Edit
-                  </Menu.Item>
-                  <Menu.Item onClick={props.onDelete} icon={<IconTrash size={14} />} color="red">
-                    Delete
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
+              <>
+                {hidden && (
+                  <Tooltip label="Other players cannot see this scorecard">
+                    <Badge size="lg" color="violet" variant="light">
+                      Hidden
+                    </Badge>
+                  </Tooltip>
+                )}
+                <Menu withinPortal position="bottom-end" shadow="sm">
+                  <Menu.Target>
+                    <ActionIcon>
+                      <IconDots size={16} />
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item onClick={() => openEditScorecardModal({ scorecard: props.scorecard })} icon={<IconPencil size={14} />}>
+                      Edit
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              </>
             )}
           </Group>
         </Group>
@@ -77,34 +90,65 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
           <Accordion.Item value="0">
             <Accordion.Control>Full scorecard</Accordion.Control>
             <Accordion.Panel>
-              <Table striped highlightOnHover withBorder>
+              <Table striped highlightOnHover withBorder captionSide="bottom" sx={{ maxWidth: 600 }}>
+                <caption>Full scorecard</caption>
                 <thead>
                   <tr>
-                    <th>Hole</th>
-                    <th>Par</th>
-                    <th>Score</th>
-                    <th>Yards</th>
-                    <th>Stroke Index</th>
+                    <th>
+                      <Text align="center">Hole</Text>
+                    </th>
+                    <th>
+                      <Text align="center">Par</Text>
+                    </th>
+                    <th>
+                      <Text align="center">Score</Text>
+                    </th>
+                    <th>
+                      <Text align="center">Yards</Text>
+                    </th>
+                    <th>
+                      <Text align="center">Stroke Index</Text>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {scoredHoles.map((hole, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{hole.par}</td>
-                      <td>{hole.score}</td>
-                      <td>{hole.yards}</td>
-                      <td>{hole.strokeIndex}</td>
+                      <td>
+                        <Text align="center">{index + 1}</Text>
+                      </td>
+                      <td>
+                        <Text align="center">{hole.par}</Text>
+                      </td>
+                      <td>
+                        <Text align="center">{hole.score}</Text>
+                      </td>
+                      <td>
+                        <Text align="center">{hole.yards}</Text>
+                      </td>
+                      <td>
+                        <Text align="center">{hole.strokeIndex}</Text>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th></th>
-                    <th>{netPar}</th>
-                    <th>{netPlayerScore}</th>
-                    <th>{netYards}</th>
-                    <th></th>
+                    <th>
+                      <Text align="center"></Text>
+                    </th>
+                    <th>
+                      <Text align="center">{netPar}</Text>
+                    </th>
+                    <th>
+                      <Text align="center">{netPlayerScore}</Text>
+                    </th>
+                    <th>
+                      <Text align="center">{netYards}</Text>
+                    </th>
+                    <th>
+                      <Text align="center"></Text>
+                    </th>
                   </tr>
                 </tfoot>
               </Table>

@@ -1,10 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { collection, CollectionReference, getFirestore, query, where } from 'firebase/firestore';
+import { collection, CollectionReference, doc, getDoc, getFirestore, query, where } from 'firebase/firestore';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from './types';
-import { useAuthSignInWithRedirect, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
-import { useFirestoreQueryData } from '@react-query-firebase/firestore';
+import { useAuthSignInWithPopup, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
+import { useFirestoreCollectionMutation, useFirestoreDocumentMutation, useFirestoreQueryData } from '@react-query-firebase/firestore';
+import { openAddPlayerModal } from './modals';
 
 // Config
 
@@ -24,32 +25,103 @@ const firebaseFirestore = getFirestore(firebaseApp);
 
 // Auth
 
-export const useFirebaseAuthUser = () => useAuthUser(['user'], firebaseAuth);
+export const useFirebaseAuthUser = () => useAuthUser('user', firebaseAuth);
 
 export const useSignIn = () =>
-  useAuthSignInWithRedirect(firebaseAuth, {
-    onSuccess: () => showNotification({ title: 'Signed in', message: 'Successfully signed in', color: 'green' }),
-    onError: (error) => showNotification({ title: 'Unable to sign in', message: error?.message, color: 'red' }),
+  useAuthSignInWithPopup(firebaseAuth, {
+    onSuccess: (data) => {
+      showNotification({ message: 'Signed in', color: 'green' });
+
+      const userId = data.user.uid;
+      const name = data.user.displayName;
+
+      getDoc(doc(playersCollectionRef, userId)).then((docSnap) => {
+        if (!docSnap.exists()) {
+          openAddPlayerModal({ userId, name });
+        }
+      });
+    },
+    onError: () => showNotification({ message: 'Unable to sign in', color: 'red' }),
   });
 
 export const useSignOut = () =>
   useAuthSignOut(firebaseAuth, {
-    onSuccess: () => showNotification({ title: 'Signed out', message: 'Successfully signed out', color: 'green' }),
+    onSuccess: () => showNotification({ message: 'Signed out', color: 'green' }),
   });
 
-// Firestore
+// Firestore data read
 
-const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
-const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
-const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
+export const coursesCollectionRef = collection(firebaseFirestore, 'courses') as CollectionReference<GolfCourse>;
+export const playersCollectionRef = collection(firebaseFirestore, 'players') as CollectionReference<GolfPlayer>;
+export const scorecardsCollectionRef = collection(firebaseFirestore, 'scorecards') as CollectionReference<GolfScorecard>;
+
 const coursesQuery = query(coursesCollectionRef);
 const playersQuery = query(playersCollectionRef);
-const scorecardsQuery = query(scorecardsCollectionRef, where('private', '==', false));
+const scorecardsQuery = query(scorecardsCollectionRef, where('hidden', '==', false));
 
 export const useCoursesCollection = () => useFirestoreQueryData('courses', coursesQuery, { idField: 'id', subscribe: true });
 export const usePlayersCollection = () => useFirestoreQueryData('players', playersQuery, { idField: 'id', subscribe: true });
 export const useScorecardsCollection = () => useFirestoreQueryData('scorecards', scorecardsQuery, { idField: 'id', subscribe: true });
 
 export const usePersonalScorecardsCollection = (uid: string) => {
-  return useFirestoreQueryData('personalScorecards', query(scorecardsCollectionRef, where('userId', '==', uid)), { idField: 'id', subscribe: true });
+  return useFirestoreQueryData(['personalScorecards', uid], query(scorecardsCollectionRef, where('userId', '==', uid)), {
+    idField: 'id',
+    subscribe: true,
+  });
+};
+
+// Firestore data write
+
+export const useCoursesCollectionMutation = () => {
+  return useFirestoreCollectionMutation(coursesCollectionRef, {
+    onSuccess: () => showNotification({ message: 'Added course', color: 'green' }),
+    onError: () => showNotification({ message: 'Unable to add course', color: 'red' }),
+  });
+};
+
+export const useCourseDocumentMutation = (id: string) => {
+  return useFirestoreDocumentMutation<Partial<GolfCourse>>(
+    doc(coursesCollectionRef, id),
+    { merge: true },
+    {
+      onSuccess: () => showNotification({ message: 'Updated course', color: 'green' }),
+      onError: () => showNotification({ message: 'Unable to update course', color: 'red' }),
+    },
+  );
+};
+
+export const usePlayersCollectionMutation = () => {
+  return useFirestoreCollectionMutation(playersCollectionRef, {
+    onSuccess: () => showNotification({ message: 'Added player', color: 'green' }),
+    onError: () => showNotification({ message: 'Unable to add player', color: 'red' }),
+  });
+};
+
+export const usePlayerDocumentMutation = (id: string) => {
+  return useFirestoreDocumentMutation<Partial<GolfPlayer>>(
+    doc(playersCollectionRef, id),
+    { merge: true },
+    {
+      onSuccess: () => showNotification({ message: 'Updated profile', color: 'green' }),
+      onError: () => showNotification({ message: 'Unable to update profile', color: 'red' }),
+    },
+  );
+};
+
+export const useScorecardsCollectionMutation = () => {
+  return useFirestoreCollectionMutation(scorecardsCollectionRef, {
+    onSuccess: () => showNotification({ message: 'Added scorecard', color: 'green' }),
+    onError: () => showNotification({ message: 'Unable to add scorecard', color: 'red' }),
+  });
+};
+
+export const useScorecardDocumentMutation = (id: string) => {
+  return useFirestoreDocumentMutation<Partial<GolfScorecard>>(
+    doc(scorecardsCollectionRef, id),
+    { merge: true },
+    {
+      onSuccess: () => showNotification({ message: 'Updated scorecard', color: 'green' }),
+      onError: () => showNotification({ message: 'Unable to update scorecard', color: 'red' }),
+    },
+  );
 };

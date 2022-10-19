@@ -1,6 +1,7 @@
 import { Card, Group, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
 import { useFirebaseAuthUser } from 'src/utils/firebase';
+import { openEditPlayerModal } from 'src/utils/modals';
 import { GolfPlayer } from 'src/utils/types';
 
 export default function PlayerStatistics(props: GolfPlayer) {
@@ -22,7 +23,9 @@ export default function PlayerStatistics(props: GolfPlayer) {
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
+                  <Menu.Item icon={<IconPencil size={14} />} onClick={() => openEditPlayerModal({ player: props })}>
+                    Edit
+                  </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             )}

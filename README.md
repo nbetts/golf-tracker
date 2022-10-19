@@ -1,26 +1,27 @@
 
 # Golf Tracker
 
-Golf tracker is a simple website to track golf score cards.
+Golf tracker is a web app that allows you to record your golf scorecards online: <https://golftracker.app>
 
 ## Features
 
-- View scorecards, courses and players
-- Login with Google accounts
-- Light/dark mode toggle
+- View & edit golf courses and your scorecards
+- Login with Google
+- Realtime data
+- Light/dark mode support
 
 ## Run Locally
 
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/nbetts/golf-tracker
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd golf-tracker
 ```
 
 Install dependencies
@@ -37,25 +38,23 @@ Start the server
 
 ## Tech Stack
 
-**Client:** React, Typescript, Mantine, Vite
+**Client:** React, Typescript, Next.js, Mantine, React-query-firebase
 
-**Server:** Firebase hosting, Firestore database
+**Server:** Firebase hosting, Firebase auth, Firestore database
 
 ## To do
 
 ### Must
 
-- allow users to create & edit courses *
-- allow users to create players *
-- allow users to edit their own player data *
-
-\* use modals
+- add more sophisticated firestore rules
 
 ### Should
 
+- add sensible signed out home page
 - support signing in with other providers
 - allow users to delete data (implement soft delete)
-- allow users to hide their scorecards
+- fix bug where react-query or firestore data does not load after fast-refresh executes
+- add sensible form validation to all forms
 
 ### Could
 

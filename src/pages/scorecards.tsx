@@ -1,4 +1,4 @@
-import { Stack, Text } from '@mantine/core';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import PlayerScorecard from 'src/components/PlayerScorecard';
 import { withAuthCheck } from 'src/utils/withRouteCheck';
 import Layout from 'src/components/Layout';
@@ -10,6 +10,7 @@ import {
   useScorecardsCollection,
 } from 'src/utils/firebase';
 import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/utils/types';
+import { openAddScorecardModal } from 'src/utils/modals';
 
 type CombinedScorecardInformation = {
   course: GolfCourse;
@@ -56,18 +57,15 @@ const Scorecards = () => {
 
   return (
     <Layout>
-      <Text size={30} weight="bold" mb="sm">
-        Scorecards
-      </Text>
+      <Group position="apart" mb="lg">
+        <Text size={30} weight="bold" m={0}>
+          Scorecards
+        </Text>
+        <Button onClick={() => openAddScorecardModal({ userId })}>Add scorecard</Button>
+      </Group>
       <Stack>
         {filteredScorecardInfo.map((info) => (
-          <PlayerScorecard
-            key={info.scorecard.id}
-            {...info}
-            isOwner={user.data?.uid === info.scorecard.userId}
-            onEdit={() => null}
-            onDelete={() => null}
-          />
+          <PlayerScorecard key={info.scorecard.id} {...info} isOwner={user.data?.uid === info.scorecard.userId} />
         ))}
       </Stack>
     </Layout>
