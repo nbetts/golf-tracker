@@ -21,7 +21,7 @@ export function UserSettings() {
             <NavLink
               label={user.data.displayName}
               description={user.data.email}
-              icon={<Avatar color="pink" radius="xl" />}
+              icon={<Avatar color="pink" radius="xl" src={user.data.photoURL} />}
               rightSection={<IconChevronRight size={12} />}
             />
           </Popover.Target>

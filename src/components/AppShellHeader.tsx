@@ -12,26 +12,12 @@ export default function AppShellHeader(props: AppShellHeaderProps) {
   return (
     <Header height={70} p="md">
       <Group sx={{ height: '100%' }} pl="md" position="apart">
-        <Group>
+        <Group spacing="sm">
           <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-            <Burger
-              opened={props.navMenuOpened}
-              onClick={() => props.onNavMenuToggle(!props.navMenuOpened)}
-              size="sm"
-              color="gray.6"
-              mr="xs"
-            />
+            <Burger opened={props.navMenuOpened} onClick={() => props.onNavMenuToggle(!props.navMenuOpened)} size="sm" mr="xs" />
           </MediaQuery>
           <Text size={22}>⛳️</Text>
-          <Text
-            component="span"
-            align="center"
-            variant="gradient"
-            gradient={{ from: 'teal', to: 'green', deg: 45 }}
-            size={22}
-            ml="xs"
-            weight="bold"
-          >
+          <Text component="span" align="center" variant="gradient" gradient={{ from: 'teal', to: 'green', deg: 45 }} size={22} ml="xs" weight="bold">
             Golf Tracker
           </Text>
         </Group>
