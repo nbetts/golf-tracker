@@ -60,7 +60,6 @@ const AddCourseModal = () => {
 
   const submitForm = (values: FormInputs) => {
     mutation.mutate({
-      id: '',
       name: values.name,
       website: values.website,
       holes: values.holes.slice(0, values.holeCount === '9 holes' ? 9 : 18),

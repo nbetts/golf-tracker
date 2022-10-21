@@ -2,18 +2,50 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /courses/{document=**} {
-      allow create, read, update: if request.auth != null;
+      allow read: if request.auth != null;
+      allow create: if dataIsValid() && request.resource.data.deleted == false;
+      allow update: if dataIsValid();
+
+      function dataIsValid() {
+        return request.auth != null
+            && request.resource.data.size() == 4
+            && request.resource.data.keys().hasOnly(['holes', 'name', 'website', 'deleted'])
+            && request.resource.data.holes is list
+            && request.resource.data.holes.size() > 0
+            && request.resource.data.name.matches('.{1,100}') == true
+            && request.resource.data.website.matches('.{0,100}') == true;
+      }
     }
 
     match /players/{document=**} {
-      allow create, read: if request.auth != null;
-      allow update: if request.auth != null && request.auth.uid == resource.id;
+      allow read: if request.auth != null;
+      allow create: if dataIsValid() && request.resource.data.deleted == false;
+      allow update: if dataIsValid() && request.auth.uid == resource.id;
+
+      function dataIsValid() {
+        return request.auth != null
+            && request.resource.data.size() == 2
+            && request.resource.data.keys().hasOnly(['name', 'deleted'])
+            && request.resource.data.name.matches('.{1,100}') == true;
+      }
     }
 
     match /scorecards/{document=**} {
-      allow create: if request.auth != null;
       allow read: if request.auth != null && (request.auth.uid == resource.data.userId || !resource.data.hidden);
-      allow update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if dataIsValid() && request.resource.data.deleted == false;
+      allow update: if dataIsValid() && request.auth.uid == resource.data.userId;
+
+      function dataIsValid() {
+        return request.auth != null
+            && request.resource.data.size() == 6
+            && request.resource.data.keys().hasOnly(['hidden', 'timestamp', 'userId', 'courseId', 'scores', 'deleted'])
+            && request.resource.data.hidden is bool
+            && request.resource.data.timestamp is timestamp
+            && request.resource.data.timestamp < request.time
+            && request.resource.data.scores is list
+            && request.resource.data.userId.matches('.{1,100}') == true
+            && request.resource.data.courseId.matches('.{1,100}') == true;
+      }
     }
   }
 }

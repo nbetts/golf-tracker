@@ -7,7 +7,7 @@ Golf tracker is a web app that allows you to record your golf scorecards online:
 
 - View & edit golf courses and your scorecards
 - Login with Google
-- Realtime data
+- Real time data
 - Light/dark mode support
 
 ## Run Locally
@@ -46,7 +46,7 @@ Start the server
 
 ### Must
 
-- add more sophisticated firestore rules
+none
 
 ### Should
 
@@ -55,6 +55,7 @@ Start the server
 - allow users to delete data (implement soft delete)
 - fix bug where react-query or firestore data does not load after fast-refresh executes
 - add sensible form validation to all forms
+- use multiple firebase projects to separate dev/prod environments
 
 ### Could
 

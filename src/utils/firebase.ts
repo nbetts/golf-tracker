@@ -73,7 +73,7 @@ export const usePersonalScorecardsCollection = (uid: string) => {
 // Firestore data write
 
 export const useCoursesCollectionMutation = () => {
-  return useFirestoreCollectionMutation(coursesCollectionRef, {
+  return useFirestoreCollectionMutation<Partial<GolfCourse>>(coursesCollectionRef, {
     onSuccess: () => showNotification({ message: 'Added course', color: 'green' }),
     onError: () => showNotification({ message: 'Unable to add course', color: 'red' }),
   });
@@ -91,7 +91,7 @@ export const useCourseDocumentMutation = (id: string) => {
 };
 
 export const usePlayersCollectionMutation = () => {
-  return useFirestoreCollectionMutation(playersCollectionRef, {
+  return useFirestoreCollectionMutation<Partial<GolfPlayer>>(playersCollectionRef, {
     onSuccess: () => showNotification({ message: 'Added player', color: 'green' }),
     onError: () => showNotification({ message: 'Unable to add player', color: 'red' }),
   });
@@ -109,7 +109,7 @@ export const usePlayerDocumentMutation = (id: string) => {
 };
 
 export const useScorecardsCollectionMutation = () => {
-  return useFirestoreCollectionMutation(scorecardsCollectionRef, {
+  return useFirestoreCollectionMutation<Partial<GolfScorecard>>(scorecardsCollectionRef, {
     onSuccess: () => showNotification({ message: 'Added scorecard', color: 'green' }),
     onError: () => showNotification({ message: 'Unable to add scorecard', color: 'red' }),
   });

@@ -42,13 +42,12 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
 
   const holeFields = new Array(holeCount).fill(0).map((_item, index) => (
     <Card key={index} shadow="sm" radius="md" withBorder p="sm">
-      <NumberInput size="xs" min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}.score`)} />
+      <NumberInput size="xs" min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}`)} />
     </Card>
   ));
 
   const submitForm = (values: FormInputs) => {
     mutation.mutate({
-      id: '',
       timestamp: Timestamp.fromDate(values.date),
       courseId: values.courseId,
       scores: values.scores,

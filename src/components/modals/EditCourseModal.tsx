@@ -63,11 +63,9 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
 
   const submitForm = (values: FormInputs) => {
     mutation.mutate({
-      id: '',
       name: values.name,
       website: values.website,
       holes: values.holes,
-      deleted: false,
     });
     closeAllModals();
   };

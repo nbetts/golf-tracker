@@ -51,7 +51,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
               {name}
             </Anchor>
             <Badge size="lg" color="cyan" variant="light">
-              {scoredHoles.length} holes
+              {scoredHoles.length} hole{scoredHoles.length === 1 ? '' : 's'}
             </Badge>
             <Badge size="lg" color="green" variant="light">
               Par {netPar}
@@ -135,7 +135,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
                 <tfoot>
                   <tr>
                     <th>
-                      <Text align="center"></Text>
+                      <Text align="center">Total</Text>
                     </th>
                     <th>
                       <Text align="center">{netPar}</Text>
@@ -147,7 +147,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
                       <Text align="center">{netYards}</Text>
                     </th>
                     <th>
-                      <Text align="center"></Text>
+                      <Text align="center">-</Text>
                     </th>
                   </tr>
                 </tfoot>

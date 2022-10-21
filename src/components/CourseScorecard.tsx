@@ -27,7 +27,7 @@ export default function CourseScorecard(props: GolfCourse) {
           </Group>
           <Group mt="md" mb="xs">
             <Badge size="lg" color="cyan" variant="light">
-              {holes.length} holes
+              {holes.length} hole{holes.length === 1 ? '' : 's'}
             </Badge>
             <Badge size="lg" color="green" variant="light">
               Par {netPar}
@@ -93,7 +93,7 @@ export default function CourseScorecard(props: GolfCourse) {
                 <tfoot>
                   <tr>
                     <th>
-                      <Text align="center"></Text>
+                      <Text align="center">Total</Text>
                     </th>
                     <th>
                       <Text align="center">{netPar}</Text>
@@ -102,7 +102,7 @@ export default function CourseScorecard(props: GolfCourse) {
                       <Text align="center">{netYards}</Text>
                     </th>
                     <th>
-                      <Text align="center"></Text>
+                      <Text align="center">-</Text>
                     </th>
                   </tr>
                 </tfoot>
