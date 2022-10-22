@@ -6,7 +6,7 @@ type AppShellHeaderProps = {
   onNavMenuToggle: (navMenuOpened: boolean) => void;
 };
 
-export default function AppShellHeader(props: AppShellHeaderProps) {
+const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
@@ -14,7 +14,7 @@ export default function AppShellHeader(props: AppShellHeaderProps) {
       <Group sx={{ height: '100%' }} pl="md" position="apart">
         <Group spacing="sm">
           <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-            <Burger opened={props.navMenuOpened} onClick={() => props.onNavMenuToggle(!props.navMenuOpened)} size="sm" mr="xs" />
+            <Burger opened={navMenuOpened} onClick={() => onNavMenuToggle(!navMenuOpened)} size="sm" mr="xs" />
           </MediaQuery>
           <Text size={22}>⛳️</Text>
           <Text component="span" align="center" variant="gradient" gradient={{ from: 'teal', to: 'green', deg: 45 }} size={22} ml="xs" weight="bold">
@@ -43,4 +43,6 @@ export default function AppShellHeader(props: AppShellHeaderProps) {
       </Group>
     </Header>
   );
-}
+};
+
+export default AppShellHeader;

@@ -41,20 +41,22 @@ const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
   const courseOptions = courses.data.sort((a, b) => a.name.localeCompare(b.name)).map((course) => ({ value: course.id, label: course.name }));
   const holeCount = courses.data.find((course) => course.id === form.values.courseId)?.holes.length || 0;
 
-  const holeFields = new Array(holeCount).fill(0).map((_item, index) => (
-    <Card key={index} shadow="sm" radius="md" withBorder p="sm">
-      <NumberInput size="xs" min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}`)} />
-    </Card>
-  ));
+  const holeFields = new Array(holeCount)
+    .fill(0)
+    .map((_item, index) => <NumberInput key={index} size="xs" min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}`)} />);
 
   const submitForm = (values: FormInputs) => {
-    mutation.mutate({
-      timestamp: Timestamp.fromDate(values.date),
-      courseId: values.courseId,
-      scores: new Array(holeCount).fill(0).map((score, index) => values.scores[index] || score),
-      hidden: values.hidden,
-    });
-    closeAllModals();
+    mutation.mutate(
+      {
+        timestamp: Timestamp.fromDate(values.date),
+        courseId: values.courseId,
+        scores: new Array(holeCount).fill(0).map((score, index) => values.scores[index] || score),
+        hidden: values.hidden,
+      },
+      {
+        onSuccess: () => closeAllModals(),
+      },
+    );
   };
 
   return (
@@ -62,7 +64,9 @@ const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
       <Stack>
         <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus />
         {courseOptions && <Select label="Course" placeholder="Choose course" data={courseOptions} {...form.getInputProps('courseId')} />}
-        {holeFields}
+        <Card shadow="sm" radius="md" withBorder p="sm">
+          <Stack spacing="xs">{holeFields}</Stack>
+        </Card>
         <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden', { type: 'checkbox' })} />
         <Button type="submit" mt="md" disabled={mutation.isLoading}>
           Update scorecard

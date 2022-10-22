@@ -25,11 +25,15 @@ const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
   });
 
   const submitForm = (values: FormInputs) => {
-    mutation.mutate({
-      name: values.name,
-      deleted: false,
-    });
-    closeAllModals();
+    mutation.mutate(
+      {
+        name: values.name,
+        deleted: false,
+      },
+      {
+        onSuccess: () => closeAllModals(),
+      },
+    );
   };
 
   return (

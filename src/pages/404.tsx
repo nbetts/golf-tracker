@@ -40,7 +40,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Error404() {
+const Error404 = () => {
   const { classes } = useStyles();
 
   return (
@@ -59,4 +59,6 @@ export default function Error404() {
       </Group>
     </Container>
   );
-}
+};
+
+export default Error404;

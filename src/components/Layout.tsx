@@ -1,4 +1,4 @@
-import { useMantineTheme, AppShell, LoadingOverlay } from '@mantine/core';
+import { useMantineTheme, AppShell, LoadingOverlay, Stack } from '@mantine/core';
 import { ReactNode, useState } from 'react';
 import { useFirebaseAuthUser } from 'src/utils/firebase';
 import AppShellHeader from './AppShellHeader';
@@ -8,7 +8,7 @@ type LayoutProps = {
   children: ReactNode;
 };
 
-export default function Layout(props: LayoutProps) {
+const Layout = ({ children }: LayoutProps) => {
   const user = useFirebaseAuthUser();
   const theme = useMantineTheme();
   const [navMenuOpened, setNavMenuOpened] = useState(false);
@@ -22,11 +22,13 @@ export default function Layout(props: LayoutProps) {
       }}
       padding="xl"
       navbarOffsetBreakpoint="sm"
-      navbar={<AppShellNavbar navMenuOpened={navMenuOpened} onNavMenuToggle={setNavMenuOpened} />}
+      navbar={<AppShellNavbar navMenuOpened={navMenuOpened} onNavMenuToggle={setNavMenuOpened} user={user.data} />}
       header={<AppShellHeader navMenuOpened={navMenuOpened} onNavMenuToggle={setNavMenuOpened} />}
     >
       <LoadingOverlay visible={user.isLoading} overlayBlur={2} />
-      {props.children}
+      <Stack>{children}</Stack>
     </AppShell>
   );
-}
+};
+
+export default Layout;

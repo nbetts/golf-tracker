@@ -1,12 +1,14 @@
 import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
-import { useFirebaseAuthUser } from 'src/utils/firebase';
 import { openEditCourseModal } from 'src/utils/modals';
 import { GolfCourse } from 'src/utils/types';
 
-export default function CourseScorecard(props: GolfCourse) {
-  const user = useFirebaseAuthUser();
-  const { name, website, holes } = props;
+type CourseScorecardProps = {
+  course: GolfCourse;
+};
+
+const CourseScorecard = ({ course }: CourseScorecardProps) => {
+  const { name, website, holes } = course;
 
   let netPar = 0,
     netYards = 0;
@@ -32,20 +34,18 @@ export default function CourseScorecard(props: GolfCourse) {
             <Badge size="lg" color="green" variant="light">
               Par {netPar}
             </Badge>
-            {user.data && (
-              <Menu withinPortal position="bottom-end" shadow="sm">
-                <Menu.Target>
-                  <ActionIcon>
-                    <IconDots size={16} />
-                  </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item icon={<IconPencil size={14} />} onClick={() => openEditCourseModal({ course: props })}>
-                    Edit
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            )}
+            <Menu withinPortal position="bottom-end" shadow="sm">
+              <Menu.Target>
+                <ActionIcon>
+                  <IconDots size={16} />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item icon={<IconPencil size={14} />} onClick={() => openEditCourseModal({ course })}>
+                  Edit
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
           </Group>
         </Group>
       </Card.Section>
@@ -113,4 +113,6 @@ export default function CourseScorecard(props: GolfCourse) {
       </Card.Section>
     </Card>
   );
-}
+};
+
+export default CourseScorecard;
