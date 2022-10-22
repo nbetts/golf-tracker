@@ -8,7 +8,7 @@ import { AppProps } from 'next/app';
 
 const queryClient = new QueryClient();
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'mantine-color-scheme',
     defaultValue: 'light',
@@ -35,4 +35,6 @@ export default function App({ Component, pageProps }: AppProps) {
       </MantineProvider>
     </ColorSchemeProvider>
   );
-}
+};
+
+export default App;

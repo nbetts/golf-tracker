@@ -1,10 +1,13 @@
 import { IconChevronRight } from '@tabler/icons';
 import { Box, NavLink, Popover, Button, Avatar } from '@mantine/core';
-import { useSignIn, useFirebaseAuthUser, useSignOut } from 'src/utils/firebase';
-import { GoogleAuthProvider } from 'firebase/auth';
+import { useSignIn, useSignOut } from 'src/utils/firebase';
+import { GoogleAuthProvider, User } from 'firebase/auth';
 
-export function UserSettings() {
-  const user = useFirebaseAuthUser();
+type UserSettingsProps = {
+  user?: User;
+};
+
+const UserSettings = ({ user }: UserSettingsProps) => {
   const signIn = useSignIn();
   const signOut = useSignOut();
 
@@ -15,13 +18,13 @@ export function UserSettings() {
         borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
       })}
     >
-      {user.data ? (
+      {user ? (
         <Popover position="right">
           <Popover.Target>
             <NavLink
-              label={user.data.displayName}
-              description={user.data.email}
-              icon={<Avatar color="pink" radius="xl" src={user.data.photoURL} />}
+              label={user.displayName}
+              description={user.email}
+              icon={<Avatar color="pink" radius="xl" src={user.photoURL} />}
               rightSection={<IconChevronRight size={12} />}
             />
           </Popover.Target>
@@ -41,4 +44,6 @@ export function UserSettings() {
       )}
     </Box>
   );
-}
+};
+
+export default UserSettings;

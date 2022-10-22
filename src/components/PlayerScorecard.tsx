@@ -10,9 +10,9 @@ type PlayerScorecardProps = {
   isOwner: boolean;
 };
 
-export default function PlayerScorecard(props: PlayerScorecardProps) {
-  const { hidden, timestamp, scores } = props.scorecard;
-  const { name, website, holes } = props.course;
+const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecardProps) => {
+  const { hidden, timestamp, scores } = scorecard;
+  const { name, website, holes } = course;
 
   // Calculate the last score index so that we don't need to show any more holes after that.
   let lastScoredHole = 1;
@@ -44,7 +44,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
             <Badge size="lg" color="blue" variant="light">
               {timestamp.toDate().toLocaleDateString()}
             </Badge>
-            <Text weight="bold">{props.player.name}</Text>
+            <Text weight="bold">{player.name}</Text>
           </Group>
           <Group mt="md" mb="xs">
             <Anchor weight="bold" href={website} target="_blank">
@@ -59,7 +59,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
             <Badge size="lg" color="pink" variant="light">
               Score {netPlayerScore}
             </Badge>
-            {props.isOwner && (
+            {isOwner && (
               <>
                 {hidden && (
                   <Tooltip label="Other players cannot see this scorecard">
@@ -75,7 +75,7 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
                     </ActionIcon>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Menu.Item onClick={() => openEditScorecardModal({ scorecard: props.scorecard })} icon={<IconPencil size={14} />}>
+                    <Menu.Item onClick={() => openEditScorecardModal({ scorecard })} icon={<IconPencil size={14} />}>
                       Edit
                     </Menu.Item>
                   </Menu.Dropdown>
@@ -158,4 +158,6 @@ export default function PlayerScorecard(props: PlayerScorecardProps) {
       </Card.Section>
     </Card>
   );
-}
+};
+
+export default PlayerScorecard;

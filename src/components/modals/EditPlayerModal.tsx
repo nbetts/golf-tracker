@@ -25,10 +25,14 @@ const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
   });
 
   const submitForm = (values: FormInputs) => {
-    mutation.mutate({
-      name: values.name,
-    });
-    closeAllModals();
+    mutation.mutate(
+      {
+        name: values.name,
+      },
+      {
+        onSuccess: () => closeAllModals(),
+      },
+    );
   };
 
   return (

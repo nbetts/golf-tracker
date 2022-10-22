@@ -42,32 +42,34 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
 
   const holeFields = holesToDisplay.map((_item, index) => (
     <Card key={index} shadow="sm" radius="md" withBorder p="sm">
+      <Text size="xs" weight={500}>
+        Hole {index + 1}
+      </Text>
       <Grid align="center" grow>
-        <Grid.Col span={2}>
-          <Text size="sm" weight={500}>
-            Hole {index + 1}
-          </Text>
-        </Grid.Col>
-        <Grid.Col span={3}>
+        <Grid.Col span={4}>
           <NumberInput size="xs" min={0} label="Par" {...form.getInputProps(`holes.${index}.par`)} />
         </Grid.Col>
-        <Grid.Col span={3}>
-          <NumberInput size="xs" min={0} label="Stroke index" {...form.getInputProps(`holes.${index}.strokeIndex`)} />
-        </Grid.Col>
-        <Grid.Col span={3}>
+        <Grid.Col span={4}>
           <NumberInput size="xs" min={0} label="Yards" {...form.getInputProps(`holes.${index}.yards`)} />
+        </Grid.Col>
+        <Grid.Col span={4}>
+          <NumberInput size="xs" min={0} label="Stroke index" {...form.getInputProps(`holes.${index}.strokeIndex`)} />
         </Grid.Col>
       </Grid>
     </Card>
   ));
 
   const submitForm = (values: FormInputs) => {
-    mutation.mutate({
-      name: values.name,
-      website: values.website,
-      holes: values.holes,
-    });
-    closeAllModals();
+    mutation.mutate(
+      {
+        name: values.name,
+        website: values.website,
+        holes: values.holes,
+      },
+      {
+        onSuccess: () => closeAllModals(),
+      },
+    );
   };
 
   return (

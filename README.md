@@ -50,7 +50,7 @@ none
 
 ### Should
 
-- add sensible signed out home page
+- add some signed out home page content
 - support signing in with other providers
 - allow users to delete data (implement soft delete)
 - fix bug where react-query or firestore data does not load after fast-refresh executes
@@ -59,8 +59,7 @@ none
 
 ### Could
 
-- add player statistics
-- add search filters to each page using the MultiSelect component
+- come up with some useful player statistics to show
 
 ### Wish
 
