@@ -10,14 +10,14 @@ const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps)
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
-    <Header height={70} p="md">
+    <Header height={66} p="md">
       <Group sx={{ height: '100%' }} pl="md" position="apart">
         <Group spacing="sm">
           <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
             <Burger opened={navMenuOpened} onClick={() => onNavMenuToggle(!navMenuOpened)} size="sm" mr="xs" />
           </MediaQuery>
-          <Text size={22}>⛳️</Text>
-          <Text component="span" align="center" variant="gradient" gradient={{ from: 'teal', to: 'green', deg: 45 }} size={22} ml="xs" weight="bold">
+          <Text size={20}>⛳️</Text>
+          <Text component="span" align="center" variant="gradient" gradient={{ from: 'teal', to: 'green', deg: 45 }} size={22} weight="bold">
             Golf Tracker
           </Text>
         </Group>
@@ -27,18 +27,20 @@ const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps)
               {colorScheme === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}
             </ActionIcon>
           </Tooltip>
-          <Tooltip
-            label={
-              <Group spacing={5}>
-                <Text>GitHub</Text>
-                <IconExternalLink size={12} />
-              </Group>
-            }
-          >
-            <ActionIcon variant="default" size={32} radius="md" component="a" href="https://github.com/nbetts/golf-tracker" target="_blank">
-              <IconBrandGithub size={20} />
-            </ActionIcon>
-          </Tooltip>
+          <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
+            <Tooltip
+              label={
+                <Group spacing={5}>
+                  <Text>GitHub</Text>
+                  <IconExternalLink size={12} />
+                </Group>
+              }
+            >
+              <ActionIcon variant="default" size={32} radius="md" component="a" href="https://github.com/nbetts/golf-tracker" target="_blank">
+                <IconBrandGithub size={20} />
+              </ActionIcon>
+            </Tooltip>
+          </MediaQuery>
         </Group>
       </Group>
     </Header>

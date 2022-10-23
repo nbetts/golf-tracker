@@ -1,9 +1,10 @@
 import { Navbar, NavLink, ThemeIcon } from '@mantine/core';
-import { IconChevronRight, IconGolf, IconUsers, IconId } from '@tabler/icons';
+import { IconChevronRight, IconGolf, IconUsers, IconId, IconUser } from '@tabler/icons';
 import Link from 'next/link';
 import routes from 'src/utils/routes';
 import UserSettings from './UserSettings';
-import { User } from 'firebase/auth';
+import { GoogleAuthProvider, User } from 'firebase/auth';
+import { useSignIn } from 'src/utils/firebase';
 
 type AppShellNavbarProps = {
   navMenuOpened: boolean;
@@ -12,10 +13,12 @@ type AppShellNavbarProps = {
 };
 
 const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbarProps) => {
+  const signIn = useSignIn();
+
   return (
     <Navbar p="xs" hiddenBreakpoint="sm" hidden={!navMenuOpened} width={{ sm: 280 }}>
       <Navbar.Section grow mb="xs">
-        {user && (
+        {user ? (
           <>
             <Link href={routes.courses} passHref>
               <NavLink
@@ -57,11 +60,25 @@ const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbar
               />
             </Link>
           </>
+        ) : (
+          <NavLink
+            label="Sign in"
+            component="button"
+            onClick={() => signIn.mutate({ provider: new GoogleAuthProvider() })}
+            rightSection={<IconChevronRight size={12} />}
+            icon={
+              <ThemeIcon color="pink" variant="light">
+                <IconUser size={16} />
+              </ThemeIcon>
+            }
+          />
         )}
       </Navbar.Section>
-      <Navbar.Section>
-        <UserSettings user={user} />
-      </Navbar.Section>
+      {user && (
+        <Navbar.Section>
+          <UserSettings user={user} />
+        </Navbar.Section>
+      )}
     </Navbar>
   );
 };
