@@ -25,9 +25,9 @@ const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecard
 
   const holeCount = Math.min(lastScoredHole, holes.length);
   const scoredHoles: ScoredGolfHole[] = [];
-  let netPar = 0,
-    netYards = 0,
-    netPlayerScore = 0;
+  let netPar = 0;
+  let netYards = 0;
+  let netPlayerScore = 0;
 
   for (let i = 0; i < holeCount; i++) {
     scoredHoles.push({ ...holes[i], score: scores[i] });
