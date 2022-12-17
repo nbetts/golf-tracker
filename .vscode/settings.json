@@ -7,5 +7,10 @@
     "Mantine",
     "pullstate",
     "tabler"
-  ]
+  ],
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml,lefthook.yml,next-env.d.ts,next.config.js,rome.json,tsconfig.json",
+    ".firebaserc": "firebase.json,firestore.indexes.json,firestore.rules"
+  }
 }
