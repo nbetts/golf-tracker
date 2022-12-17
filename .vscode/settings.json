@@ -1,5 +1,11 @@
 {
   "editor.defaultFormatter": "rome.rome",
   "editor.formatOnSave": true,
-  "cSpell.words": ["Firestore", "Mantine"]
+  "cSpell.words": [
+    "Firestore",
+    "lefthook",
+    "Mantine",
+    "pullstate",
+    "tabler"
+  ]
 }
