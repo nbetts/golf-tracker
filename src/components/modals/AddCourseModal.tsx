@@ -1,5 +1,6 @@
 import { Button, Card, Grid, NumberInput, SegmentedControl, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { closeAllModals } from '@mantine/modals';
 import { useCoursesCollectionMutation } from 'src/utils/firebase';
 import { GolfHole } from 'src/utils/types';
 
@@ -56,12 +57,17 @@ const AddCourseModal = () => {
   ));
 
   const submitForm = (values: FormInputs) => {
-    mutation.mutate({
-      name: values.name,
-      website: values.website,
-      holes: values.holes.slice(0, values.holeCount === '9 holes' ? 9 : 18),
-      deleted: false,
-    });
+    mutation.mutate(
+      {
+        name: values.name,
+        website: values.website,
+        holes: values.holes,
+        deleted: false,
+      },
+      {
+        onSuccess: () => closeAllModals(),
+      },
+    );
   };
 
   return (
