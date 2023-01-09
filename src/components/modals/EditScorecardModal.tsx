@@ -43,7 +43,7 @@ const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
 
   const holeFields = new Array(holeCount)
     .fill(0)
-    .map((_item, index) => <NumberInput key={index} size="xs" min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}`)} />);
+    .map((_item, index) => <NumberInput key={index} min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}`)} />);
 
   const submitForm = (values: FormInputs) => {
     mutation.mutate(

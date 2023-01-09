@@ -52,7 +52,7 @@ none
 
 - add some signed out home page content
 - support signing in with other providers
-- allow users to delete data (implement soft delete)
+- allow users to delete data (implement soft delete on courses, hard delete on users/scorecards)
 - fix bug where react-query or firestore data does not load after fast-refresh executes
 - add sensible form validation to all forms
 - use multiple firebase projects to separate dev/prod environments

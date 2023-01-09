@@ -98,6 +98,7 @@ const Scorecards = () => {
           clearable
           clearButtonLabel="Clear selection"
           sx={{ maxWidth: 500 }}
+          size="md"
         />
         <MultiSelect
           data={sortedPlayers?.map((player) => player.name) || []}
@@ -110,6 +111,7 @@ const Scorecards = () => {
           clearable
           clearButtonLabel="Clear selection"
           sx={{ maxWidth: 500 }}
+          size="md"
         />
       </Group>
       <Divider />

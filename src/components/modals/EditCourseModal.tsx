@@ -47,13 +47,13 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
       </Text>
       <Grid align="center" grow>
         <Grid.Col span={4}>
-          <NumberInput size="xs" min={0} label="Par" {...form.getInputProps(`holes.${index}.par`)} />
+          <NumberInput min={0} label="Par" {...form.getInputProps(`holes.${index}.par`)} />
         </Grid.Col>
         <Grid.Col span={4}>
-          <NumberInput size="xs" min={0} label="Yards" {...form.getInputProps(`holes.${index}.yards`)} />
+          <NumberInput min={0} label="Yards" {...form.getInputProps(`holes.${index}.yards`)} />
         </Grid.Col>
         <Grid.Col span={4}>
-          <NumberInput size="xs" min={0} label="Stroke index" {...form.getInputProps(`holes.${index}.strokeIndex`)} />
+          <NumberInput min={0} label="S. index" {...form.getInputProps(`holes.${index}.strokeIndex`)} />
         </Grid.Col>
       </Grid>
     </Card>
