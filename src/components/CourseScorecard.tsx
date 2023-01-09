@@ -10,8 +10,8 @@ type CourseScorecardProps = {
 const CourseScorecard = ({ course }: CourseScorecardProps) => {
   const { name, website, holes } = course;
 
-  let netPar = 0,
-    netYards = 0;
+  let netPar = 0;
+  let netYards = 0;
 
   for (let i = 0; i < holes.length; i++) {
     netPar += holes[i].par;

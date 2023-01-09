@@ -31,7 +31,7 @@ const ScorecardsFilter = ({ userId, courses, players, coursesFilterValues, playe
   const publicScorecards = useScorecardsCollection();
   const personalScorecards = usePersonalScorecardsCollection(userId);
 
-  if (!publicScorecards.data || !personalScorecards.data) {
+  if (!(publicScorecards.data && personalScorecards.data)) {
     return null;
   }
 

@@ -1,5 +1,14 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "cSpell.words": ["Firestore", "Mantine"]
+  "editor.defaultFormatter": "rome.rome",
+  "editor.formatOnSave": false,
+  "cSpell.words": ["Firestore", "lefthook", "Mantine", "pullstate", "tabler"],
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js, ${capture}.test.ts",
+    "*.tsx": "${capture}.ts, ${capture}.test.ts, ${capture}.test.tsx, ${capture}.stories.ts, ${capture}.stories.tsx",
+    "next.config.js": "next-env.d.ts",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, lefthook.yml, rome.json, tsconfig.json",
+    ".firebaserc": "firebase.json, firestore.indexes.json, firestore.rules",
+    "README.md": "LICENSE.txt"
+  }
 }
