@@ -1,13 +1,7 @@
 {
   "editor.defaultFormatter": "rome.rome",
-  "editor.formatOnSave": true,
-  "cSpell.words": [
-    "Firestore",
-    "lefthook",
-    "Mantine",
-    "pullstate",
-    "tabler"
-  ],
+  "editor.formatOnSave": false,
+  "cSpell.words": ["Firestore", "lefthook", "Mantine", "pullstate", "tabler"],
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "${capture}.js, ${capture}.test.ts",

@@ -24,7 +24,7 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
     initialValues: {
       name: course.name,
       website: course.website,
-      holeCount: course.holes.length <= 9 ? '9 holes' : '18 holes',
+      holeCount: course.holes.slice(9).reduce((sum, { par }) => par + sum, 0) > 0 ? '18 holes' : '9 holes',
       holes: course.holes,
     },
     validate: {
