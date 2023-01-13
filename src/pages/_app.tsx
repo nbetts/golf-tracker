@@ -5,6 +5,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppProps } from 'next/app';
+import { theme } from 'src/utils/theme';
 
 const queryClient = new QueryClient();
 
@@ -19,7 +20,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider theme={{ colorScheme, primaryColor: 'green' }} withGlobalStyles withNormalizeCSS>
+      <MantineProvider theme={{ ...theme, colorScheme }} withGlobalStyles withNormalizeCSS>
         <QueryClientProvider client={queryClient}>
           <NotificationsProvider>
             <ModalsProvider>

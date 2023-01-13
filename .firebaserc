@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "golf-tracker-302ca"
-  }
+    "default": "golf-tracker-62943",
+    "production": "golf-tracker-302ca"
+  },
+  "targets": {},
+  "etags": {}
 }
