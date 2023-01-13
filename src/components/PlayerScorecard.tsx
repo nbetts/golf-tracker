@@ -107,7 +107,7 @@ const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecard
                       <Text align="center">Yards</Text>
                     </th>
                     <th>
-                      <Text align="center">Stroke Index</Text>
+                      <Text align="center">S. index</Text>
                     </th>
                   </tr>
                 </thead>
