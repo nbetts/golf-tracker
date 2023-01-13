@@ -30,7 +30,13 @@ Install dependencies
   yarn
 ```
 
-Start the server
+Log into the Firebase CLI
+
+```bash
+firebase login
+```
+
+Start the dev server
 
 ```bash
   yarn dev
@@ -55,7 +61,6 @@ none
 - allow users to delete data (implement soft delete on courses, hard delete on users/scorecards)
 - fix bug where react-query or firestore data does not load after fast-refresh executes
 - add sensible form validation to all forms
-- use multiple firebase projects to separate dev/prod environments
 
 ### Could
 
