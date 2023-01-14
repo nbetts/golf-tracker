@@ -73,9 +73,11 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
           </Card>
         )}
         <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden')} />
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Add scorecard
-        </Button>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Add scorecard
+          </Button>
+        </Flex>
       </Flex>
     </form>
   );

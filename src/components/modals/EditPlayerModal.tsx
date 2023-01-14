@@ -39,9 +39,11 @@ export const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
     <form onSubmit={form.onSubmit(submitForm)}>
       <Flex direction="column">
         <TextInput label="Name" placeholder="Your name" {...form.getInputProps('name')} data-autofocus />
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Update profile
-        </Button>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Update profile
+          </Button>
+        </Flex>
       </Flex>
     </form>
   );

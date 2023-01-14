@@ -70,9 +70,11 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
           </Flex>
         </Card>
         <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden', { type: 'checkbox' })} />
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Update scorecard
-        </Button>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Update scorecard
+          </Button>
+        </Flex>
       </Flex>
     </form>
   );

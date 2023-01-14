@@ -44,7 +44,7 @@ export const EditCourseModal = ({ course }: EditCourseModalProps) => {
 
   const holeFields = holesToDisplay.map((_item, index) => (
     <Card key={index} shadow="sm" radius="md" withBorder p="sm">
-      <Text size="xs" weight={500}>
+      <Text size="sm" weight={500}>
         Hole {index + 1}
       </Text>
       <Grid align="center" grow>
@@ -85,9 +85,11 @@ export const EditCourseModal = ({ course }: EditCourseModalProps) => {
         <TextInput label="Website" placeholder="https://example.com/" {...form.getInputProps('website')} />
         <SegmentedControl mt="xs" {...form.getInputProps('holeCount')} data={holeCount.map((value) => ({ value, label: value }))} />
         {holeFields}
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Update course
-        </Button>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Update course
+          </Button>
+        </Flex>
       </Flex>
     </form>
   );

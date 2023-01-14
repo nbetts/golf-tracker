@@ -20,9 +20,11 @@ export const AccountSettingsModal = () => {
           Sign out
         </Button>
       </Flex>
-      <Button type="submit" mt="md" onClick={() => closeAllModals()}>
-        Close
-      </Button>
+      <Flex justify="center">
+        <Button type="submit" mt="md" onClick={() => closeAllModals()}>
+          Close
+        </Button>
+      </Flex>
     </Flex>
   );
 };
