@@ -1,8 +1,6 @@
 import { Divider, Flex, Text } from '@mantine/core';
-import { withAuthCheck } from 'src/utils/withRouteCheck';
-import PlayerStatistics from 'src/components/PlayerStatistics';
-import Layout from 'src/components/Layout';
-import { useFirebaseAuthUser, usePlayersCollection } from 'src/utils/firebase';
+import { Layout, PlayerStatistics } from 'src/components';
+import { useFirebaseAuthUser, usePlayersCollection, withAuthCheck } from 'src/utils';
 
 const Players = () => {
   const user = useFirebaseAuthUser();

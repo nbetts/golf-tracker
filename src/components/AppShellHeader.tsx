@@ -6,7 +6,7 @@ type AppShellHeaderProps = {
   onNavMenuToggle: (navMenuOpened: boolean) => void;
 };
 
-const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps) => {
+export const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
@@ -46,5 +46,3 @@ const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps)
     </Header>
   );
 };
-
-export default AppShellHeader;

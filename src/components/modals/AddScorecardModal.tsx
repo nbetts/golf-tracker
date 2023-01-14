@@ -3,7 +3,7 @@ import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
-import { useCoursesCollection, useScorecardsCollectionMutation } from 'src/utils/firebase';
+import { useCoursesCollection, useScorecardsCollectionMutation } from 'src/utils';
 
 type FormInputs = {
   date: Date;
@@ -16,7 +16,7 @@ export type AddScorecardModalProps = {
   userId: string;
 };
 
-const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
+export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
   const mutation = useScorecardsCollectionMutation();
   const courses = useCoursesCollection();
 
@@ -80,5 +80,3 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
     </form>
   );
 };
-
-export default AddScorecardModal;

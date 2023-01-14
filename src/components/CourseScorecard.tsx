@@ -1,13 +1,13 @@
 import { Card, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Flex } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
-import { openEditCourseModal } from 'src/utils/modals';
-import { GolfCourse } from 'src/utils/types';
+import { GolfCourse } from 'src/types';
+import { openEditCourseModal } from 'src/utils';
 
 type CourseScorecardProps = {
   course: GolfCourse;
 };
 
-const CourseScorecard = ({ course }: CourseScorecardProps) => {
+export const CourseScorecard = ({ course }: CourseScorecardProps) => {
   const { name, website, holes } = course;
 
   let netPar = 0;
@@ -114,5 +114,3 @@ const CourseScorecard = ({ course }: CourseScorecardProps) => {
     </Card>
   );
 };
-
-export default CourseScorecard;

@@ -1,7 +1,7 @@
 import { Button, Flex, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { usePlayerDocumentMutation } from 'src/utils/firebase';
+import { usePlayerDocumentMutation } from 'src/utils';
 
 type FormInputs = {
   name: string;
@@ -12,7 +12,7 @@ export type AddPlayerModalProps = {
   name: string | null;
 };
 
-const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
+export const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
   const mutation = usePlayerDocumentMutation(userId);
 
   const form = useForm<FormInputs>({
@@ -47,5 +47,3 @@ const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
     </form>
   );
 };
-
-export default AddPlayerModal;

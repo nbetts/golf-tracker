@@ -1,8 +1,8 @@
 import { Button, Card, Flex, Grid, NumberInput, SegmentedControl, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { useCourseDocumentMutation } from 'src/utils/firebase';
-import { GolfCourse, GolfHole } from 'src/utils/types';
+import { GolfCourse, GolfHole } from 'src/types';
+import { useCourseDocumentMutation } from 'src/utils';
 
 const holeCount = ['9 holes', '18 holes'];
 
@@ -17,7 +17,7 @@ export type EditCourseModalProps = {
   course: GolfCourse;
 };
 
-const EditCourseModal = ({ course }: EditCourseModalProps) => {
+export const EditCourseModal = ({ course }: EditCourseModalProps) => {
   const mutation = useCourseDocumentMutation(course.id);
 
   const form = useForm<FormInputs>({
@@ -86,5 +86,3 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
     </form>
   );
 };
-
-export default EditCourseModal;

@@ -3,8 +3,8 @@ import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
-import { useCoursesCollection, useScorecardDocumentMutation } from 'src/utils/firebase';
-import { GolfScorecard } from 'src/utils/types';
+import { GolfScorecard } from 'src/types';
+import { useCoursesCollection, useScorecardDocumentMutation } from 'src/utils';
 
 type FormInputs = {
   date: Date;
@@ -17,7 +17,7 @@ export type EditScorecardModalProps = {
   scorecard: GolfScorecard;
 };
 
-const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
+export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
   const mutation = useScorecardDocumentMutation(scorecard.id);
   const courses = useCoursesCollection();
 
@@ -77,5 +77,3 @@ const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
     </form>
   );
 };
-
-export default EditScorecardModal;

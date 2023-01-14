@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Stack } from '@mantine/core';
 import { closeAllModals } from '@mantine/modals';
-import { useSignOut } from 'src/utils/firebase';
+import { useSignOut } from 'src/utils';
 
 export const AccountSettingsModal = () => {
   const signOut = useSignOut();

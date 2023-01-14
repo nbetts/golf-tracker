@@ -5,7 +5,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppProps } from 'next/app';
-import { theme } from 'src/utils/theme';
+import { theme } from 'src/utils';
 
 const queryClient = new QueryClient();
 

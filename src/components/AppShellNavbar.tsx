@@ -1,10 +1,8 @@
 import { Avatar, Box, Navbar, NavLink, ThemeIcon } from '@mantine/core';
-import { IconChevronRight, IconGolf, IconUsers, IconId, IconUser, IconChevronUp } from '@tabler/icons';
+import { IconChevronRight, IconGolf, IconUsers, IconId, IconUser } from '@tabler/icons';
 import Link from 'next/link';
-import routes from 'src/utils/routes';
 import { GoogleAuthProvider, User } from 'firebase/auth';
-import { useSignIn } from 'src/utils/firebase';
-import { openAccountSettingsModal } from 'src/utils/modals';
+import { useSignIn, routes, openAccountSettingsModal } from 'src/utils';
 
 type AppShellNavbarProps = {
   navMenuOpened: boolean;
@@ -12,7 +10,7 @@ type AppShellNavbarProps = {
   user?: User;
 };
 
-const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbarProps) => {
+export const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbarProps) => {
   const signIn = useSignIn();
 
   return (
@@ -94,5 +92,3 @@ const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbar
     </Navbar>
   );
 };
-
-export default AppShellNavbar;

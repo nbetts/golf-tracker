@@ -1,17 +1,16 @@
 import { Button, Divider, Flex, MultiSelect, Text } from '@mantine/core';
-import PlayerScorecard from 'src/components/PlayerScorecard';
-import { withAuthCheck } from 'src/utils/withRouteCheck';
-import Layout from 'src/components/Layout';
-import {
-  useCoursesCollection,
-  useFirebaseAuthUser,
-  usePlayersCollection,
-  usePersonalScorecardsCollection,
-  useScorecardsCollection,
-} from 'src/utils/firebase';
-import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/utils/types';
-import { openAddScorecardModal } from 'src/utils/modals';
+import { Layout, PlayerScorecard } from 'src/components';
 import { useState } from 'react';
+import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/types';
+import {
+  useScorecardsCollection,
+  usePersonalScorecardsCollection,
+  useFirebaseAuthUser,
+  useCoursesCollection,
+  usePlayersCollection,
+  openAddScorecardModal,
+  withAuthCheck,
+} from 'src/utils';
 
 type CombinedScorecardInformation = {
   course: GolfCourse;

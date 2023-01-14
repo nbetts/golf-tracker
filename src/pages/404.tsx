@@ -1,6 +1,6 @@
 import { createStyles, Title, Text, Button, Container, Flex } from '@mantine/core';
 import Link from 'next/link';
-import routes from 'src/utils/routes';
+import { routes } from 'src/utils';
 
 const useStyles = createStyles((theme) => ({
   root: {

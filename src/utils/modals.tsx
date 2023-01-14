@@ -1,11 +1,18 @@
 import { openModal } from '@mantine/modals';
+import {
+  AddPlayerModalProps,
+  AddPlayerModal,
+  EditPlayerModalProps,
+  EditPlayerModal,
+  AddCourseModal,
+  EditCourseModalProps,
+  EditCourseModal,
+  AddScorecardModalProps,
+  AddScorecardModal,
+  EditScorecardModalProps,
+  EditScorecardModal,
+} from 'src/components';
 import { AccountSettingsModal } from 'src/components/modals/AccountSettingsModal';
-import AddCourseModal from 'src/components/modals/AddCourseModal';
-import AddPlayerModal, { AddPlayerModalProps } from 'src/components/modals/AddPlayerModal';
-import AddScorecardModal, { AddScorecardModalProps } from 'src/components/modals/AddScorecardModal';
-import EditCourseModal, { EditCourseModalProps } from 'src/components/modals/EditCourseModal';
-import EditPlayerModal, { EditPlayerModalProps } from 'src/components/modals/EditPlayerModal';
-import EditScorecardModal, { EditScorecardModalProps } from 'src/components/modals/EditScorecardModal';
 
 export const openAccountSettingsModal = () => {
   openModal({ title: 'Account settings', children: <AccountSettingsModal /> });

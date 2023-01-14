@@ -1,6 +1,6 @@
 import { Text } from '@mantine/core';
-import Layout from 'src/components/Layout';
-import { withoutAuthCheck } from 'src/utils/withRouteCheck';
+import { Layout } from 'src/components';
+import { withoutAuthCheck } from 'src/utils';
 
 const Home = () => {
   return (

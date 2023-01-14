@@ -1,8 +1,8 @@
 import { Button, Flex, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { usePlayerDocumentMutation } from 'src/utils/firebase';
-import { GolfPlayer } from 'src/utils/types';
+import { GolfPlayer } from 'src/types';
+import { usePlayerDocumentMutation } from 'src/utils';
 
 type FormInputs = {
   name: string;
@@ -12,7 +12,7 @@ export type EditPlayerModalProps = {
   player: GolfPlayer;
 };
 
-const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
+export const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
   const mutation = usePlayerDocumentMutation(player.id);
 
   const form = useForm<FormInputs>({
@@ -46,5 +46,3 @@ const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
     </form>
   );
 };
-
-export default EditPlayerModal;

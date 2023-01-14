@@ -1,14 +1,14 @@
 import { Card, Menu, ActionIcon, Accordion, Text, Flex } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
-import { openEditPlayerModal } from 'src/utils/modals';
-import { GolfPlayer } from 'src/utils/types';
+import { GolfPlayer } from 'src/types';
+import { openEditPlayerModal } from 'src/utils';
 
 type PlayerStatisticsProps = {
   player: GolfPlayer;
   isOwner: boolean;
 };
 
-const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
+export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
@@ -47,5 +47,3 @@ const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
     </Card>
   );
 };
-
-export default PlayerStatistics;
