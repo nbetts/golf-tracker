@@ -1,6 +1,6 @@
 import { Button, Divider, Flex, MultiSelect, Text } from '@mantine/core';
 import { Layout, PlayerScorecard } from 'src/components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/types';
 import {
   useScorecardsCollection,
@@ -68,6 +68,7 @@ const ScorecardsFilter = ({ userId, courses, players, coursesFilterValues, playe
 
 const Scorecards = () => {
   const user = useFirebaseAuthUser();
+  const userId = user.data?.uid;
   const courses = useCoursesCollection();
   const players = usePlayersCollection();
 
@@ -77,13 +78,19 @@ const Scorecards = () => {
   const [coursesFilterValues, onCoursesFilterValuesChange] = useState<string[]>([]);
   const [playersFilterValues, onPlayersFilterValuesChange] = useState<string[]>([]);
 
+  useEffect(() => {
+    if (userId && sessionStorage['golf-tracker-add-scorecard-modal-form-inputs']) {
+      openAddScorecardModal({ userId });
+    }
+  }, [userId]);
+
   return (
     <Layout>
       <Flex align="center" justify="space-between" mb="lg">
         <Text size={30} weight="bold" m={0}>
           Scorecards
         </Text>
-        <Button onClick={() => user.data?.uid && openAddScorecardModal({ userId: user.data.uid })}>Add scorecard</Button>
+        <Button onClick={() => userId && openAddScorecardModal({ userId })}>Add scorecard</Button>
       </Flex>
       <Flex align="center">
         <MultiSelect
@@ -113,9 +120,9 @@ const Scorecards = () => {
       </Flex>
       <Divider />
       <Flex direction="column">
-        {user.data?.uid && sortedCourses && sortedPlayers && (
+        {userId && sortedCourses && sortedPlayers && (
           <ScorecardsFilter
-            userId={user.data.uid}
+            userId={userId}
             courses={sortedCourses}
             players={sortedPlayers}
             coursesFilterValues={coursesFilterValues}

@@ -1,8 +1,9 @@
-import { Button, Card, Checkbox, Flex, NumberInput, Select, TextInput } from '@mantine/core';
+import { Button, Card, Checkbox, Flex, NumberInput, Select } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
+import { useEffect } from 'react';
 import { useCoursesCollection, useScorecardsCollectionMutation } from 'src/utils';
 
 type FormInputs = {
@@ -10,6 +11,13 @@ type FormInputs = {
   courseId: string;
   scores: number[];
   hidden: boolean;
+};
+
+const initialValues: FormInputs = {
+  date: new Date(),
+  courseId: '',
+  scores: new Array(18).fill(''),
+  hidden: false,
 };
 
 export type AddScorecardModalProps = {
@@ -21,17 +29,39 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
   const courses = useCoursesCollection();
 
   const form = useForm<FormInputs>({
-    initialValues: {
-      date: new Date(),
-      courseId: '',
-      scores: new Array(18).fill(''),
-      hidden: false,
-    },
+    initialValues,
     validate: {
       date: (value) => (!value ? 'Date is required' : null),
       courseId: (value) => (!value ? 'Course is required' : null),
     },
   });
+
+  useEffect(() => {
+    const storedFormValues = sessionStorage.getItem('golf-tracker-add-scorecard-modal-form-inputs');
+
+    if (storedFormValues) {
+      try {
+        const parsedFormValues = JSON.parse(storedFormValues);
+
+        if (parsedFormValues) {
+          form.setValues({
+            ...parsedFormValues,
+            date: new Date(parsedFormValues.date),
+          });
+        }
+      } catch (error) {}
+    }
+
+    return () => {
+      sessionStorage.removeItem('golf-tracker-add-scorecard-modal-form-inputs');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (form.isValid()) {
+      sessionStorage.setItem('golf-tracker-add-scorecard-modal-form-inputs', JSON.stringify(form.values));
+    }
+  }, [form.values]);
 
   if (!courses.data) {
     return null;
@@ -63,7 +93,7 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
       <Flex direction="column">
-        <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus />
+        <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus autoFocus />
         {courseOptions && <Select label="Course" placeholder="Choose course" data={courseOptions} {...form.getInputProps('courseId')} />}
         {form.values.courseId && (
           <Card shadow="sm" radius="md" withBorder p="sm">
