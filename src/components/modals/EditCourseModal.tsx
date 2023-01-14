@@ -4,6 +4,8 @@ import { closeAllModals } from '@mantine/modals';
 import { GolfCourse, GolfHole } from 'src/types';
 import { useCourseDocumentMutation } from 'src/utils';
 
+// @ts-ignore allow hole data to be blank
+const initialHoleData: GolfHole[] = new Array(18).fill(0).map(() => ({ par: '', strokeIndex: '', yards: '' }));
 const holeCount = ['9 holes', '18 holes'];
 
 type FormInputs = {
@@ -25,7 +27,7 @@ export const EditCourseModal = ({ course }: EditCourseModalProps) => {
       name: course.name,
       website: course.website,
       holeCount: course.holes.slice(9).reduce((sum, { par }) => par + sum, 0) > 0 ? '18 holes' : '9 holes',
-      holes: course.holes,
+      holes: initialHoleData.map((hole, index) => ({ ...hole, ...course.holes[index] })),
     },
     validate: {
       name: (value) => (/^.{1,100}$/.test(value) ? null : 'Name must be 1-100 characters'),
@@ -64,7 +66,11 @@ export const EditCourseModal = ({ course }: EditCourseModalProps) => {
       {
         name: values.name,
         website: values.website,
-        holes: values.holes,
+        holes: values.holes.slice(0, values.holeCount === '9 holes' ? 9 : 18).map((hole) => ({
+          par: hole.par || 0,
+          strokeIndex: hole.strokeIndex || 0,
+          yards: hole.yards || 0,
+        })),
       },
       {
         onSuccess: () => closeAllModals(),

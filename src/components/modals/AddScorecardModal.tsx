@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, Flex, NumberInput, Select } from '@mantine/core';
+import { Button, Card, Checkbox, Flex, NumberInput, Select, TextInput } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
@@ -24,7 +24,7 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
     initialValues: {
       date: new Date(),
       courseId: '',
-      scores: new Array(18).fill(0),
+      scores: new Array(18).fill(''),
       hidden: false,
     },
     validate: {
@@ -49,7 +49,7 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
       {
         timestamp: Timestamp.fromDate(values.date),
         courseId: values.courseId,
-        scores: values.scores,
+        scores: values.scores.map((score) => score || 0),
         hidden: values.hidden,
         userId,
         deleted: false,

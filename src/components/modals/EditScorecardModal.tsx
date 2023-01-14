@@ -25,7 +25,7 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
     initialValues: {
       date: scorecard.timestamp.toDate(),
       courseId: scorecard.courseId,
-      scores: new Array(18).fill(0).map((score, index) => scorecard.scores[index] || score),
+      scores: new Array(18).fill(0).map((_, index) => scorecard.scores[index] || 0),
       hidden: scorecard.hidden,
     },
     validate: {
@@ -50,7 +50,7 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
       {
         timestamp: Timestamp.fromDate(values.date),
         courseId: values.courseId,
-        scores: new Array(holeCount).fill(0).map((score, index) => values.scores[index] || score),
+        scores: new Array(holeCount).fill(0).map((_, index) => values.scores[index] || 0),
         hidden: values.hidden,
       },
       {
