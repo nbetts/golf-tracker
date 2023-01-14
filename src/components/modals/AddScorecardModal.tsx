@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, NumberInput, Select, Stack } from '@mantine/core';
+import { Button, Card, Checkbox, Flex, NumberInput, Select } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
@@ -62,19 +62,21 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
 
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
-      <Stack>
+      <Flex direction="column">
         <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus />
         {courseOptions && <Select label="Course" placeholder="Choose course" data={courseOptions} {...form.getInputProps('courseId')} />}
         {form.values.courseId && (
           <Card shadow="sm" radius="md" withBorder p="sm">
-            <Stack spacing="xs">{holeFields}</Stack>
+            <Flex direction="column" gap="xs">
+              {holeFields}
+            </Flex>
           </Card>
         )}
         <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden')} />
         <Button type="submit" mt="md" disabled={mutation.isLoading}>
           Add scorecard
         </Button>
-      </Stack>
+      </Flex>
     </form>
   );
 };

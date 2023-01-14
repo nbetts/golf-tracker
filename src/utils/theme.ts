@@ -8,6 +8,11 @@ export const theme: MantineThemeOverride = {
         size: 'md',
       },
     },
+    Flex: {
+      defaultProps: {
+        gap: 'md',
+      },
+    },
     MultiSelect: {
       defaultProps: {
         size: 'md',

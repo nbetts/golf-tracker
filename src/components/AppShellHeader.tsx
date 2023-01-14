@@ -1,4 +1,4 @@
-import { Header, Group, MediaQuery, Burger, Tooltip, ActionIcon, Text, useMantineColorScheme } from '@mantine/core';
+import { Header, MediaQuery, Burger, Tooltip, ActionIcon, Text, useMantineColorScheme, Flex } from '@mantine/core';
 import { IconSun, IconMoon, IconBrandGithub, IconExternalLink } from '@tabler/icons';
 
 type AppShellHeaderProps = {
@@ -11,8 +11,8 @@ const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps)
 
   return (
     <Header height={66} p="md">
-      <Group sx={{ height: '100%' }} pl="md" position="apart">
-        <Group spacing="sm">
+      <Flex align="center" justify="space-between" sx={{ height: '100%' }} pl="md">
+        <Flex align="center" gap="sm">
           <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
             <Burger opened={navMenuOpened} onClick={() => onNavMenuToggle(!navMenuOpened)} size="sm" mr="xs" />
           </MediaQuery>
@@ -20,8 +20,8 @@ const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps)
           <Text component="span" align="center" variant="gradient" gradient={{ from: 'teal', to: 'green', deg: 45 }} size={22} weight="bold">
             Golf Tracker
           </Text>
-        </Group>
-        <Group spacing="xs">
+        </Flex>
+        <Flex align="center" gap="xs">
           <Tooltip label={`${colorScheme === 'dark' ? 'Light' : 'Dark'} mode`}>
             <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={32} radius="md">
               {colorScheme === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}
@@ -30,10 +30,10 @@ const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps)
           <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
             <Tooltip
               label={
-                <Group spacing={5}>
+                <Flex align="center" gap={5}>
                   <Text>GitHub</Text>
                   <IconExternalLink size={12} />
-                </Group>
+                </Flex>
               }
             >
               <ActionIcon variant="default" size={32} radius="md" component="a" href="https://github.com/nbetts/golf-tracker" target="_blank">
@@ -41,8 +41,8 @@ const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeaderProps)
               </ActionIcon>
             </Tooltip>
           </MediaQuery>
-        </Group>
-      </Group>
+        </Flex>
+      </Flex>
     </Header>
   );
 };

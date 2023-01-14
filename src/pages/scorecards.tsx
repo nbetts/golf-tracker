@@ -1,4 +1,4 @@
-import { Button, Divider, Group, MultiSelect, Stack, Text } from '@mantine/core';
+import { Button, Divider, Flex, MultiSelect, Text } from '@mantine/core';
 import PlayerScorecard from 'src/components/PlayerScorecard';
 import { withAuthCheck } from 'src/utils/withRouteCheck';
 import Layout from 'src/components/Layout';
@@ -80,13 +80,13 @@ const Scorecards = () => {
 
   return (
     <Layout>
-      <Group position="apart" mb="lg">
+      <Flex align="center" justify="space-between" mb="lg">
         <Text size={30} weight="bold" m={0}>
           Scorecards
         </Text>
         <Button onClick={() => user.data?.uid && openAddScorecardModal({ userId: user.data.uid })}>Add scorecard</Button>
-      </Group>
-      <Group>
+      </Flex>
+      <Flex align="center">
         <MultiSelect
           data={sortedCourses?.map((course) => course.name) || []}
           label="Filter courses"
@@ -111,9 +111,9 @@ const Scorecards = () => {
           clearButtonLabel="Clear selection"
           sx={{ maxWidth: 500 }}
         />
-      </Group>
+      </Flex>
       <Divider />
-      <Stack>
+      <Flex direction="column">
         {user.data?.uid && sortedCourses && sortedPlayers && (
           <ScorecardsFilter
             userId={user.data.uid}
@@ -123,7 +123,7 @@ const Scorecards = () => {
             playersFilterValues={playersFilterValues}
           />
         )}
-      </Stack>
+      </Flex>
     </Layout>
   );
 };

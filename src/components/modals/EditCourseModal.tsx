@@ -1,4 +1,4 @@
-import { Button, Card, Grid, NumberInput, SegmentedControl, Stack, Text, TextInput } from '@mantine/core';
+import { Button, Card, Flex, Grid, NumberInput, SegmentedControl, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { useCourseDocumentMutation } from 'src/utils/firebase';
@@ -74,7 +74,7 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
 
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
-      <Stack>
+      <Flex direction="column">
         <TextInput label="Name" placeholder="Augusta National Golf Club" {...form.getInputProps('name')} data-autofocus />
         <TextInput label="Website" placeholder="https://example.com/" {...form.getInputProps('website')} />
         <SegmentedControl mt="xs" {...form.getInputProps('holeCount')} data={holeCount.map((value) => ({ value, label: value }))} />
@@ -82,7 +82,7 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
         <Button type="submit" mt="md" disabled={mutation.isLoading}>
           Update course
         </Button>
-      </Stack>
+      </Flex>
     </form>
   );
 };
