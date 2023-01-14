@@ -1,10 +1,10 @@
-import { Button, Card, Checkbox, NumberInput, Select, Stack } from '@mantine/core';
+import { Button, Card, Checkbox, Flex, NumberInput, Select } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
-import { useCoursesCollection, useScorecardDocumentMutation } from 'src/utils/firebase';
-import { GolfScorecard } from 'src/utils/types';
+import { GolfScorecard } from 'src/types';
+import { useCoursesCollection, useScorecardDocumentMutation } from 'src/utils';
 
 type FormInputs = {
   date: Date;
@@ -17,7 +17,7 @@ export type EditScorecardModalProps = {
   scorecard: GolfScorecard;
 };
 
-const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
+export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
   const mutation = useScorecardDocumentMutation(scorecard.id);
   const courses = useCoursesCollection();
 
@@ -25,7 +25,7 @@ const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
     initialValues: {
       date: scorecard.timestamp.toDate(),
       courseId: scorecard.courseId,
-      scores: new Array(18).fill(0).map((score, index) => scorecard.scores[index] || score),
+      scores: new Array(18).fill(0).map((_, index) => scorecard.scores[index] || 0),
       hidden: scorecard.hidden,
     },
     validate: {
@@ -50,7 +50,7 @@ const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
       {
         timestamp: Timestamp.fromDate(values.date),
         courseId: values.courseId,
-        scores: new Array(holeCount).fill(0).map((score, index) => values.scores[index] || score),
+        scores: new Array(holeCount).fill(0).map((_, index) => values.scores[index] || 0),
         hidden: values.hidden,
       },
       {
@@ -61,19 +61,21 @@ const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
 
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
-      <Stack>
+      <Flex direction="column">
         <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus />
         {courseOptions && <Select label="Course" placeholder="Choose course" data={courseOptions} {...form.getInputProps('courseId')} />}
         <Card shadow="sm" radius="md" withBorder p="sm">
-          <Stack spacing="xs">{holeFields}</Stack>
+          <Flex direction="column" gap="xs">
+            {holeFields}
+          </Flex>
         </Card>
         <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden', { type: 'checkbox' })} />
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Update scorecard
-        </Button>
-      </Stack>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Update scorecard
+          </Button>
+        </Flex>
+      </Flex>
     </form>
   );
 };
-
-export default EditScorecardModal;

@@ -1,9 +1,11 @@
-import { Button, Card, Grid, NumberInput, SegmentedControl, Stack, Text, TextInput } from '@mantine/core';
+import { Button, Card, Flex, Grid, NumberInput, SegmentedControl, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { useCourseDocumentMutation } from 'src/utils/firebase';
-import { GolfCourse, GolfHole } from 'src/utils/types';
+import { GolfCourse, GolfHole } from 'src/types';
+import { useCourseDocumentMutation } from 'src/utils';
 
+// @ts-ignore allow hole data to be blank
+const initialHoleData: GolfHole[] = new Array(18).fill(0).map(() => ({ par: '', strokeIndex: '', yards: '' }));
 const holeCount = ['9 holes', '18 holes'];
 
 type FormInputs = {
@@ -17,7 +19,7 @@ export type EditCourseModalProps = {
   course: GolfCourse;
 };
 
-const EditCourseModal = ({ course }: EditCourseModalProps) => {
+export const EditCourseModal = ({ course }: EditCourseModalProps) => {
   const mutation = useCourseDocumentMutation(course.id);
 
   const form = useForm<FormInputs>({
@@ -25,7 +27,7 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
       name: course.name,
       website: course.website,
       holeCount: course.holes.slice(9).reduce((sum, { par }) => par + sum, 0) > 0 ? '18 holes' : '9 holes',
-      holes: course.holes,
+      holes: initialHoleData.map((hole, index) => ({ ...hole, ...course.holes[index] })),
     },
     validate: {
       name: (value) => (/^.{1,100}$/.test(value) ? null : 'Name must be 1-100 characters'),
@@ -42,7 +44,7 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
 
   const holeFields = holesToDisplay.map((_item, index) => (
     <Card key={index} shadow="sm" radius="md" withBorder p="sm">
-      <Text size="xs" weight={500}>
+      <Text size="sm" weight={500}>
         Hole {index + 1}
       </Text>
       <Grid align="center" grow>
@@ -64,7 +66,11 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
       {
         name: values.name,
         website: values.website,
-        holes: values.holes,
+        holes: values.holes.slice(0, values.holeCount === '9 holes' ? 9 : 18).map((hole) => ({
+          par: hole.par || 0,
+          strokeIndex: hole.strokeIndex || 0,
+          yards: hole.yards || 0,
+        })),
       },
       {
         onSuccess: () => closeAllModals(),
@@ -74,17 +80,17 @@ const EditCourseModal = ({ course }: EditCourseModalProps) => {
 
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
-      <Stack>
+      <Flex direction="column">
         <TextInput label="Name" placeholder="Augusta National Golf Club" {...form.getInputProps('name')} data-autofocus />
         <TextInput label="Website" placeholder="https://example.com/" {...form.getInputProps('website')} />
         <SegmentedControl mt="xs" {...form.getInputProps('holeCount')} data={holeCount.map((value) => ({ value, label: value }))} />
         {holeFields}
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Update course
-        </Button>
-      </Stack>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Update course
+          </Button>
+        </Flex>
+      </Flex>
     </form>
   );
 };
-
-export default EditCourseModal;

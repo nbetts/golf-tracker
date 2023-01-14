@@ -1,10 +1,8 @@
-import { Navbar, NavLink, ThemeIcon } from '@mantine/core';
+import { Avatar, Box, Navbar, NavLink, ThemeIcon } from '@mantine/core';
 import { IconChevronRight, IconGolf, IconUsers, IconId, IconUser } from '@tabler/icons';
 import Link from 'next/link';
-import routes from 'src/utils/routes';
-import UserSettings from './UserSettings';
 import { GoogleAuthProvider, User } from 'firebase/auth';
-import { useSignIn } from 'src/utils/firebase';
+import { useSignIn, routes, openAccountSettingsModal } from 'src/utils';
 
 type AppShellNavbarProps = {
   navMenuOpened: boolean;
@@ -12,7 +10,7 @@ type AppShellNavbarProps = {
   user?: User;
 };
 
-const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbarProps) => {
+export const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbarProps) => {
   const signIn = useSignIn();
 
   return (
@@ -76,11 +74,21 @@ const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbar
       </Navbar.Section>
       {user && (
         <Navbar.Section>
-          <UserSettings user={user} />
+          <Box
+            pt="xs"
+            sx={(theme) => ({
+              borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
+            })}
+          >
+            <NavLink
+              label={user.displayName}
+              description={user.email}
+              icon={<Avatar color="pink" radius="xl" src={user.photoURL} />}
+              onClick={() => openAccountSettingsModal()}
+            />
+          </Box>
         </Navbar.Section>
       )}
     </Navbar>
   );
 };
-
-export default AppShellNavbar;

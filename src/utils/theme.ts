@@ -8,6 +8,12 @@ export const theme: MantineThemeOverride = {
         size: 'md',
       },
     },
+    Flex: {
+      defaultProps: {
+        gap: 'md',
+        wrap: 'wrap',
+      },
+    },
     MultiSelect: {
       defaultProps: {
         size: 'md',
@@ -16,6 +22,7 @@ export const theme: MantineThemeOverride = {
     NumberInput: {
       defaultProps: {
         size: 'md',
+        inputMode: 'numeric',
       },
     },
     Select: {

@@ -1,22 +1,22 @@
-import { Card, Group, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
+import { Card, Menu, ActionIcon, Accordion, Text, Flex } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
-import { openEditPlayerModal } from 'src/utils/modals';
-import { GolfPlayer } from 'src/utils/types';
+import { GolfPlayer } from 'src/types';
+import { openEditPlayerModal } from 'src/utils';
 
 type PlayerStatisticsProps = {
   player: GolfPlayer;
   isOwner: boolean;
 };
 
-const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
+export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
-        <Group position="apart">
-          <Group mt="md" mb="xs">
+        <Flex align="center" justify="space-between">
+          <Flex align="center" mt="md" mb="xs">
             <Text weight="bold">{player.name}</Text>
-          </Group>
-          <Group mt="md" mb="xs">
+          </Flex>
+          <Flex align="center" mt="md" mb="xs">
             {isOwner && (
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
@@ -31,8 +31,8 @@ const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
                 </Menu.Dropdown>
               </Menu>
             )}
-          </Group>
-        </Group>
+          </Flex>
+        </Flex>
       </Card.Section>
       <Card.Section>
         <Accordion chevronPosition="left">
@@ -47,5 +47,3 @@ const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
     </Card>
   );
 };
-
-export default PlayerStatistics;

@@ -1,8 +1,6 @@
-import { Divider, Group, Stack, Text } from '@mantine/core';
-import { withAuthCheck } from 'src/utils/withRouteCheck';
-import PlayerStatistics from 'src/components/PlayerStatistics';
-import Layout from 'src/components/Layout';
-import { useFirebaseAuthUser, usePlayersCollection } from 'src/utils/firebase';
+import { Divider, Flex, Text } from '@mantine/core';
+import { Layout, PlayerStatistics } from 'src/components';
+import { useFirebaseAuthUser, usePlayersCollection, withAuthCheck } from 'src/utils';
 
 const Players = () => {
   const user = useFirebaseAuthUser();
@@ -11,17 +9,17 @@ const Players = () => {
 
   return (
     <Layout>
-      <Group position="apart" mb="lg">
+      <Flex align="center" justify="space-between" mb="lg">
         <Text size={30} weight="bold" m={0}>
           Players
         </Text>
-      </Group>
+      </Flex>
       <Divider />
-      <Stack justify="flex-start">
+      <Flex direction="column" justify="flex-start">
         {sortedPlayers.map((player) => (
           <PlayerStatistics key={player.id} player={player} isOwner={user.data?.uid === player.id} />
         ))}
-      </Stack>
+      </Flex>
     </Layout>
   );
 };

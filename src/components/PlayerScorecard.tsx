@@ -1,7 +1,7 @@
-import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip } from '@mantine/core';
+import { Card, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip, Flex } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
-import { openEditScorecardModal } from 'src/utils/modals';
-import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/utils/types';
+import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/types';
+import { openEditScorecardModal } from 'src/utils';
 
 type PlayerScorecardProps = {
   course: GolfCourse;
@@ -10,7 +10,7 @@ type PlayerScorecardProps = {
   isOwner: boolean;
 };
 
-const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecardProps) => {
+export const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecardProps) => {
   const { hidden, timestamp, scores } = scorecard;
   const { name, website, holes } = course;
 
@@ -39,14 +39,14 @@ const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecard
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
-        <Group position="apart">
-          <Group mt="md" mb="xs">
+        <Flex align="center" justify="space-between">
+          <Flex align="center" mt="md" mb="xs">
             <Badge size="lg" color="blue" variant="light">
               {timestamp.toDate().toLocaleDateString()}
             </Badge>
             <Text weight="bold">{player.name}</Text>
-          </Group>
-          <Group mt="md" mb="xs">
+          </Flex>
+          <Flex align="center" mt="md" mb="xs">
             <Anchor weight="bold" href={website} target="_blank">
               {name}
             </Anchor>
@@ -82,8 +82,8 @@ const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecard
                 </Menu>
               </>
             )}
-          </Group>
-        </Group>
+          </Flex>
+        </Flex>
       </Card.Section>
       <Card.Section>
         <Accordion chevronPosition="left">
@@ -159,5 +159,3 @@ const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerScorecard
     </Card>
   );
 };
-
-export default PlayerScorecard;

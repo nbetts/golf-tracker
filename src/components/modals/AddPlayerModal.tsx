@@ -1,7 +1,7 @@
-import { Button, Stack, TextInput } from '@mantine/core';
+import { Button, Flex, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { usePlayerDocumentMutation } from 'src/utils/firebase';
+import { usePlayerDocumentMutation } from 'src/utils';
 
 type FormInputs = {
   name: string;
@@ -12,7 +12,7 @@ export type AddPlayerModalProps = {
   name: string | null;
 };
 
-const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
+export const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
   const mutation = usePlayerDocumentMutation(userId);
 
   const form = useForm<FormInputs>({
@@ -38,14 +38,14 @@ const AddPlayerModal = ({ userId, name }: AddPlayerModalProps) => {
 
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
-      <Stack>
+      <Flex direction="column">
         <TextInput label="Name" placeholder="Your name" {...form.getInputProps('name')} data-autofocus />
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Continue
-        </Button>
-      </Stack>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Continue
+          </Button>
+        </Flex>
+      </Flex>
     </form>
   );
 };
-
-export default AddPlayerModal;

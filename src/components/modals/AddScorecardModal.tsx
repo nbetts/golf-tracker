@@ -1,9 +1,9 @@
-import { Button, Card, Checkbox, NumberInput, Select, Stack } from '@mantine/core';
+import { Button, Card, Checkbox, Flex, NumberInput, Select, TextInput } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
-import { useCoursesCollection, useScorecardsCollectionMutation } from 'src/utils/firebase';
+import { useCoursesCollection, useScorecardsCollectionMutation } from 'src/utils';
 
 type FormInputs = {
   date: Date;
@@ -16,7 +16,7 @@ export type AddScorecardModalProps = {
   userId: string;
 };
 
-const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
+export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
   const mutation = useScorecardsCollectionMutation();
   const courses = useCoursesCollection();
 
@@ -24,7 +24,7 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
     initialValues: {
       date: new Date(),
       courseId: '',
-      scores: new Array(18).fill(0),
+      scores: new Array(18).fill(''),
       hidden: false,
     },
     validate: {
@@ -49,7 +49,7 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
       {
         timestamp: Timestamp.fromDate(values.date),
         courseId: values.courseId,
-        scores: values.scores,
+        scores: values.scores.map((score) => score || 0),
         hidden: values.hidden,
         userId,
         deleted: false,
@@ -62,21 +62,23 @@ const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
 
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
-      <Stack>
+      <Flex direction="column">
         <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus />
         {courseOptions && <Select label="Course" placeholder="Choose course" data={courseOptions} {...form.getInputProps('courseId')} />}
         {form.values.courseId && (
           <Card shadow="sm" radius="md" withBorder p="sm">
-            <Stack spacing="xs">{holeFields}</Stack>
+            <Flex direction="column" gap="xs">
+              {holeFields}
+            </Flex>
           </Card>
         )}
         <Checkbox mt="sm" label="Hide this scorecard from other players" {...form.getInputProps('hidden')} />
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Add scorecard
-        </Button>
-      </Stack>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Add scorecard
+          </Button>
+        </Flex>
+      </Flex>
     </form>
   );
 };
-
-export default AddScorecardModal;

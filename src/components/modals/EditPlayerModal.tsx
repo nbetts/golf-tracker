@@ -1,8 +1,8 @@
-import { Button, Stack, TextInput } from '@mantine/core';
+import { Button, Flex, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
-import { usePlayerDocumentMutation } from 'src/utils/firebase';
-import { GolfPlayer } from 'src/utils/types';
+import { GolfPlayer } from 'src/types';
+import { usePlayerDocumentMutation } from 'src/utils';
 
 type FormInputs = {
   name: string;
@@ -12,7 +12,7 @@ export type EditPlayerModalProps = {
   player: GolfPlayer;
 };
 
-const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
+export const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
   const mutation = usePlayerDocumentMutation(player.id);
 
   const form = useForm<FormInputs>({
@@ -37,14 +37,14 @@ const EditPlayerModal = ({ player }: EditPlayerModalProps) => {
 
   return (
     <form onSubmit={form.onSubmit(submitForm)}>
-      <Stack>
+      <Flex direction="column">
         <TextInput label="Name" placeholder="Your name" {...form.getInputProps('name')} data-autofocus />
-        <Button type="submit" mt="md" disabled={mutation.isLoading}>
-          Update profile
-        </Button>
-      </Stack>
+        <Flex justify="center">
+          <Button type="submit" mt="md" disabled={mutation.isLoading}>
+            Update profile
+          </Button>
+        </Flex>
+      </Flex>
     </form>
   );
 };
-
-export default EditPlayerModal;

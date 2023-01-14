@@ -1,17 +1,16 @@
-import { Button, Divider, Group, MultiSelect, Stack, Text } from '@mantine/core';
-import PlayerScorecard from 'src/components/PlayerScorecard';
-import { withAuthCheck } from 'src/utils/withRouteCheck';
-import Layout from 'src/components/Layout';
-import {
-  useCoursesCollection,
-  useFirebaseAuthUser,
-  usePlayersCollection,
-  usePersonalScorecardsCollection,
-  useScorecardsCollection,
-} from 'src/utils/firebase';
-import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/utils/types';
-import { openAddScorecardModal } from 'src/utils/modals';
+import { Button, Divider, Flex, MultiSelect, Text } from '@mantine/core';
+import { Layout, PlayerScorecard } from 'src/components';
 import { useState } from 'react';
+import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/types';
+import {
+  useScorecardsCollection,
+  usePersonalScorecardsCollection,
+  useFirebaseAuthUser,
+  useCoursesCollection,
+  usePlayersCollection,
+  openAddScorecardModal,
+  withAuthCheck,
+} from 'src/utils';
 
 type CombinedScorecardInformation = {
   course: GolfCourse;
@@ -80,13 +79,13 @@ const Scorecards = () => {
 
   return (
     <Layout>
-      <Group position="apart" mb="lg">
+      <Flex align="center" justify="space-between" mb="lg">
         <Text size={30} weight="bold" m={0}>
           Scorecards
         </Text>
         <Button onClick={() => user.data?.uid && openAddScorecardModal({ userId: user.data.uid })}>Add scorecard</Button>
-      </Group>
-      <Group>
+      </Flex>
+      <Flex align="center">
         <MultiSelect
           data={sortedCourses?.map((course) => course.name) || []}
           label="Filter courses"
@@ -111,9 +110,9 @@ const Scorecards = () => {
           clearButtonLabel="Clear selection"
           sx={{ maxWidth: 500 }}
         />
-      </Group>
+      </Flex>
       <Divider />
-      <Stack>
+      <Flex direction="column">
         {user.data?.uid && sortedCourses && sortedPlayers && (
           <ScorecardsFilter
             userId={user.data.uid}
@@ -123,7 +122,7 @@ const Scorecards = () => {
             playersFilterValues={playersFilterValues}
           />
         )}
-      </Stack>
+      </Flex>
     </Layout>
   );
 };

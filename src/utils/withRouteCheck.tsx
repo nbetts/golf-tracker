@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useFirebaseAuthUser } from './firebase';
-import routes from './routes';
+import { routes } from './routes';
 
 export const withAuthCheck = (Component: React.ComponentType): React.FC =>
   function InnerComponent(props) {

@@ -1,13 +1,13 @@
-import { Card, Group, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text } from '@mantine/core';
+import { Card, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Flex } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
-import { openEditCourseModal } from 'src/utils/modals';
-import { GolfCourse } from 'src/utils/types';
+import { GolfCourse } from 'src/types';
+import { openEditCourseModal } from 'src/utils';
 
 type CourseScorecardProps = {
   course: GolfCourse;
 };
 
-const CourseScorecard = ({ course }: CourseScorecardProps) => {
+export const CourseScorecard = ({ course }: CourseScorecardProps) => {
   const { name, website, holes } = course;
 
   let netPar = 0;
@@ -21,13 +21,13 @@ const CourseScorecard = ({ course }: CourseScorecardProps) => {
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
-        <Group position="apart">
-          <Group mt="md" mb="xs">
+        <Flex align="center" justify="space-between">
+          <Flex align="center" mt="md" mb="xs">
             <Anchor weight="bold" href={website} target="_blank">
               {name}
             </Anchor>
-          </Group>
-          <Group mt="md" mb="xs">
+          </Flex>
+          <Flex align="center" mt="md" mb="xs">
             <Badge size="lg" color="cyan" variant="light">
               {holes.length} hole{holes.length === 1 ? '' : 's'}
             </Badge>
@@ -46,8 +46,8 @@ const CourseScorecard = ({ course }: CourseScorecardProps) => {
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
-          </Group>
-        </Group>
+          </Flex>
+        </Flex>
       </Card.Section>
       <Card.Section>
         <Accordion chevronPosition="left">
@@ -114,5 +114,3 @@ const CourseScorecard = ({ course }: CourseScorecardProps) => {
     </Card>
   );
 };
-
-export default CourseScorecard;

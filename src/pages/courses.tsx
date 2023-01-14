@@ -1,9 +1,6 @@
-import { Button, Divider, Group, Stack, Text } from '@mantine/core';
-import { withAuthCheck } from 'src/utils/withRouteCheck';
-import CourseScorecard from 'src/components/CourseScorecard';
-import Layout from 'src/components/Layout';
-import { useCoursesCollection } from 'src/utils/firebase';
-import { openAddCourseModal } from 'src/utils/modals';
+import { Button, Divider, Flex, Text } from '@mantine/core';
+import { Layout, CourseScorecard } from 'src/components';
+import { useCoursesCollection, openAddCourseModal, withAuthCheck } from 'src/utils';
 
 const Courses = () => {
   const courses = useCoursesCollection();
@@ -11,18 +8,18 @@ const Courses = () => {
 
   return (
     <Layout>
-      <Group position="apart" mb="lg">
+      <Flex align="center" justify="space-between" mb="lg">
         <Text size={30} weight="bold" m={0}>
           Courses
         </Text>
         <Button onClick={() => openAddCourseModal()}>Add course</Button>
-      </Group>
+      </Flex>
       <Divider />
-      <Stack justify="flex-start">
+      <Flex direction="column" justify="flex-start">
         {sortedCourses.map((course) => (
           <CourseScorecard key={course.id} course={course} />
         ))}
-      </Stack>
+      </Flex>
     </Layout>
   );
 };

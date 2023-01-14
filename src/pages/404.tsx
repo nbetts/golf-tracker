@@ -1,6 +1,6 @@
-import { createStyles, Title, Text, Button, Container, Group } from '@mantine/core';
+import { createStyles, Title, Text, Button, Container, Flex } from '@mantine/core';
 import Link from 'next/link';
-import routes from 'src/utils/routes';
+import { routes } from 'src/utils';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -50,13 +50,13 @@ const Error404 = () => {
       <Text color="dimmed" size="lg" align="center" className={classes.description}>
         Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another URL.
       </Text>
-      <Group position="center">
+      <Flex align="center" justify="center">
         <Link href={routes.home} passHref>
           <Button component="a" variant="subtle" size="md">
             Take me back to home the page
           </Button>
         </Link>
-      </Group>
+      </Flex>
     </Container>
   );
 };
