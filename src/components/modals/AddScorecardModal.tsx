@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, Flex, NumberInput, Select } from '@mantine/core';
+import { Affix, Badge, Box, Button, Card, Center, Checkbox, Flex, NumberInput, Select, Text, Transition } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
@@ -68,11 +68,8 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
   }
 
   const courseOptions = courses.data.sort((a, b) => a.name.localeCompare(b.name)).map((course) => ({ value: course.id, label: course.name }));
-  const holeCount = courses.data.find((course) => course.id === form.values.courseId)?.holes.length || 0;
-
-  const holeFields = new Array(holeCount)
-    .fill(0)
-    .map((_item, index) => <NumberInput key={index} min={0} label={`Hole ${index + 1}`} {...form.getInputProps(`scores.${index}`)} />);
+  const course = courses.data.find((course) => course.id === form.values.courseId);
+  const totalScore = form.values.scores.reduce((prev, current) => (typeof prev === 'string' ? parseInt(prev) : prev) + current, 0);
 
   const submitForm = (values: FormInputs) => {
     mutation.mutate(
@@ -95,10 +92,27 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
       <Flex direction="column">
         <DatePicker label="Date" placeholder="Choose date" {...form.getInputProps('date')} maxDate={new Date()} data-autofocus autoFocus />
         {courseOptions && <Select label="Course" placeholder="Choose course" data={courseOptions} {...form.getInputProps('courseId')} />}
-        {form.values.courseId && (
+        {course && (
           <Card shadow="sm" radius="md" withBorder p="sm">
-            <Flex direction="column" gap="xs">
-              {holeFields}
+            <Flex direction="column" gap="sm">
+              {course.holes.map((hole, index) => (
+                <NumberInput
+                  key={index}
+                  min={0}
+                  label={
+                    <Flex align="center">
+                      {`Hole ${index + 1}`}
+                      <Badge color="green" variant="light">
+                        Par {hole.par}
+                      </Badge>
+                      <Badge color="pink" variant="light">
+                        {hole.yards} yards
+                      </Badge>
+                    </Flex>
+                  }
+                  {...form.getInputProps(`scores.${index}`)}
+                />
+              ))}
             </Flex>
           </Card>
         )}
@@ -109,6 +123,22 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
           </Button>
         </Flex>
       </Flex>
+      <Affix position={{ top: 20, left: 0 }} zIndex={202} style={{ width: '100%' }}>
+        <Transition transition="slide-up" mounted={totalScore > 0}>
+          {(transitionStyles) => (
+            <Center>
+              <Card style={transitionStyles} bg="blue.6" p="sm" px="md" shadow="sm">
+                <Flex gap="xs">
+                  <Text color="white">Total score:</Text>
+                  <Text color="white" weight="bold">
+                    {totalScore}
+                  </Text>
+                </Flex>
+              </Card>
+            </Center>
+          )}
+        </Transition>
+      </Affix>
     </form>
   );
 };
