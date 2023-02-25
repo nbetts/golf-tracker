@@ -1,5 +1,5 @@
 import { Card, Badge, Anchor, Table, Menu, ActionIcon, Accordion, Text, Tooltip, Flex } from '@mantine/core';
-import { IconDots, IconPencil } from '@tabler/icons';
+import { IconDots, IconPencil, IconQuestionMark } from '@tabler/icons';
 import { GolfCourse, GolfPlayer, GolfScorecard, ScoredGolfHole } from 'src/types';
 import { openEditScorecardModal } from 'src/utils';
 
@@ -25,16 +25,31 @@ export const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerSc
 
   const holeCount = Math.min(lastScoredHole, holes.length);
   const scoredHoles: ScoredGolfHole[] = [];
-  let netPar = 0;
-  let netYards = 0;
-  let netPlayerScore = 0;
+  let outPar = 0;
+  let outYards = 0;
+  let outPlayerScore = 0;
+  let inPar = 0;
+  let inYards = 0;
+  let inPlayerScore = 0;
 
   for (let i = 0; i < holeCount; i++) {
     scoredHoles.push({ ...holes[i], score: scores[i] });
-    netPar += holes[i].par;
-    netYards += holes[i].yards;
-    netPlayerScore += scores[i];
+
+    if (i < 9) {
+      outPar += holes[i].par;
+      outYards += holes[i].yards;
+      outPlayerScore += scores[i];
+    } else {
+      inPar += holes[i].par;
+      inYards += holes[i].yards;
+      inPlayerScore += scores[i];
+    }
   }
+
+  const netPar = outPar + inPar;
+  const netYards = outYards + inYards;
+  const netPlayerScore = outPlayerScore + inPlayerScore;
+  const adjustedScore = Math.round((netPlayerScore / netPar) * 72);
 
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -59,10 +74,15 @@ export const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerSc
             <Badge size="lg" color="pink" variant="light">
               Score {netPlayerScore}
             </Badge>
+            <Tooltip label="Adjusted score to par 72" withArrow>
+              <Badge size="lg" color="orange" variant="light">
+                AS. {adjustedScore}
+              </Badge>
+            </Tooltip>
             {isOwner && (
               <>
                 {hidden && (
-                  <Tooltip label="Other players cannot see this scorecard">
+                  <Tooltip label="Other players cannot see this scorecard" withArrow>
                     <Badge size="lg" color="violet" variant="light">
                       Hidden
                     </Badge>
@@ -112,7 +132,7 @@ export const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerSc
                   </tr>
                 </thead>
                 <tbody>
-                  {scoredHoles.map((hole, index) => (
+                  {scoredHoles.slice(0, 9).map((hole, index) => (
                     <tr key={index}>
                       <td>
                         <Text align="center">{index + 1}</Text>
@@ -131,6 +151,83 @@ export const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerSc
                       </td>
                     </tr>
                   ))}
+                  {scoredHoles.length > 9 && (
+                    <>
+                      <tr>
+                        <td>
+                          <Text align="center" weight="bold">
+                            Out
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {outPar}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {outPlayerScore}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {outYards}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            -
+                          </Text>
+                        </td>
+                      </tr>
+                      {scoredHoles.slice(9).map((hole, index) => (
+                        <tr key={index}>
+                          <td>
+                            <Text align="center">{index + 9 + 1}</Text>
+                          </td>
+                          <td>
+                            <Text align="center">{hole.par}</Text>
+                          </td>
+                          <td>
+                            <Text align="center">{hole.score}</Text>
+                          </td>
+                          <td>
+                            <Text align="center">{hole.yards}</Text>
+                          </td>
+                          <td>
+                            <Text align="center">{hole.strokeIndex}</Text>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td>
+                          <Text align="center" weight="bold">
+                            In
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {inPar}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {inPlayerScore}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {inYards}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            -
+                          </Text>
+                        </td>
+                      </tr>
+                    </>
+                  )}
                 </tbody>
                 <tfoot>
                   <tr>

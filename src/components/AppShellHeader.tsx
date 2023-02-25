@@ -22,13 +22,14 @@ export const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeade
           </Text>
         </Flex>
         <Flex align="center" gap="xs">
-          <Tooltip label={`${colorScheme === 'dark' ? 'Light' : 'Dark'} mode`}>
+          <Tooltip label={`${colorScheme === 'dark' ? 'Light' : 'Dark'} mode`} withArrow>
             <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={32} radius="md">
               {colorScheme === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}
             </ActionIcon>
           </Tooltip>
           <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
             <Tooltip
+              withArrow
               label={
                 <Flex align="center" gap={5}>
                   <Text>GitHub</Text>

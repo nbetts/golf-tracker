@@ -10,13 +10,23 @@ type CourseScorecardProps = {
 export const CourseScorecard = ({ course }: CourseScorecardProps) => {
   const { name, website, holes } = course;
 
-  let netPar = 0;
-  let netYards = 0;
+  let outPar = 0;
+  let outYards = 0;
+  let inPar = 0;
+  let inYards = 0;
 
   for (let i = 0; i < holes.length; i++) {
-    netPar += holes[i].par;
-    netYards += holes[i].yards;
+    if (i < 9) {
+      outPar += holes[i].par;
+      outYards += holes[i].yards;
+    } else {
+      inPar += holes[i].par;
+      inYards += holes[i].yards;
+    }
   }
+
+  const netPar = outPar + inPar;
+  const netYards = outYards + inYards;
 
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -73,7 +83,7 @@ export const CourseScorecard = ({ course }: CourseScorecardProps) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {holes.map((hole, index) => (
+                  {holes.slice(0, 9).map((hole, index) => (
                     <tr key={index}>
                       <td>
                         <Text align="center">{index + 1}</Text>
@@ -89,6 +99,70 @@ export const CourseScorecard = ({ course }: CourseScorecardProps) => {
                       </td>
                     </tr>
                   ))}
+                  {holes.length > 9 && (
+                    <>
+                      <tr>
+                        <td>
+                          <Text align="center" weight="bold">
+                            Out
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {outPar}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {outYards}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            -
+                          </Text>
+                        </td>
+                      </tr>
+                      {holes.slice(9).map((hole, index) => (
+                        <tr key={index}>
+                          <td>
+                            <Text align="center">{index + 9 + 1}</Text>
+                          </td>
+                          <td>
+                            <Text align="center">{hole.par}</Text>
+                          </td>
+                          <td>
+                            <Text align="center">{hole.yards}</Text>
+                          </td>
+                          <td>
+                            <Text align="center">{hole.strokeIndex}</Text>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td>
+                          <Text align="center" weight="bold">
+                            In
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {inPar}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            {inYards}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text align="center" weight="bold">
+                            -
+                          </Text>
+                        </td>
+                      </tr>
+                    </>
+                  )}
                 </tbody>
                 <tfoot>
                   <tr>
