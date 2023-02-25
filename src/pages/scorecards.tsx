@@ -1,6 +1,6 @@
-import { Button, Divider, Flex, MultiSelect, Text } from '@mantine/core';
+import { Button, Divider, Flex, MultiSelect, SelectItem, Text } from '@mantine/core';
 import { Layout, PlayerScorecard } from 'src/components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { GolfCourse, GolfPlayer, GolfScorecard } from 'src/types';
 import {
   useScorecardsCollection,
@@ -47,8 +47,8 @@ const ScorecardsFilter = ({ userId, courses, players, coursesFilterValues, playe
 
       if (course) {
         if (
-          (coursesFilterValues.length === 0 || coursesFilterValues.includes(course.name)) &&
-          (playersFilterValues.length === 0 || playersFilterValues.includes(player.name))
+          (coursesFilterValues.length === 0 || coursesFilterValues.includes(course.id)) &&
+          (playersFilterValues.length === 0 || playersFilterValues.includes(player.id))
         ) {
           filteredScorecardInfo.push({ course, player, scorecard });
         }
@@ -73,8 +73,17 @@ const Scorecards = () => {
   const courses = useCoursesCollection();
   const players = usePlayersCollection();
 
-  const sortedCourses = courses.data?.sort((a, b) => a.name.localeCompare(b.name));
-  const sortedPlayers = players.data?.sort((a, b) => a.name.localeCompare(b.name));
+  const sortedCourses = courses.data?.sort((a, b) => a.name.localeCompare(b.name)) || [];
+  const sortedPlayers = players.data?.sort((a, b) => a.name.localeCompare(b.name)) || [];
+
+  const coursesMultiSelectData = sortedCourses.map<SelectItem>((course) => ({
+    label: course.name,
+    value: course.id,
+  }));
+  const playersMultiSelectData = sortedPlayers.map<SelectItem>((player) => ({
+    label: player.name,
+    value: player.id,
+  }));
 
   const [coursesFilterValues, onCoursesFilterValuesChange] = useLocalStorage<string[]>({
     key: 'scorecards-page-courses-filter',
@@ -104,7 +113,7 @@ const Scorecards = () => {
       </Flex>
       <Flex align="center">
         <MultiSelect
-          data={sortedCourses?.map((course) => course.name) || []}
+          data={coursesMultiSelectData}
           label="Filter courses"
           placeholder="Select courses to filter"
           value={coursesFilterValues}
@@ -116,7 +125,7 @@ const Scorecards = () => {
           sx={{ maxWidth: 500 }}
         />
         <MultiSelect
-          data={sortedPlayers?.map((player) => player.name) || []}
+          data={playersMultiSelectData}
           label="Filter players"
           placeholder="Select players to filter"
           value={playersFilterValues}
