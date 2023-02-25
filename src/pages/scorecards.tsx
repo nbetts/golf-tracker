@@ -11,6 +11,7 @@ import {
   openAddScorecardModal,
   withAuthCheck,
 } from 'src/utils';
+import { useLocalStorage } from '@mantine/hooks';
 
 type CombinedScorecardInformation = {
   course: GolfCourse;
@@ -75,8 +76,17 @@ const Scorecards = () => {
   const sortedCourses = courses.data?.sort((a, b) => a.name.localeCompare(b.name));
   const sortedPlayers = players.data?.sort((a, b) => a.name.localeCompare(b.name));
 
-  const [coursesFilterValues, onCoursesFilterValuesChange] = useState<string[]>([]);
-  const [playersFilterValues, onPlayersFilterValuesChange] = useState<string[]>([]);
+  const [coursesFilterValues, onCoursesFilterValuesChange] = useLocalStorage<string[]>({
+    key: 'scorecards-page-courses-filter',
+    defaultValue: [],
+    getInitialValueInEffect: true,
+  });
+
+  const [playersFilterValues, onPlayersFilterValuesChange] = useLocalStorage<string[]>({
+    key: 'scorecards-page-players-filter',
+    defaultValue: [],
+    getInitialValueInEffect: true,
+  });
 
   useEffect(() => {
     if (userId && sessionStorage['golf-tracker-add-scorecard-modal-form-inputs']) {

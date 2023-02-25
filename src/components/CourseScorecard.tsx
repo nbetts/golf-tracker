@@ -33,9 +33,7 @@ export const CourseScorecard = ({ course }: CourseScorecardProps) => {
       <Card.Section withBorder inheritPadding py="xs">
         <Flex align="center" justify="space-between">
           <Flex align="center" mt="md" mb="xs">
-            <Anchor weight="bold" href={website} target="_blank">
-              {name}
-            </Anchor>
+            <Text weight="bold">{name}</Text>
           </Flex>
           <Flex align="center" mt="md" mb="xs">
             <Badge size="lg" color="cyan" variant="light">
@@ -64,6 +62,14 @@ export const CourseScorecard = ({ course }: CourseScorecardProps) => {
           <Accordion.Item value="0">
             <Accordion.Control>Full scorecard</Accordion.Control>
             <Accordion.Panel>
+              {website && (
+                <Text mb="md">
+                  {'Website: '}
+                  <Anchor weight="bold" href={website} target="_blank">
+                    {website}
+                  </Anchor>
+                </Text>
+              )}
               <Table striped highlightOnHover withBorder captionSide="bottom" sx={{ maxWidth: 600 }}>
                 <caption>Full scorecard</caption>
                 <thead>

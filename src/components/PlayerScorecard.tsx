@@ -62,9 +62,7 @@ export const PlayerScorecard = ({ course, player, scorecard, isOwner }: PlayerSc
             <Text weight="bold">{player.name}</Text>
           </Flex>
           <Flex align="center" mt="md" mb="xs">
-            <Anchor weight="bold" href={website} target="_blank">
-              {name}
-            </Anchor>
+            <Text weight="bold">{name}</Text>
             <Badge size="lg" color="cyan" variant="light">
               {scoredHoles.length} hole{scoredHoles.length === 1 ? '' : 's'}
             </Badge>
