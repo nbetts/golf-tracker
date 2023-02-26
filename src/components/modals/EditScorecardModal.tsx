@@ -1,10 +1,11 @@
-import { Affix, Badge, Button, Card, Center, Checkbox, Flex, NumberInput, Select, Text, Transition } from '@mantine/core';
+import { Affix, Badge, Button, Card, Center, Checkbox, Flex, Select, Text, Transition } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
 import { GolfScorecard } from 'src/types';
 import { useCoursesCollection, useScorecardDocumentMutation } from 'src/utils';
+import { ScoreInputCarousel } from '../ScoreInputCarousel';
 
 type FormInputs = {
   date: Date;
@@ -65,22 +66,18 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
           <Card shadow="sm" radius="md" withBorder p="sm">
             <Flex direction="column" gap="sm">
               {course.holes.map((hole, index) => (
-                <NumberInput
-                  key={index}
-                  min={0}
-                  label={
-                    <Flex align="center">
-                      {`Hole ${index + 1}`}
-                      <Badge color="green" variant="light">
-                        Par {hole.par}
-                      </Badge>
-                      <Badge color="pink" variant="light">
-                        {hole.yards} yards
-                      </Badge>
-                    </Flex>
-                  }
-                  {...form.getInputProps(`scores.${index}`)}
-                />
+                <>
+                  <Flex align="center" gap="xs">
+                    {`Hole ${index + 1}`}
+                    <Badge color="green" variant="light">
+                      Par {hole.par}
+                    </Badge>
+                    <Badge color="pink" variant="light">
+                      {hole.yards} yards
+                    </Badge>
+                  </Flex>
+                  <ScoreInputCarousel {...form.getInputProps(`scores.${index}`)} />
+                </>
               ))}
             </Flex>
           </Card>
