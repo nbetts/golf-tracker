@@ -1,7 +1,8 @@
 import { Card, Menu, ActionIcon, Accordion, Text, Flex } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
 import { GolfPlayer } from 'src/types';
-import { openEditPlayerModal } from 'src/utils';
+import { openEditPlayerModal, usePersonalScorecardsCollection, useScorecardsCollection } from 'src/utils';
+import { AdjustedScoresGraph } from './graphs/AdjustedScoresGraph';
 
 type PlayerStatisticsProps = {
   player: GolfPlayer;
@@ -9,6 +10,9 @@ type PlayerStatisticsProps = {
 };
 
 export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
+  const scorecards = useScorecardsCollection();
+  const playerScorecards = scorecards.data?.filter((scorecard) => scorecard.userId === player.id);
+
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
@@ -38,9 +42,7 @@ export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => 
         <Accordion chevronPosition="left">
           <Accordion.Item value="0">
             <Accordion.Control>Full statistics</Accordion.Control>
-            <Accordion.Panel>
-              <Text>To do</Text>
-            </Accordion.Panel>
+            <Accordion.Panel>{playerScorecards && <AdjustedScoresGraph scorecards={playerScorecards} />}</Accordion.Panel>
           </Accordion.Item>
         </Accordion>
       </Card.Section>
