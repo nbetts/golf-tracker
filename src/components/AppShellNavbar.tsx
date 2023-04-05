@@ -11,66 +11,48 @@ type AppShellNavbarProps = {
 };
 
 export const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShellNavbarProps) => {
-  const signIn = useSignIn();
-
   return (
     <Navbar p="xs" hiddenBreakpoint="sm" hidden={!navMenuOpened} width={{ sm: 280 }}>
       <Navbar.Section grow mb="xs">
-        {user ? (
-          <>
-            <Link href={routes.courses} passHref>
-              <NavLink
-                label="Courses"
-                component="a"
-                onClick={() => onNavMenuToggle(false)}
-                rightSection={<IconChevronRight size={12} />}
-                icon={
-                  <ThemeIcon color="green" variant="light">
-                    <IconGolf size={16} />
-                  </ThemeIcon>
-                }
-              />
-            </Link>
-            <Link href={routes.players} passHref>
-              <NavLink
-                label="Players"
-                component="a"
-                onClick={() => onNavMenuToggle(false)}
-                rightSection={<IconChevronRight size={12} />}
-                icon={
-                  <ThemeIcon color="pink" variant="light">
-                    <IconUsers size={16} />
-                  </ThemeIcon>
-                }
-              />
-            </Link>
-            <Link href={routes.scorecards} passHref>
-              <NavLink
-                label="Scorecards"
-                component="a"
-                onClick={() => onNavMenuToggle(false)}
-                rightSection={<IconChevronRight size={12} />}
-                icon={
-                  <ThemeIcon color="cyan" variant="light">
-                    <IconId size={16} />
-                  </ThemeIcon>
-                }
-              />
-            </Link>
-          </>
-        ) : (
+        <Link href={routes.courses} passHref>
           <NavLink
-            label="Sign in"
-            component="button"
-            onClick={() => signIn.mutate({ provider: new GoogleAuthProvider() })}
+            label="Courses"
+            component="a"
+            onClick={() => onNavMenuToggle(false)}
             rightSection={<IconChevronRight size={12} />}
             icon={
-              <ThemeIcon color="pink" variant="light">
-                <IconUser size={16} />
+              <ThemeIcon color="green" variant="light">
+                <IconGolf size={16} />
               </ThemeIcon>
             }
           />
-        )}
+        </Link>
+        <Link href={routes.players} passHref>
+          <NavLink
+            label="Players"
+            component="a"
+            onClick={() => onNavMenuToggle(false)}
+            rightSection={<IconChevronRight size={12} />}
+            icon={
+              <ThemeIcon color="pink" variant="light">
+                <IconUsers size={16} />
+              </ThemeIcon>
+            }
+          />
+        </Link>
+        <Link href={routes.scorecards} passHref>
+          <NavLink
+            label="Scorecards"
+            component="a"
+            onClick={() => onNavMenuToggle(false)}
+            rightSection={<IconChevronRight size={12} />}
+            icon={
+              <ThemeIcon color="cyan" variant="light">
+                <IconId size={16} />
+              </ThemeIcon>
+            }
+          />
+        </Link>
       </Navbar.Section>
       {user && (
         <Navbar.Section>

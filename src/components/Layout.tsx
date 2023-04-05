@@ -22,7 +22,7 @@ export const Layout = ({ children }: LayoutProps) => {
       }}
       padding="xl"
       navbarOffsetBreakpoint="sm"
-      navbar={<AppShellNavbar navMenuOpened={navMenuOpened} onNavMenuToggle={setNavMenuOpened} user={user.data} />}
+      navbar={user.data && <AppShellNavbar navMenuOpened={navMenuOpened} onNavMenuToggle={setNavMenuOpened} user={user.data} />}
       header={<AppShellHeader navMenuOpened={navMenuOpened} onNavMenuToggle={setNavMenuOpened} />}
     >
       <LoadingOverlay visible={user.isLoading} overlayBlur={2} />

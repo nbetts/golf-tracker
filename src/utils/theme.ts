@@ -35,5 +35,10 @@ export const theme: MantineThemeOverride = {
         size: 'md',
       },
     },
+    PasswordInput: {
+      defaultProps: {
+        size: 'md',
+      },
+    },
   },
 };
