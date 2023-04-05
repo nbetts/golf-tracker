@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Stack } from '@mantine/core';
+import { Box, Button, Center, Flex, Stack } from '@mantine/core';
 import { closeAllModals } from '@mantine/modals';
 import { useSignOut } from 'src/utils';
 
@@ -7,7 +7,7 @@ export const AccountSettingsModal = () => {
 
   return (
     <Flex direction="column">
-      <Flex>
+      <Center>
         <Button
           color="pink"
           variant="outline"
@@ -19,7 +19,7 @@ export const AccountSettingsModal = () => {
         >
           Sign out
         </Button>
-      </Flex>
+      </Center>
       <Flex justify="center">
         <Button type="submit" mt="md" onClick={() => closeAllModals()}>
           Close

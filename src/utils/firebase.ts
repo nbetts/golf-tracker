@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { collection, CollectionReference, doc, getDoc, getFirestore, query, where } from 'firebase/firestore';
 import { showNotification } from '@mantine/notifications';
 import { GolfCourse, GolfPlayer, GolfScorecard } from '../types';
-import { useAuthSignInWithPopup, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
+import { useAuthSignInWithEmailAndPassword, useAuthSignOut, useAuthUser } from '@react-query-firebase/auth';
 import { useFirestoreCollectionMutation, useFirestoreDocumentMutation, useFirestoreQueryData } from '@react-query-firebase/firestore';
 import { openAddPlayerModal } from './modals';
 
@@ -28,7 +28,7 @@ const firebaseFirestore = getFirestore(firebaseApp);
 export const useFirebaseAuthUser = () => useAuthUser('user', firebaseAuth);
 
 export const useSignIn = () =>
-  useAuthSignInWithPopup(firebaseAuth, {
+  useAuthSignInWithEmailAndPassword(firebaseAuth, {
     onSuccess: (data) => {
       showNotification({ message: 'Signed in', color: 'green' });
 
