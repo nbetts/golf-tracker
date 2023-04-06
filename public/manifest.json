@@ -1,8 +1,8 @@
 {
   "name": "Golf Tracker",
   "short_name": "Golf Tracker",
-  "theme_color": "#69DB7C",
-  "background_color": "#373A40",
+  "theme_color": "#141517",
+  "background_color": "#141517",
   "display": "standalone",
   "orientation": "portrait",
   "icons": [

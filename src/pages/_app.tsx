@@ -32,7 +32,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                 <meta name="apple-mobile-web-app-title" content="Golf Tracker" />
                 <meta name="mobile-web-app-capable" content="yes" />
-                <meta name="theme-color" content="#69DB7C" />
+                <meta name="theme-color" content="#141517" />
                 <link rel="apple-touch-icon" sizes="48x48" href="/assets/icons/icon-48x48.png" />
                 <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/icon-72x72.png" />
                 <link rel="apple-touch-icon" sizes="96x96" href="/assets/icons/icon-96x96.png" />
