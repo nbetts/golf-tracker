@@ -1,8 +1,8 @@
 import { Avatar, Box, Navbar, NavLink, ThemeIcon } from '@mantine/core';
 import { IconChevronRight, IconGolf, IconUsers, IconId, IconUser } from '@tabler/icons';
 import Link from 'next/link';
-import { GoogleAuthProvider, User } from 'firebase/auth';
-import { useSignIn, routes, openAccountSettingsModal } from 'src/utils';
+import { User } from 'firebase/auth';
+import { routes, openAccountSettingsModal } from 'src/utils';
 
 type AppShellNavbarProps = {
   navMenuOpened: boolean;
