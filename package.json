@@ -9,7 +9,7 @@
   "scripts": {
     "postinstall": "lefthook install",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --mode development",
     "preview": "vite preview",
     "format": "rome format src",
     "format:fix": "rome format src --write",
