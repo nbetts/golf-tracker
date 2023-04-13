@@ -1,20 +1,20 @@
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useFirebaseAuthUser } from './firebase';
 import { routes } from './routes';
+import { useNavigate } from 'react-router-dom';
 
 export const withAuthCheck = (Component: React.ComponentType): React.FC =>
   function InnerComponent(props) {
     const user = useFirebaseAuthUser();
-    const router = useRouter();
+    const navigate = useNavigate();
     const isLoading = user.isLoading;
     const routeAllowed = user.data?.uid;
 
     useEffect(() => {
-      if (router.isReady && !isLoading && !routeAllowed) {
-        router.replace(routes.home);
+      if (!(isLoading || routeAllowed)) {
+        navigate(routes.home);
       }
-    }, [router, isLoading, routeAllowed]);
+    }, [isLoading, routeAllowed]);
 
     return !isLoading && routeAllowed ? <Component {...props} /> : null;
   };
@@ -22,15 +22,15 @@ export const withAuthCheck = (Component: React.ComponentType): React.FC =>
 export const withoutAuthCheck = (Component: React.ComponentType): React.FC =>
   function InnerComponent(props) {
     const user = useFirebaseAuthUser();
-    const router = useRouter();
+    const navigate = useNavigate();
     const isLoading = user.isLoading;
     const routeAllowed = !user.data;
 
     useEffect(() => {
-      if (router.isReady && !isLoading && !routeAllowed) {
-        router.replace(routes.scorecards);
+      if (!(isLoading || routeAllowed)) {
+        navigate(routes.scorecards);
       }
-    }, [router, isLoading, routeAllowed]);
+    }, [isLoading, routeAllowed]);
 
     return !isLoading && routeAllowed ? <Component {...props} /> : null;
   };

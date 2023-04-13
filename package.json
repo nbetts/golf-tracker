@@ -29,13 +29,16 @@
     "@react-query-firebase/auth": "^1.0.0-dev.2",
     "@react-query-firebase/firestore": "^1.0.0-dev.7",
     "@tabler/icons": "^1.101.0",
+    "dayjs": "^1.11.7",
     "embla-carousel-react": "^7.0.9",
     "firebase": "^9.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2",
+    "react-router-dom": "^6.10.0",
     "recharts": "^2.5.0",
-    "regression": "^2.0.1"
+    "regression": "^2.0.1",
+    "vite-tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",

@@ -3,6 +3,7 @@ import { useLocalStorage } from '@mantine/hooks';
 import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Outlet } from 'react-router-dom';
 import { theme } from 'src/utils';
 
 const queryClient = new QueryClient();
@@ -21,7 +22,9 @@ const App = () => {
       <MantineProvider theme={{ ...theme, colorScheme }} withGlobalStyles withNormalizeCSS>
         <QueryClientProvider client={queryClient}>
           <NotificationsProvider>
-            <ModalsProvider>{/* todo: render routes */}</ModalsProvider>
+            <ModalsProvider>
+              <Outlet />
+            </ModalsProvider>
           </NotificationsProvider>
         </QueryClientProvider>
       </MantineProvider>

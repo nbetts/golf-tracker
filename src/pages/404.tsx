@@ -1,5 +1,5 @@
 import { createStyles, Title, Text, Button, Container, Flex } from '@mantine/core';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { routes } from 'src/utils';
 
 const useStyles = createStyles((theme) => ({
@@ -51,7 +51,7 @@ const Error404 = () => {
         Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another URL.
       </Text>
       <Flex align="center" justify="center">
-        <Link href={routes.home} passHref>
+        <Link to={routes.home}>
           <Button component="a" variant="subtle" size="md">
             Take me back to home the page
           </Button>

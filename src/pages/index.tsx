@@ -1,6 +1,5 @@
-import { Box, Button, Container, Flex, Paper, PasswordInput, Text, TextInput, createStyles } from '@mantine/core';
+import { Button, Flex, PasswordInput, Text, TextInput, createStyles } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useMediaQuery } from '@mantine/hooks';
 import { Layout } from 'src/components';
 import { useSignIn, withoutAuthCheck } from 'src/utils';
 

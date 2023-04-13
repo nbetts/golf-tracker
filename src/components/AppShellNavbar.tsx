@@ -1,6 +1,6 @@
 import { Avatar, Box, Navbar, NavLink, ThemeIcon } from '@mantine/core';
 import { IconChevronRight, IconGolf, IconUsers, IconId, IconUser } from '@tabler/icons';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { User } from 'firebase/auth';
 import { routes, openAccountSettingsModal } from 'src/utils';
 
@@ -14,7 +14,7 @@ export const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShel
   return (
     <Navbar p="xs" hiddenBreakpoint="sm" hidden={!navMenuOpened} width={{ sm: 280 }}>
       <Navbar.Section grow mb="xs">
-        <Link href={routes.courses} passHref>
+        <Link to={routes.courses}>
           <NavLink
             label="Courses"
             component="a"
@@ -27,7 +27,7 @@ export const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShel
             }
           />
         </Link>
-        <Link href={routes.players} passHref>
+        <Link to={routes.players}>
           <NavLink
             label="Players"
             component="a"
@@ -40,7 +40,7 @@ export const AppShellNavbar = ({ navMenuOpened, onNavMenuToggle, user }: AppShel
             }
           />
         </Link>
-        <Link href={routes.scorecards} passHref>
+        <Link to={routes.scorecards}>
           <NavLink
             label="Scorecards"
             component="a"
