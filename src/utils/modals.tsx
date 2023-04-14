@@ -32,11 +32,19 @@ export const openEditPlayerModal = (props: EditPlayerModalProps) => {
 };
 
 export const openAddCourseModal = () => {
-  openModal({ title: 'Add course', children: <AddCourseModal /> });
+  openModal({
+    title: 'Add course',
+    children: <AddCourseModal />,
+    onClose: () => localStorage.removeItem('golf-tracker-add-course-modal-form-inputs'),
+  });
 };
 
 export const openEditCourseModal = (props: EditCourseModalProps) => {
-  openModal({ title: 'Edit course', children: <EditCourseModal {...props} /> });
+  openModal({
+    title: 'Edit course',
+    children: <EditCourseModal {...props} />,
+    onClose: () => localStorage.removeItem('golf-tracker-edit-course-modal-form-inputs'),
+  });
 };
 
 export const openAddScorecardModal = () => {

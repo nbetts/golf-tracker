@@ -43,10 +43,7 @@ export const AddScorecardModal = () => {
         const parsedFormValues = JSON.parse(storedFormValues);
 
         if (parsedFormValues) {
-          form.setValues({
-            ...parsedFormValues,
-            date: new Date(parsedFormValues.date),
-          });
+          form.setValues(parsedFormValues);
         } else {
           localStorage.removeItem('golf-tracker-add-scorecard-modal-form-inputs');
         }
