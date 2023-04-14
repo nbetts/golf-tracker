@@ -5,6 +5,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Outlet } from 'react-router-dom';
 import { theme } from 'src/utils';
+import { ReloadPrompt } from './components/ReloadPrompt';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => {
           <NotificationsProvider>
             <ModalsProvider>
               <Outlet />
+              <ReloadPrompt />
             </ModalsProvider>
           </NotificationsProvider>
         </QueryClientProvider>
