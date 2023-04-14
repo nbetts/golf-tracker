@@ -1,6 +1,7 @@
 import { Button, Card, Flex, Grid, NumberInput, SegmentedControl, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
+import { useEffect } from 'react';
 import { GolfCourse, GolfHole } from 'src/types';
 import { useCourseDocumentMutation } from 'src/utils';
 
@@ -9,6 +10,7 @@ const initialHoleData: GolfHole[] = new Array(18).fill(0).map(() => ({ par: '', 
 const holeCount = ['9 holes', '18 holes'];
 
 type FormInputs = {
+  courseId: string;
   name: string;
   website: string;
   holeCount: '9 holes' | '18 holes';
@@ -24,6 +26,7 @@ export const EditCourseModal = ({ course }: EditCourseModalProps) => {
 
   const form = useForm<FormInputs>({
     initialValues: {
+      courseId: course.id,
       name: course.name,
       website: course.website,
       holeCount: course.holes.slice(9).reduce((sum, { par }) => par + sum, 0) > 0 ? '18 holes' : '9 holes',
@@ -39,6 +42,12 @@ export const EditCourseModal = ({ course }: EditCourseModalProps) => {
       },
     },
   });
+
+  useEffect(() => {
+    if (form.isValid()) {
+      localStorage.setItem('golf-tracker-edit-course-modal-form-inputs', JSON.stringify(form.values));
+    }
+  }, [form.values]);
 
   const holesToDisplay = form.values.holes.slice(0, form.values.holeCount === '9 holes' ? 9 : 18);
 

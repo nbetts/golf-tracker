@@ -51,11 +51,9 @@ const Error404 = () => {
         Unfortunately, this is only a 404 page. You may have mistyped the address, or the page has been moved to another URL.
       </Text>
       <Flex align="center" justify="center">
-        <Link to={routes.home}>
-          <Button component="a" variant="subtle" size="md">
-            Take me back to home the page
-          </Button>
-        </Link>
+        <Button component={Link} to={routes.home} variant="subtle" size="md">
+          Take me back to home the page
+        </Button>
       </Flex>
     </Container>
   );

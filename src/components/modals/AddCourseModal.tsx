@@ -1,6 +1,7 @@
 import { Button, Card, Flex, Grid, NumberInput, SegmentedControl, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
+import { useEffect } from 'react';
 import { GolfHole } from 'src/types';
 import { useCoursesCollectionMutation } from 'src/utils';
 
@@ -35,6 +36,28 @@ export const AddCourseModal = () => {
       },
     },
   });
+
+  useEffect(() => {
+    const storedFormValues = localStorage.getItem('golf-tracker-add-course-modal-form-inputs');
+
+    if (storedFormValues) {
+      try {
+        const parsedFormValues = JSON.parse(storedFormValues);
+
+        if (parsedFormValues) {
+          form.setValues(parsedFormValues);
+        } else {
+          localStorage.removeItem('golf-tracker-add-course-modal-form-inputs');
+        }
+      } catch (error) {}
+    }
+  }, []);
+
+  useEffect(() => {
+    if (form.isValid()) {
+      localStorage.setItem('golf-tracker-add-course-modal-form-inputs', JSON.stringify(form.values));
+    }
+  }, [form.values]);
 
   const holesToDisplay = form.values.holes.slice(0, form.values.holeCount === '9 holes' ? 9 : 18);
 

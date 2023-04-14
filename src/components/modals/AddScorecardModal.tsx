@@ -3,8 +3,8 @@ import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { closeAllModals } from '@mantine/modals';
 import { Timestamp } from 'firebase/firestore';
-import { useEffect } from 'react';
-import { useCoursesCollection, useScorecardsCollectionMutation } from 'src/utils';
+import { Fragment, useEffect } from 'react';
+import { useCoursesCollection, useFirebaseAuthUser, useScorecardsCollectionMutation } from 'src/utils';
 import { ScoreInputCarousel } from '../ScoreInputCarousel';
 
 type FormInputs = {
@@ -21,11 +21,9 @@ const initialValues: FormInputs = {
   hidden: false,
 };
 
-export type AddScorecardModalProps = {
-  userId: string;
-};
-
-export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
+export const AddScorecardModal = () => {
+  const user = useFirebaseAuthUser();
+  const userId = user.data?.uid;
   const mutation = useScorecardsCollectionMutation();
   const courses = useCoursesCollection();
 
@@ -38,29 +36,24 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
   });
 
   useEffect(() => {
-    const storedFormValues = sessionStorage.getItem('golf-tracker-add-scorecard-modal-form-inputs');
+    const storedFormValues = localStorage.getItem('golf-tracker-add-scorecard-modal-form-inputs');
 
     if (storedFormValues) {
       try {
         const parsedFormValues = JSON.parse(storedFormValues);
 
         if (parsedFormValues) {
-          form.setValues({
-            ...parsedFormValues,
-            date: new Date(parsedFormValues.date),
-          });
+          form.setValues(parsedFormValues);
+        } else {
+          localStorage.removeItem('golf-tracker-add-scorecard-modal-form-inputs');
         }
       } catch (error) {}
     }
-
-    return () => {
-      sessionStorage.removeItem('golf-tracker-add-scorecard-modal-form-inputs');
-    };
   }, []);
 
   useEffect(() => {
     if (form.isValid()) {
-      sessionStorage.setItem('golf-tracker-add-scorecard-modal-form-inputs', JSON.stringify(form.values));
+      localStorage.setItem('golf-tracker-add-scorecard-modal-form-inputs', JSON.stringify(form.values));
     }
   }, [form.values]);
 
@@ -97,7 +90,7 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
           <Card shadow="sm" radius="md" withBorder p="sm">
             <Flex direction="column" gap="sm">
               {course.holes.map((hole, index) => (
-                <>
+                <Fragment key={index}>
                   <Flex align="center">
                     {`Hole ${index + 1}`}
                     <Badge color="green" variant="light">
@@ -108,7 +101,7 @@ export const AddScorecardModal = ({ userId }: AddScorecardModalProps) => {
                     </Badge>
                   </Flex>
                   <ScoreInputCarousel {...form.getInputProps(`scores.${index}`)} />
-                </>
+                </Fragment>
               ))}
             </Flex>
           </Card>

@@ -1,7 +1,9 @@
 import { Button, Divider, Flex, MultiSelect, SelectItem, Text } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
+import { useEffect } from 'react';
 import { Layout, CourseScorecard } from 'src/components';
-import { useCoursesCollection, openAddCourseModal, withAuthCheck } from 'src/utils';
+import { GolfCourse } from 'src/types';
+import { useCoursesCollection, openAddCourseModal, withAuthCheck, openEditCourseModal } from 'src/utils';
 
 const Courses = () => {
   const courses = useCoursesCollection();
@@ -16,6 +18,33 @@ const Courses = () => {
     defaultValue: [],
     getInitialValueInEffect: true,
   });
+
+  useEffect(() => {
+    if (localStorage['golf-tracker-add-course-modal-form-inputs']) {
+      openAddCourseModal();
+    } else if (localStorage['golf-tracker-edit-course-modal-form-inputs']) {
+      const storedFormValues = localStorage.getItem('golf-tracker-edit-course-modal-form-inputs');
+
+      if (storedFormValues) {
+        try {
+          const parsedFormValues = JSON.parse(storedFormValues);
+
+          if (parsedFormValues) {
+            const course: GolfCourse = {
+              id: parsedFormValues.courseId,
+              name: parsedFormValues.name,
+              website: parsedFormValues.website,
+              holes: parsedFormValues.holes,
+              deleted: parsedFormValues.deleted,
+            };
+            openEditCourseModal({ course });
+          } else {
+            localStorage.removeItem('golf-tracker-edit-course-modal-form-inputs');
+          }
+        } catch (error) {}
+      }
+    }
+  }, []);
 
   return (
     <Layout>
