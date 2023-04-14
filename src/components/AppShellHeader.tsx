@@ -16,7 +16,6 @@ export const AppShellHeader = ({ navMenuOpened, onNavMenuToggle }: AppShellHeade
           <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
             <Burger opened={navMenuOpened} onClick={() => onNavMenuToggle(!navMenuOpened)} size="sm" mr="xs" />
           </MediaQuery>
-          <Text size={20}>⛳️</Text>
           <Text component="span" align="center" variant="gradient" gradient={{ from: 'teal', to: 'green', deg: 45 }} size={22} weight="bold">
             Golf Tracker
           </Text>
