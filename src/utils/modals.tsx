@@ -7,7 +7,6 @@ import {
   AddCourseModal,
   EditCourseModalProps,
   EditCourseModal,
-  AddScorecardModalProps,
   AddScorecardModal,
   EditScorecardModalProps,
   EditScorecardModal,
@@ -40,10 +39,18 @@ export const openEditCourseModal = (props: EditCourseModalProps) => {
   openModal({ title: 'Edit course', children: <EditCourseModal {...props} /> });
 };
 
-export const openAddScorecardModal = (props: AddScorecardModalProps) => {
-  openModal({ title: 'Add scorecard', children: <AddScorecardModal {...props} /> });
+export const openAddScorecardModal = () => {
+  openModal({
+    title: 'Add scorecard',
+    children: <AddScorecardModal />,
+    onClose: () => localStorage.removeItem('golf-tracker-add-scorecard-modal-form-inputs'),
+  });
 };
 
 export const openEditScorecardModal = (props: EditScorecardModalProps) => {
-  openModal({ title: 'Edit scorecard', children: <EditScorecardModal {...props} /> });
+  openModal({
+    title: 'Edit scorecard',
+    children: <EditScorecardModal {...props} />,
+    onClose: () => localStorage.removeItem('golf-tracker-edit-scorecard-modal-form-inputs'),
+  });
 };

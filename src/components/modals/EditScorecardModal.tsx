@@ -6,8 +6,10 @@ import { Timestamp } from 'firebase/firestore';
 import { GolfScorecard } from 'src/types';
 import { useCoursesCollection, useScorecardDocumentMutation } from 'src/utils';
 import { ScoreInputCarousel } from '../ScoreInputCarousel';
+import { Fragment, useEffect } from 'react';
 
 type FormInputs = {
+  scorecardId: string;
   date: Date;
   courseId: string;
   scores: number[];
@@ -24,6 +26,7 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
 
   const form = useForm<FormInputs>({
     initialValues: {
+      scorecardId: scorecard.id,
       date: scorecard.timestamp.toDate(),
       courseId: scorecard.courseId,
       scores: new Array(18).fill(0).map((_, index) => scorecard.scores[index] || 0),
@@ -34,6 +37,12 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
       courseId: (value) => (!value ? 'Course is required' : null),
     },
   });
+
+  useEffect(() => {
+    if (form.isValid()) {
+      localStorage.setItem('golf-tracker-edit-scorecard-modal-form-inputs', JSON.stringify(form.values));
+    }
+  }, [form.values]);
 
   if (!courses.data) {
     return null;
@@ -66,7 +75,7 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
           <Card shadow="sm" radius="md" withBorder p="sm">
             <Flex direction="column" gap="sm">
               {course.holes.map((hole, index) => (
-                <>
+                <Fragment key={index}>
                   <Flex align="center" gap="xs">
                     {`Hole ${index + 1}`}
                     <Badge color="green" variant="light">
@@ -77,7 +86,7 @@ export const EditScorecardModal = ({ scorecard }: EditScorecardModalProps) => {
                     </Badge>
                   </Flex>
                   <ScoreInputCarousel {...form.getInputProps(`scores.${index}`)} />
-                </>
+                </Fragment>
               ))}
             </Flex>
           </Card>

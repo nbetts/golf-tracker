@@ -10,8 +10,10 @@ import {
   usePlayersCollection,
   openAddScorecardModal,
   withAuthCheck,
+  openEditScorecardModal,
 } from 'src/utils';
 import { useLocalStorage } from '@mantine/hooks';
+import { Timestamp } from '@firebase/firestore';
 
 type CombinedScorecardInformation = {
   course: GolfCourse;
@@ -98,10 +100,33 @@ const Scorecards = () => {
   });
 
   useEffect(() => {
-    if (userId && sessionStorage['golf-tracker-add-scorecard-modal-form-inputs']) {
-      openAddScorecardModal({ userId });
+    if (localStorage['golf-tracker-add-scorecard-modal-form-inputs']) {
+      openAddScorecardModal();
+    } else if (localStorage['golf-tracker-edit-scorecard-modal-form-inputs']) {
+      const storedFormValues = localStorage.getItem('golf-tracker-edit-scorecard-modal-form-inputs');
+
+      if (storedFormValues) {
+        try {
+          const parsedFormValues = JSON.parse(storedFormValues);
+
+          if (parsedFormValues) {
+            const scorecard: GolfScorecard = {
+              id: parsedFormValues.scorecardId,
+              timestamp: Timestamp.fromDate(new Date(parsedFormValues.date)),
+              courseId: parsedFormValues.courseId,
+              scores: parsedFormValues.scores,
+              hidden: parsedFormValues.hidden,
+              userId: '',
+              deleted: false,
+            };
+            openEditScorecardModal({ scorecard });
+          } else {
+            localStorage.removeItem('golf-tracker-edit-scorecard-modal-form-inputs');
+          }
+        } catch (error) {}
+      }
     }
-  }, [userId]);
+  }, []);
 
   return (
     <Layout>
@@ -109,7 +134,7 @@ const Scorecards = () => {
         <Text size={30} weight="bold" m={0}>
           Scorecards
         </Text>
-        <Button onClick={() => userId && openAddScorecardModal({ userId })}>Add scorecard</Button>
+        <Button onClick={() => openAddScorecardModal()}>Add scorecard</Button>
       </Flex>
       <Flex align="center">
         <MultiSelect
