@@ -50,27 +50,5 @@ Start the dev server
 
 ## To do
 
-### Must
-
-none
-
-### Should
-
-- add some signed out home page content
-- support signing in with other providers
-- allow users to delete data (implement soft delete on courses, hard delete on users/scorecards)
 - fix bug where react-query or firestore data does not load after fast-refresh executes
-- add sensible form validation to all forms
-
-### Could
-
-- come up with some useful player statistics to show
-
-### Wish
-
-- add firebase analytics
 - make scorecard filtering more efficient (e.g. use maps instead of arrays)
-- add ability to create and join user groups
-  - user groups scope what courses, players and scorecards that group can see
-  - which will mean users need roles such as group captain and group member
-  - captains can invite and remove users from groups

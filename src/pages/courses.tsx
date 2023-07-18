@@ -46,6 +46,8 @@ const Courses = () => {
     }
   }, []);
 
+  const filteredCourses = sortedCourses.filter((course) => coursesFilterValues.length === 0 || coursesFilterValues.includes(course.id));
+
   return (
     <Layout>
       <Flex align="center" justify="space-between" mb="lg">
@@ -68,12 +70,12 @@ const Courses = () => {
           sx={{ maxWidth: 500 }}
         />
       </Flex>
+      <Text>{filteredCourses.length} courses</Text>
       <Divider />
       <Flex direction="column" justify="flex-start">
-        {sortedCourses.map(
-          (course) =>
-            (coursesFilterValues.length === 0 || coursesFilterValues.includes(course.id)) && <CourseScorecard key={course.id} course={course} />,
-        )}
+        {filteredCourses.map((course) => (
+          <CourseScorecard key={course.id} course={course} />
+        ))}
       </Flex>
     </Layout>
   );

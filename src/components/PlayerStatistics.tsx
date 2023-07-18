@@ -1,8 +1,16 @@
-import { Card, Menu, ActionIcon, Accordion, Text, Flex } from '@mantine/core';
+import { Card, Menu, ActionIcon, Accordion, Text, Flex, List } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
 import { GolfPlayer } from 'src/types';
-import { openEditPlayerModal, usePersonalScorecardsCollection, useScorecardsCollection } from 'src/utils';
+import { openEditPlayerModal, useCoursesCollection, usePersonalScorecardsCollection, useScorecardsCollection } from 'src/utils';
 import { AdjustedScoresGraph } from './graphs/AdjustedScoresGraph';
+import { calculateAdjustedScore } from 'src/utils/calculateAdjustedScore';
+import { useEffect, useState } from 'react';
+import { HoleDifferencesGraph } from './graphs/HoldDifferencesGraph';
+
+type SortedScore = {
+  score: number;
+  is18HoleRound: boolean;
+};
 
 type PlayerStatisticsProps = {
   player: GolfPlayer;
@@ -10,8 +18,84 @@ type PlayerStatisticsProps = {
 };
 
 export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => {
+  const courses = useCoursesCollection();
   const scorecards = useScorecardsCollection();
-  const playerScorecards = scorecards.data?.filter((scorecard) => scorecard.userId === player.id);
+  const playerScorecards = scorecards.data?.filter((scorecard) => scorecard.userId === player.id) || [];
+  const coursesPlayed = new Set(playerScorecards.map((scorecard) => scorecard.courseId)).size;
+  const [handicap18HoleRounds, setHandicap18HoleRounds] = useState(0);
+  const [handicapAllRounds, setHandicapAllRounds] = useState(0);
+  const [holeDifferences, setHoleDifferences] = useState<number[]>([]);
+  const holeDifferenceArrayIndexOffset = 2;
+
+  useEffect(() => {
+    if (scorecards.data && courses.data) {
+      const adjustedScores = playerScorecards
+        .sort((a, b) => b.timestamp.seconds - a.timestamp.seconds)
+        .map<SortedScore>((scorecard) => {
+          const course = courses.data.find((course) => course.id === scorecard.courseId);
+
+          if (!course) {
+            return {
+              score: 0,
+              is18HoleRound: false,
+            };
+          }
+
+          let lastScoredHole = 1;
+
+          for (let i = 0; i < scorecard.scores.length; i++) {
+            if (scorecard.scores[i] > 0) {
+              lastScoredHole = i + 1;
+            }
+          }
+
+          return {
+            score: calculateAdjustedScore(scorecard, course),
+            is18HoleRound: lastScoredHole >= 18,
+          };
+        });
+
+      const sortedScores18HoleRounds = adjustedScores
+        .filter((score) => score.is18HoleRound)
+        .slice(0, 20)
+        .sort((a, b) => a.score - b.score)
+        .slice(0, 8);
+      const sortedScoresAllRounds = adjustedScores
+        .slice(0, 20)
+        .sort((a, b) => a.score - b.score)
+        .slice(0, 8);
+      setHandicap18HoleRounds(
+        Math.round(sortedScores18HoleRounds.reduce((sum, curr) => sum + curr.score, 0) / sortedScores18HoleRounds.length - 72 || 0),
+      );
+      setHandicapAllRounds(Math.round(sortedScoresAllRounds.reduce((sum, curr) => sum + curr.score, 0) / sortedScoresAllRounds.length - 72 || 0));
+
+      const holeDifferences: number[] = [];
+
+      playerScorecards.forEach((scorecard) => {
+        const course = courses.data.find((course) => course.id === scorecard.courseId);
+
+        if (course) {
+          for (let i = 0; i < course.holes.length; i++) {
+            if (scorecard.scores[i] > 0) {
+              const holeDifference = scorecard.scores[i] - course.holes[i].par + holeDifferenceArrayIndexOffset;
+
+              if (holeDifference > 10) {
+                continue;
+              }
+
+              if (!holeDifferences[holeDifference]) {
+                holeDifferences[holeDifference] = 1;
+              } else {
+                holeDifferences[holeDifference]++;
+              }
+            }
+          }
+        }
+      });
+
+      setHoleDifferences(holeDifferences);
+    }
+  }, [scorecards.data, courses.data]);
 
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -41,8 +125,19 @@ export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => 
       <Card.Section>
         <Accordion chevronPosition="left">
           <Accordion.Item value="0">
-            <Accordion.Control>Full statistics</Accordion.Control>
-            <Accordion.Panel>{playerScorecards && <AdjustedScoresGraph scorecards={playerScorecards} />}</Accordion.Panel>
+            <Accordion.Control>Statistics</Accordion.Control>
+            <Accordion.Panel>
+              <List mb="md">
+                <List.Item>Rounds played: {playerScorecards.length}</List.Item>
+                <List.Item>Courses played: {coursesPlayed}</List.Item>
+                <List.Item>Handicap (18 hole rounds): {handicap18HoleRounds}</List.Item>
+                <List.Item>Handicap (all rounds): {handicapAllRounds}</List.Item>
+              </List>
+              <Text size="xl">Graph of stroke breakdown</Text>
+              <HoleDifferencesGraph holeDifferences={holeDifferences} holeDifferenceArrayIndexOffset={holeDifferenceArrayIndexOffset} />
+              <Text size="xl">Graph of scores adjusted to par 72</Text>
+              <AdjustedScoresGraph scorecards={playerScorecards} />
+            </Accordion.Panel>
           </Accordion.Item>
         </Accordion>
       </Card.Section>

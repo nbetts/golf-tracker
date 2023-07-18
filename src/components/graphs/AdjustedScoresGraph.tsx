@@ -77,7 +77,7 @@ export const AdjustedScoresGraph = ({ scorecards }: AdjustedScoresGraphProps) =>
       dataPoints[i] = dataPoint;
     }
 
-    const trend = regression.linear(dataPoints.map((dataPoint, index) => [index, dataPoint.score]));
+    const trend = regression.polynomial(dataPoints.map((dataPoint, index) => [index, dataPoint.score]));
 
     for (let i = 0; i < dataPoints.length; i++) {
       dataPoints[i].trend = trend.points[i][1];

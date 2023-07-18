@@ -23,7 +23,7 @@ export const AddCourseModal = () => {
     initialValues: {
       name: '',
       website: '',
-      holeCount: '9 holes',
+      holeCount: '18 holes',
       holes: initialHoleData,
     },
     validate: {

@@ -62,9 +62,13 @@ const ScorecardsFilter = ({ userId, courses, players, coursesFilterValues, playe
 
   return (
     <>
-      {filteredScorecardInfo.map((info) => (
-        <PlayerScorecard key={info.scorecard.id} {...info} isOwner={userId === info.scorecard.userId} />
-      ))}
+      <Text>{filteredScorecardInfo.length} scorecards</Text>
+      <Divider />
+      <Flex direction="column">
+        {filteredScorecardInfo.map((info) => (
+          <PlayerScorecard key={info.scorecard.id} {...info} isOwner={userId === info.scorecard.userId} />
+        ))}
+      </Flex>
     </>
   );
 };
@@ -162,18 +166,15 @@ const Scorecards = () => {
           sx={{ maxWidth: 500 }}
         />
       </Flex>
-      <Divider />
-      <Flex direction="column">
-        {userId && sortedCourses && sortedPlayers && (
-          <ScorecardsFilter
-            userId={userId}
-            courses={sortedCourses}
-            players={sortedPlayers}
-            coursesFilterValues={coursesFilterValues}
-            playersFilterValues={playersFilterValues}
-          />
-        )}
-      </Flex>
+      {userId && sortedCourses && sortedPlayers && (
+        <ScorecardsFilter
+          userId={userId}
+          courses={sortedCourses}
+          players={sortedPlayers}
+          coursesFilterValues={coursesFilterValues}
+          playersFilterValues={playersFilterValues}
+        />
+      )}
     </Layout>
   );
 };
