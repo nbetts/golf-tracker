@@ -52,3 +52,4 @@ Start the dev server
 
 - fix bug where react-query or firestore data does not load after fast-refresh executes
 - make scorecard filtering more efficient (e.g. use maps instead of arrays)
+- auto-hide header on scroll down when on mobile

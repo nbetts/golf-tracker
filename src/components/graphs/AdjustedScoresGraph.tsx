@@ -30,6 +30,7 @@ export const AdjustedScoresGraph = ({ scorecards }: AdjustedScoresGraphProps) =>
     const dataPoints: DataPoint[] = [];
     let newMinScore = Number.MAX_SAFE_INTEGER;
     let newMaxScore = 0;
+    let scores: number[] = [];
 
     for (let i = 0; i < scorecardsSortedByTime.length; i++) {
       const scorecard = scorecardsSortedByTime[i];
@@ -43,13 +44,11 @@ export const AdjustedScoresGraph = ({ scorecards }: AdjustedScoresGraphProps) =>
       const course = courses.data.find(({ id }) => id === scorecard.courseId);
 
       if (course) {
-        const { scores } = scorecard;
-
         // Calculate the last score index so that we don't need to show any more holes after that.
         let lastScoredHole = 1;
 
-        for (let i = 0; i < scores.length; i++) {
-          if (scores[i] > 0) {
+        for (let i = 0; i < scorecard.scores.length; i++) {
+          if (scorecard.scores[i] > 0) {
             lastScoredHole = i + 1;
           }
         }
@@ -61,11 +60,12 @@ export const AdjustedScoresGraph = ({ scorecards }: AdjustedScoresGraphProps) =>
 
         for (let i = 0; i < holeCount; i++) {
           totalPar += course.holes[i].par;
-          totalPlayerScore += scores[i];
+          totalPlayerScore += scorecard.scores[i];
         }
 
         const adjustedScore = Math.round((totalPlayerScore / totalPar) * 72);
         dataPoint.score = adjustedScore;
+        scores[i] = adjustedScore;
 
         if (adjustedScore < newMinScore) {
           newMinScore = adjustedScore;
@@ -77,7 +77,7 @@ export const AdjustedScoresGraph = ({ scorecards }: AdjustedScoresGraphProps) =>
       dataPoints[i] = dataPoint;
     }
 
-    const trend = regression.polynomial(dataPoints.map((dataPoint, index) => [index, dataPoint.score]));
+    const trend = regression.linear(dataPoints.map((dataPoint, index) => [index, dataPoint.score]));
 
     for (let i = 0; i < dataPoints.length; i++) {
       dataPoints[i].trend = trend.points[i][1];

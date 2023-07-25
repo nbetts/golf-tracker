@@ -1,7 +1,7 @@
 import { Card, Menu, ActionIcon, Accordion, Text, Flex, List } from '@mantine/core';
 import { IconDots, IconPencil } from '@tabler/icons';
 import { GolfPlayer } from 'src/types';
-import { openEditPlayerModal, useCoursesCollection, usePersonalScorecardsCollection, useScorecardsCollection } from 'src/utils';
+import { openEditPlayerModal, useCoursesCollection, useScorecardsCollection } from 'src/utils';
 import { AdjustedScoresGraph } from './graphs/AdjustedScoresGraph';
 import { calculateAdjustedScore } from 'src/utils/calculateAdjustedScore';
 import { useEffect, useState } from 'react';
@@ -22,10 +22,9 @@ export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => 
   const scorecards = useScorecardsCollection();
   const playerScorecards = scorecards.data?.filter((scorecard) => scorecard.userId === player.id) || [];
   const coursesPlayed = new Set(playerScorecards.map((scorecard) => scorecard.courseId)).size;
-  const [handicap18HoleRounds, setHandicap18HoleRounds] = useState(0);
-  const [handicapAllRounds, setHandicapAllRounds] = useState(0);
-  const [holeDifferences, setHoleDifferences] = useState<number[]>([]);
-  const holeDifferenceArrayIndexOffset = 2;
+  const [handicap18HoleRounds, setHandicap18HoleRounds] = useState('');
+  const [handicapAllRounds, setHandicapAllRounds] = useState('');
+  const [holeDifferences, setHoleDifferences] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (scorecards.data && courses.data) {
@@ -65,11 +64,11 @@ export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => 
         .sort((a, b) => a.score - b.score)
         .slice(0, 8);
       setHandicap18HoleRounds(
-        Math.round(sortedScores18HoleRounds.reduce((sum, curr) => sum + curr.score, 0) / sortedScores18HoleRounds.length - 72 || 0),
+        (sortedScores18HoleRounds.reduce((sum, curr) => sum + curr.score, 0) / sortedScores18HoleRounds.length - 72 || 0).toFixed(1),
       );
-      setHandicapAllRounds(Math.round(sortedScoresAllRounds.reduce((sum, curr) => sum + curr.score, 0) / sortedScoresAllRounds.length - 72 || 0));
+      setHandicapAllRounds((sortedScoresAllRounds.reduce((sum, curr) => sum + curr.score, 0) / sortedScoresAllRounds.length - 72 || 0).toFixed(1));
 
-      const holeDifferences: number[] = [];
+      const holeDifferences: Record<string, number> = {};
 
       playerScorecards.forEach((scorecard) => {
         const course = courses.data.find((course) => course.id === scorecard.courseId);
@@ -77,16 +76,18 @@ export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => 
         if (course) {
           for (let i = 0; i < course.holes.length; i++) {
             if (scorecard.scores[i] > 0) {
-              const holeDifference = scorecard.scores[i] - course.holes[i].par + holeDifferenceArrayIndexOffset;
+              const holeDifference = scorecard.scores[i] - course.holes[i].par;
 
               if (holeDifference > 10) {
                 continue;
               }
 
-              if (!holeDifferences[holeDifference]) {
-                holeDifferences[holeDifference] = 1;
+              const key = holeDifference >= 0 ? `+${holeDifference}` : holeDifference;
+
+              if (!holeDifferences[key]) {
+                holeDifferences[key] = 1;
               } else {
-                holeDifferences[holeDifference]++;
+                holeDifferences[key]++;
               }
             }
           }
@@ -133,9 +134,9 @@ export const PlayerStatistics = ({ player, isOwner }: PlayerStatisticsProps) => 
                 <List.Item>Handicap (18 hole rounds): {handicap18HoleRounds}</List.Item>
                 <List.Item>Handicap (all rounds): {handicapAllRounds}</List.Item>
               </List>
-              <Text size="xl">Graph of stroke breakdown</Text>
-              <HoleDifferencesGraph holeDifferences={holeDifferences} holeDifferenceArrayIndexOffset={holeDifferenceArrayIndexOffset} />
-              <Text size="xl">Graph of scores adjusted to par 72</Text>
+              <Text size="xl">Stroke breakdown</Text>
+              <HoleDifferencesGraph holeDifferences={holeDifferences} />
+              <Text size="xl">Scores adjusted to par 72</Text>
               <AdjustedScoresGraph scorecards={playerScorecards} />
             </Accordion.Panel>
           </Accordion.Item>
