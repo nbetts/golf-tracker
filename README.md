@@ -1,7 +1,7 @@
 
 # Golf Tracker
 
-Golf tracker is a web app that allows you to record your golf scorecards online: <https://golftracker.app>
+Golf tracker is a web app that allows you to record your golf scorecards online: <https://golf-tracker-302ca.web.app>
 
 ## Features
 
